@@ -85,15 +85,15 @@ class wc18_admin {
 			if($n === 1) {
 
 				echo '<div class="add-cat-container">';
-	    			echo '<img class="add-cat" src="' . WCCD_URI . 'images/add-cat.png">';
-	    			echo '<img class="add-cat-hover" src="' . WCCD_URI . 'images/add-cat-hover.png">';
+	    			echo '<img class="add-cat" src="' . WC18_URI . 'images/add-cat.png">';
+	    			echo '<img class="add-cat-hover" src="' . WC18_URI . 'images/add-cat-hover.png">';
 				echo '</div>';				
 
 			} else {
 
     			echo '<div class="remove-cat-container">';
-	    			echo '<img class="remove-cat" src="' . WCCD_URI . 'images/remove-cat.png">';
-	    			echo '<img class="remove-cat-hover" src="' . WCCD_URI . 'images/remove-cat-hover.png">';
+	    			echo '<img class="remove-cat" src="' . WC18_URI . 'images/remove-cat.png">';
+	    			echo '<img class="remove-cat-hover" src="' . WC18_URI . 'images/remove-cat-hover.png">';
     			echo '</div>';
 
 			}

@@ -36,9 +36,9 @@ function wc18_premium_activation() {
 	define('WC18_PRIVATE', WC18_DIR . 'private/');
 	
 	/*Requires*/
-	require WC18_INCLUDES . 'class-wc18-gateway.php';
-	require WC18_INCLUDES . 'class-wc18-soap-client.php';
-	require WC18_INCLUDES . 'class-wc18-admin.php';
+	require WC18_INCLUDES . 'class-18app-gateway.php';
+	require WC18_INCLUDES . 'class-18app-soap-client.php';
+	require WC18_INCLUDES . 'class-18app-admin.php';
 
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {
@@ -80,7 +80,7 @@ function wc18_secure_update_check($queryArgs) {
 }
 
 
-
+ /*
  * Avvisi utente in fase di aggiornaemnto plugin
  */
 function wc18_update_message( $plugin_data, $response) {

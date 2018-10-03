@@ -158,11 +158,11 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		);
 
 		$data = $this->get_post_data();
-	    $18app_code = $data['wc-codice-18app']; //il buono inserito dall'utente
+	    $app_code = $data['wc-codice-18app']; //il buono inserito dall'utente
 
-	    if($18app_code) {
+	    if($app_code) {
 
-		    $soapClient = new wc18_soap_client($18app_code, $import);
+		    $soapClient = new wc18_soap_client($app_code, $import);
 		    
 		    try {
 
@@ -210,7 +210,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						    $woocommerce->cart->empty_cart();	
 
 						    /*Aggiungo il buono 18app all'ordine*/
-							update_post_meta($order_id, 'wc-codice-18app', $18app_code);
+							update_post_meta($order_id, 'wc-codice-18app', $app_code);
 
 						    $output = array(
 						        'result' => 'success',
