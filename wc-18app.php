@@ -61,7 +61,6 @@ add_action('plugins_loaded', 'wc18_premium_activation', 1);
 
 /**
  * Update checker
- * test3
  */
 require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php');
 $wc18_update_checker = Puc_v4_Factory::buildUpdateChecker(
