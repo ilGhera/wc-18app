@@ -241,7 +241,7 @@ class wc18_admin {
 		/*Recupero le opzioni salvate nel db*/
 		$premium_key = get_option('wc18-premium-key');
 		$categories = get_option('wc18-categories');
-		$tot_cats = count($categories);
+		$tot_cats = $categories ? count($categories) : 0;
 		$wc18_image = get_option('wc18-image');
 
 		echo '<div class="wrap">';
@@ -439,7 +439,7 @@ class wc18_admin {
 				    					}
 
 						    		echo '</ul>';
-						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . count($categories) . '">';
+						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : '') . '">';
 					    			echo '<p class="description">' . esc_html(__('Seleziona le categorie di prodotti corrispondenti ai beni acquistabili.', 'wc18')) . '</p>';
 				    			echo '</td>';
 				    		echo '</tr>';
