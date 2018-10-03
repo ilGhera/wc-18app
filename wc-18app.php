@@ -80,19 +80,19 @@ function wc18_secure_update_check($queryArgs) {
 }
 
 
-/**
+
  * Avvisi utente in fase di aggiornaemnto plugin
  */
-function wccd_update_message( $plugin_data, $response) {
+function wc18_update_message( $plugin_data, $response) {
 
 	$message = null;
-	$key = get_option('wccd-premium-key');
+	$key = get_option('wc18-premium-key');
 
     $message = null;
 
 	if(!$key) {
 
-		$message = __('Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a href="' . admin_url() . 'admin.php/?page=wccd-settings">impostazioni del plugin</a>. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+		$message = __('Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a href="' . admin_url() . 'admin.php/?page=wc18-settings">impostazioni del plugin</a>. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	
 	} else {
 	
@@ -102,9 +102,9 @@ function wccd_update_message( $plugin_data, $response) {
 	    $now = strtotime('today');
 
 	    if($limit < $now) { 
-	        $message = __('Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+	        $message = __('Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	    } elseif($decoded_key[2] != 3518) {
-	    	$message = __('Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+	    	$message = __('Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	    }
 
 	}
@@ -117,7 +117,7 @@ function wccd_update_message( $plugin_data, $response) {
 		),
 	);
 
-	echo ($message) ? '<br><span class="wccd-alert">' . wp_kses($message, $allowed) . '</span>' : '';
+	echo ($message) ? '<br><span class="wc18-alert">' . wp_kses($message, $allowed) . '</span>' : '';
 
 }
-add_action('in_plugin_update_message-wc-carta-docente-premium/wc-carta-docente.php', 'wccd_update_message', 10, 2);
+add_action('in_plugin_update_message-wc-18app-premium/wc-18app.php', 'wc18_update_message', 10, 2);
