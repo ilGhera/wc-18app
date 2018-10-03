@@ -16,7 +16,6 @@
 
 /**
  * Attivazione
- * test
  */
 function wc18_premium_activation() {
 
