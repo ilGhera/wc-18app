@@ -18,12 +18,12 @@
  * Attivazione
  * test
  */
-function wccd_premium_activation() {
+function wc18_premium_activation() {
 
 	/*Se presente, disattiva la versione free del plugin*/
-	if(function_exists('wccd_activation')) {
-		deactivate_plugins('wc-carta-docente/wc-carta-docente.php');
-	    remove_action( 'plugins_loaded', 'wccd_activation' );
+	if(function_exists('wc18_activation')) {
+		deactivate_plugins('wc-18app/wc-18app.php');
+	    remove_action( 'plugins_loaded', 'wc18_activation' );
 	    wp_redirect(admin_url('plugins.php?plugin_status=all&paged=1&s'));
 	}
 
@@ -31,33 +31,33 @@ function wccd_premium_activation() {
 	if(!class_exists('WC_Payment_Gateway')) return;
 
 	/*Definizione costanti*/
-	define('WCCD_DIR', plugin_dir_path(__FILE__));
-	define('WCCD_URI', plugin_dir_url(__FILE__));
-	define('WCCD_INCLUDES', WCCD_DIR . 'includes/');
-	define('WCCD_PRIVATE', WCCD_DIR . 'private/');
+	define('WC18_DIR', plugin_dir_path(__FILE__));
+	define('WC18_URI', plugin_dir_url(__FILE__));
+	define('WC18_INCLUDES', WC18_DIR . 'includes/');
+	define('WC18_PRIVATE', WC18_DIR . 'private/');
 	
 	/*Requires*/
-	require WCCD_INCLUDES . 'class-wccd-teacher-gateway.php';
-	require WCCD_INCLUDES . 'class-wccd-soap-client.php';
-	require WCCD_INCLUDES . 'class-wccd-admin.php';
+	require WC18_INCLUDES . 'class-wc18-gateway.php';
+	require WC18_INCLUDES . 'class-wc18-soap-client.php';
+	require WC18_INCLUDES . 'class-wc18-admin.php';
 
 	/*Script e folgi di stile front-end*/
-	function wccd_load_scripts() {
-		wp_enqueue_style('wccd-style', WCCD_URI . 'css/wc-carta-docente.css');
+	function wc18_load_scripts() {
+		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-18app.css');
 	}
 
 	/*Script e folgi di stile back-end*/
-	function wccd_load_admin_scripts() {
-		wp_enqueue_style('wccd-admin-style', WCCD_URI . 'css/wc-carta-docente-admin.css');
-		wp_enqueue_script('wccd-admin-scripts', WCCD_URI . 'js/wc-carta-docente-admin.js');
+	function wc18_load_admin_scripts() {
+		wp_enqueue_style('wc18-admin-style', WC18_URI . 'css/wc-18app-admin.css');
+		wp_enqueue_script('wc18-admin-scripts', WC18_URI . 'js/wc-18app-admin.js');
 	}
 
 	/*Script e folgi di stile*/
-	add_action('wp_enqueue_scripts', 'wccd_load_scripts');
-	add_action('admin_enqueue_scripts', 'wccd_load_admin_scripts');
+	add_action('wp_enqueue_scripts', 'wc18_load_scripts');
+	add_action('admin_enqueue_scripts', 'wc18_load_admin_scripts');
 
 } 
-add_action('plugins_loaded', 'wccd_premium_activation', 1);
+add_action('plugins_loaded', 'wc18_premium_activation', 1);
 
 
 /**
