@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin name: WooCommerce Carta Docente - Premium
- * Plugin URI: https://www.ilghera.com/product/wc-carta-docente/
- * Description: Abilita in WooCommerce il pagamento con Carta del Docente prevista dallo stato Italiano. 
+ * Plugin name: WooCommerce 18app - Premium
+ * Plugin URI: https://www.ilghera.com/product/wc-18app-premium/
+ * Description: Abilita in WooCommerce il pagamento con 18app previsto dallo stato Italiano. 
  * Author: ilGhera
- * Version: 0.9.3
+ * Version: 0.9.0
  * Author URI: https://ilghera.com 
  * Requires at least: 4.0
  * Tested up to: 4.9
  * WC tested up to: 3
- * Text Domain: wccd
+ * Text Domain: wc18
  * Domain Path: /languages
  */
 
