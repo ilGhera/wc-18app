@@ -63,15 +63,15 @@ add_action('plugins_loaded', 'wc18_premium_activation', 1);
  * Update checker
  */
 require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php');
-$wccd_update_checker = Puc_v4_Factory::buildUpdateChecker(
-    'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-carta-docente-premium',
+$wc18_update_checker = Puc_v4_Factory::buildUpdateChecker(
+    'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-18app-premium',
     __FILE__,
-    'wc-carta-docente-premium'
+    'wc-18app-premium'
 );
 
-$wccd_update_checker->addQueryArgFilter('wccd_secure_update_check');
-function wccd_secure_update_check($queryArgs) {
-    $key = base64_encode( get_option('wccd-premium-key') );
+$wc18_update_checker->addQueryArgFilter('wc18_secure_update_check');
+function wc18_secure_update_check($queryArgs) {
+    $key = base64_encode( get_option('wc18-premium-key') );
 
     if($key) {
         $queryArgs['premium-key'] = $key;
@@ -83,16 +83,16 @@ function wccd_secure_update_check($queryArgs) {
 /**
  * Avvisi utente in fase di aggiornaemnto plugin
  */
-function wccd_update_message( $plugin_data, $response) {
+function wc18_update_message( $plugin_data, $response) {
 
 	$message = null;
-	$key = get_option('wccd-premium-key');
+	$key = get_option('wc18-premium-key');
 
     $message = null;
 
 	if(!$key) {
 
-		$message = __('Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a href="' . admin_url() . 'admin.php/?page=wccd-settings">impostazioni del plugin</a>. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+		$message = __('Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a href="' . admin_url() . 'admin.php/?page=wc18-settings">impostazioni del plugin</a>. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	
 	} else {
 	
@@ -102,9 +102,9 @@ function wccd_update_message( $plugin_data, $response) {
 	    $now = strtotime('today');
 
 	    if($limit < $now) { 
-	        $message = __('Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+	        $message = __('Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	    } elseif($decoded_key[2] != 3518) {
-	    	$message = __('Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a href="https://www.ilghera.com/product/woocommerce-carta-docente-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wccd');
+	    	$message = __('Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a href="https://www.ilghera.com/product/woocommerce-18app-premium/" target="_blank">qui</a> per maggiori informazioni.', 'wc18');
 	    }
 
 	}
@@ -117,7 +117,7 @@ function wccd_update_message( $plugin_data, $response) {
 		),
 	);
 
-	echo ($message) ? '<br><span class="wccd-alert">' . wp_kses($message, $allowed) . '</span>' : '';
+	echo ($message) ? '<br><span class="wc18-alert">' . wp_kses($message, $allowed) . '</span>' : '';
 
 }
-add_action('in_plugin_update_message-wc-carta-docente-premium/wc-carta-docente.php', 'wccd_update_message', 10, 2);
+add_action('in_plugin_update_message-wc-18app-premium/wc-18app.php', 'wc18_update_message', 10, 2);
