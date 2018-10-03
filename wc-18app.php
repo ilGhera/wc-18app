@@ -64,15 +64,15 @@ add_action('plugins_loaded', 'wc18_premium_activation', 1);
  * test
  */
 require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php');
-$wccd_update_checker = Puc_v4_Factory::buildUpdateChecker(
-    'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-carta-docente-premium',
+$wc18_update_checker = Puc_v4_Factory::buildUpdateChecker(
+    'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-18app-premium',
     __FILE__,
-    'wc-carta-docente-premium'
+    'wc-18app-premium'
 );
 
-$wccd_update_checker->addQueryArgFilter('wccd_secure_update_check');
-function wccd_secure_update_check($queryArgs) {
-    $key = base64_encode( get_option('wccd-premium-key') );
+$wc18_update_checker->addQueryArgFilter('wc18_secure_update_check');
+function wc18_secure_update_check($queryArgs) {
+    $key = base64_encode( get_option('wc18-premium-key') );
 
     if($key) {
         $queryArgs['premium-key'] = $key;
