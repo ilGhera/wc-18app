@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="VerificaVoucher" targetNamespace="http://bonus.miur.it/VerificaVoucher/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bonus.miur.it/VerificaVoucher/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="VerificaVoucher" targetNamespace="http://bonus.mibact.it/VerificaVoucher/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bonus.mibact.it/VerificaVoucher/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://bonus.miur.it/VerificaVoucher/">
+    <xsd:schema targetNamespace="http://bonus.mibact.it/VerificaVoucher/">
       <xsd:complexType name="Check">
         <xsd:sequence>
           <xsd:element maxOccurs="1" minOccurs="1" name="tipoOperazione" type="xsd:string"/>
@@ -85,7 +84,7 @@
   <wsdl:binding name="VerificaVoucherSOAP" type="tns:VerificaVoucher">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="Check">
-      <soap:operation soapAction="http://bonus.miur.it/VerificaVoucher/Check"/>
+      <soap:operation soapAction="http://bonus.mibact.it/VerificaVoucher/Check"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -94,7 +93,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Confirm">
-      <soap:operation soapAction="http://bonus.miur.it/VerificaVoucher/Confirm"/>
+      <soap:operation soapAction="http://bonus.mibact.it/VerificaVoucher/Confirm"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -105,7 +104,7 @@
   </wsdl:binding>
   <wsdl:service name="VerificaVoucher">
     <wsdl:port binding="tns:VerificaVoucherSOAP" name="VerificaVoucherSOAP">
-      <soap:address location="https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher"/>
+      <soap:address location="https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
