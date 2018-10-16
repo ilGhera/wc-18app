@@ -34,6 +34,7 @@ function wc18_premium_activation() {
 	define('WC18_URI', plugin_dir_url(__FILE__));
 	define('WC18_INCLUDES', WC18_DIR . 'includes/');
 	define('WC18_PRIVATE', WC18_DIR . 'private/');
+	define('WCCD_PRIVATE_URI', WCCD_URI . 'private/');
 	
 	/*Requires*/
 	require WC18_INCLUDES . 'class-18app-gateway.php';
