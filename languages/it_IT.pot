@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WC 18app 0.9.0\n"
-"POT-Creation-Date: 2018-10-03 15:37+0200\n"
+"POT-Creation-Date: 2018-10-16 15:59+0200\n"
 "PO-Revision-Date: 2018-07-02 12:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -228,20 +228,20 @@ msgstr ""
 msgid "There is no changelog available."
 msgstr ""
 
-#: wc-18app.php:95
+#: wc-18app.php:96
 msgid ""
 "Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a "
 "href=\""
 msgstr ""
 
-#: wc-18app.php:105
+#: wc-18app.php:106
 msgid ""
 "Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a href="
 "\"https://www.ilghera.com/product/woocommerce-18app-premium/\" target="
 "\"_blank\">qui</a> per maggiori informazioni."
 msgstr ""
 
-#: wc-18app.php:107
+#: wc-18app.php:108
 msgid ""
 "Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a "
 "href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" target="

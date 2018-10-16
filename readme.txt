@@ -5,11 +5,11 @@ Version: 0.9.0
 Requires at least: 4.0
 Tested up to: 4.9
 
-Abilita in WooCommerce il pagamento con 18app.
+Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 
 == Description ==
 
-Il plugin consente di abilitare sul proprio store il pagamento con 18app.
+Il plugin consente di abilitare sul proprio store il pagamento con 18app, il Bonus Cultura previsto dallo sato italiano.
 In fase di checkout, il buono inserito dall'utente verrà verificato per validità, credito disponibile e pertinenza in termini di tipologia di prodotto.
 
 
