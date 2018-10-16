@@ -67,6 +67,6 @@ This plugin sends data to an external service, like the categories and the price
 == Changelog ==
 
 = 0.9.0 =
-Data di rilascio: 2 Ottobre, 2018
+Data di rilascio: 16 Ottobre, 2018
 
 * Prima release.
