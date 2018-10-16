@@ -104,7 +104,7 @@
   </wsdl:binding>
   <wsdl:service name="VerificaVoucher">
     <wsdl:port binding="tns:VerificaVoucherSOAP" name="VerificaVoucherSOAP">
-      <soap:address location="https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher"/>
+      <soap:address location="https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
