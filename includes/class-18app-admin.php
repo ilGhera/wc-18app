@@ -128,7 +128,7 @@ class wc18_admin {
 	 */
 	public function get_go_premium() {
 		$output = '<span class="label label-warning premium">';
-			$output .= '<a href="https://www.ilghera.com/woocommerce-18app-premium" target="_blank">Premium</a>';
+			$output .= '<a href="https://www.ilghera.com/product/woocommerce-18app-premium" target="_blank">Premium</a>';
 		$output .= '</span>';
 
 		return $output;
