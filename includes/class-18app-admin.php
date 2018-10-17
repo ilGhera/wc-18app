@@ -1,9 +1,9 @@
 <?php
 
-class wccd_admin {
+class wc18_admin {
 
 	public function __construct() {
-		add_action('admin_init', array($this, 'wccd_save_settings'));
+		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_menu', array($this, 'register_options_page'));
 		add_action('wp_ajax_delete-certificate', array($this, 'delete_certificate_callback'));
 		add_action('wp_ajax_add-cat', array($this, 'add_cat_callback'));
@@ -14,7 +14,7 @@ class wccd_admin {
 	 * Registra la pagina opzioni del plugin
 	 */
 	public function register_options_page() {
-		add_submenu_page( 'woocommerce', __('WooCommerce Carta docente - Impostazioni', 'wccd'), __('WC Carta Docente', 'wccd'), 'manage_options', 'wccd-settings', array($this, 'wccd_settings'));
+		add_submenu_page( 'woocommerce', __('WooCommerce 18app - Impostazioni', 'wc18'), __('WC 18app', 'wc18'), 'manage_options', 'wc18-settings', array($this, 'wc18_settings'));
 	}
 
 
@@ -25,7 +25,7 @@ class wccd_admin {
 	 */
 	public static function get_the_file($ext) {
 		$files = [];
-		foreach (glob(WCCD_PRIVATE . '*' . $ext) as $file) {
+		foreach (glob(WC18_PRIVATE . '*' . $ext) as $file) {
 			$files[] = $file; 
 		}
 		$output = empty($files) ? false : $files[0];
@@ -41,7 +41,7 @@ class wccd_admin {
 		if(isset($_POST['delete'])) {
 			$cert = isset($_POST['cert']) ? sanitize_text_field($_POST['cert']) : '';
 			if($cert) {
-				unlink(WCCD_PRIVATE . $cert);	
+				unlink(WC18_PRIVATE . $cert);	
 			}
 		}
 
@@ -67,14 +67,14 @@ class wccd_admin {
 			$term_value = $bene_value ? $data[$bene_value] : '';
 
 
-			echo '<select name="wccd-beni-' . $n . '" class="wccd-field beni">';
-				echo '<option value="">Bene carta docente</option>';
+			echo '<select name="wc18-beni-' . $n . '" class="wc18-field beni">';
+				echo '<option value="">Bene 18app</option>';
 				foreach ($beni as $bene) {
     				echo '<option value="' . $bene . '"' . ($bene === $bene_value ? ' selected="selected"' : '') . '>' . ucfirst($bene) . '</option>';
 				}
 			echo '</select>';
 
-			echo '<select name="wccd-categories-' . $n . '" class="wccd-field categories">';
+			echo '<select name="wc18-categories-' . $n . '" class="wc18-field categories">';
 				echo '<option value="">Categoria WooCommerce</option>';
 				foreach ($terms as $term) {
     				echo '<option value="' . $term->term_id . '"' . ($term->term_id == $term_value ? ' selected="selected"' : '') . '>' . $term->name . '</option>';
@@ -84,15 +84,15 @@ class wccd_admin {
 			if($n === 1) {
 
 				echo '<div class="add-cat-container">';
-	    			echo '<img class="add-cat" src="' . WCCD_URI . 'images/add-cat.png">';
-	    			echo '<img class="add-cat-hover" src="' . WCCD_URI . 'images/add-cat-hover.png">';
+	    			echo '<img class="add-cat" src="' . WC18_URI . 'images/add-cat.png">';
+	    			echo '<img class="add-cat-hover" src="' . WC18_URI . 'images/add-cat-hover.png">';
 				echo '</div>';				
 
 			} else {
 
     			echo '<div class="remove-cat-container">';
-	    			echo '<img class="remove-cat" src="' . WCCD_URI . 'images/remove-cat.png">';
-	    			echo '<img class="remove-cat-hover" src="' . WCCD_URI . 'images/remove-cat-hover.png">';
+	    			echo '<img class="remove-cat" src="' . WC18_URI . 'images/remove-cat.png">';
+	    			echo '<img class="remove-cat-hover" src="' . WC18_URI . 'images/remove-cat-hover.png">';
     			echo '</div>';
 
 			}
@@ -123,7 +123,7 @@ class wccd_admin {
 	 */
 	public function get_go_premium() {
 		$output = '<span class="label label-warning premium">';
-			$output .= '<a href="https://www.ilghera.com/woocommerce-carta-docente-premium" target="_blank">Premium</a>';
+			$output .= '<a href="https://www.ilghera.com/woocommerce-18app-premium" target="_blank">Premium</a>';
 		$output .= '</span>';
 
 		return $output;
@@ -133,8 +133,8 @@ class wccd_admin {
 	/**
 	 * Attivazione certificato
 	 */
-	public function wccd_cert_activation() {
-	    $soapClient = new wccd_soap_client('11aa22bb', '');
+	public function wc18_cert_activation() {
+	    $soapClient = new wc18_soap_client('11aa22bb', '');
 
 	    try {
 
@@ -144,7 +144,7 @@ class wccd_admin {
 		} catch(Exception $e) {
 
             $notice = isset($e->detail->FaultVoucher->exceptionMessage) ? $e->detail->FaultVoucher->exceptionMessage : $e->faultstring;
-		    error_log('Error wccd_cert_activation: ' . print_r($e, true));
+		    error_log('Error wc18_cert_activation: ' . print_r($e, true));
 		    return $notice;
 
         } 
@@ -154,67 +154,67 @@ class wccd_admin {
 	/**
 	 * Pagina opzioni plugin
 	 */
-	public function wccd_settings() {
+	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-		$categories = get_option('wccd-categories');
+		$categories = get_option('wc18-categories');
 		$tot_cats = $categories ? count($categories) : 0;
-		$wccd_image = get_option('wccd-image');
+		$wc18_image = get_option('wc18-image');
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
-			    echo '<h1>WooCommerce Carta Docente - ' . esc_html(__('Impostazioni', 'wccd')) . '</h1>';
+			    echo '<h1>WooCommerce 18app - ' . esc_html(__('Impostazioni', 'wc18')) . '</h1>';
 
 				/*Tabs*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"></div>';
-				echo '<h2 id="wccd-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
-					echo '<a href="#" data-link="wccd-certificate" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html(__('Certificato', 'wccd')) . '</a>';
-					echo '<a href="#" data-link="wccd-options" class="nav-tab" onclick="return false;">' . esc_html(__('Opzioni', 'wccd')) . '</a>';
+				echo '<h2 id="wc18-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
+					echo '<a href="#" data-link="wc18-certificate" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html(__('Certificato', 'wc18')) . '</a>';
+					echo '<a href="#" data-link="wc18-options" class="nav-tab" onclick="return false;">' . esc_html(__('Opzioni', 'wc18')) . '</a>';
 				echo '</h2>';
 
 			    /*Certificate*/
-			    echo '<div id="wccd-certificate" class="wccd-admin" style="display: block;">';
+			    echo '<div id="wc18-certificate" class="wc18-admin" style="display: block;">';
 
 		    		/*Carica certificato .pem*/
-		    		echo '<h3>' . esc_html(__('Carica il tuo certificato', 'wccd')) . '</h3>';
-	    			echo '<p class="description">' . esc_html(__('Se sei già in posseso di un certificato non devi fare altro che caricarlo, nient\'altro.', 'wccd')) . '</p>';
+		    		echo '<h3>' . esc_html(__('Carica il tuo certificato', 'wc18')) . '</h3>';
+	    			echo '<p class="description">' . esc_html(__('Se sei già in posseso di un certificato non devi fare altro che caricarlo, nient\'altro.', 'wc18')) . '</p>';
 
-				    echo '<form name="wccd-upload-certificate" class="wccd-upload-certificate one-of" method="post" enctype="multipart/form-data" action="">';
-				    	echo '<table class="form-table wccd-table">';
+				    echo '<form name="wc18-upload-certificate" class="wc18-upload-certificate one-of" method="post" enctype="multipart/form-data" action="">';
+				    	echo '<table class="form-table wc18-table">';
 
 				    		/*Carica certificato*/
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Carica certificato', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Carica certificato', 'wc18')) . '</th>';
 				    			echo '<td>';
 				    				if($file = self::get_the_file('.pem')) {
 
-				    					$activation = $this->wccd_cert_activation();
+				    					$activation = $this->wc18_cert_activation();
 
 				    					if($activation === 'ok') {
 
 					    					echo '<span class="cert-loaded">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wccd') . '</a>';
-					    					echo '<p class="description">' . esc_html(__('File caricato e attivato correttamente.', 'wccd')) . '</p>';
+					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<p class="description">' . esc_html(__('File caricato e attivato correttamente.', 'wc18')) . '</p>';
 
-					    					update_option('wccd-cert-activation', 1);
+					    					update_option('wc18-cert-activation', 1);
 
 				    					} else {
 
 					    					echo '<span class="cert-loaded error">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wccd') . '</a>';
-					    					echo '<p class="description">' . sprintf(esc_html(__('L\'attivazione del certificato ha restituito il seguente errore: %s', 'wccd')), $activation) . '</p>';
+					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<p class="description">' . sprintf(esc_html(__('L\'attivazione del certificato ha restituito il seguente errore: %s', 'wc18')), $activation) . '</p>';
 
-					    					delete_option('wccd-cert-activation');
+					    					delete_option('wc18-cert-activation');
 
 				    					}
 
 				    				} else {
-						    			echo '<input type="file" accept=".pem" name="wccd-certificate" class="wccd-certificate">';
-						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con Carta del docente', 'wccd')) . '</p>';
+						    			echo '<input type="file" accept=".pem" name="wc18-certificate" class="wc18-certificate">';
+						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con 18app', 'wc18')) . '</p>';
 			
-								    	wp_nonce_field('wccd-upload-certificate', 'wccd-certificate-nonce');
-								    	echo '<input type="hidden" name="wccd-certificate-hidden" value="1">';
-								    	echo '<input type="submit" class="button-primary wccd-button" value="' . esc_html('Salva certificato', 'wccd') . '">';
+								    	wp_nonce_field('wc18-upload-certificate', 'wc18-certificate-nonce');
+								    	echo '<input type="hidden" name="wc18-certificate-hidden" value="1">';
+								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Salva certificato', 'wc18') . '">';
 				    				}
 				    			echo '</td>';
 				    		echo '</tr>';
@@ -226,64 +226,64 @@ class wccd_admin {
 		    		if(!self::get_the_file('.pem')) {
 				
 			    		/*Genera richiesta certificato .der*/
-			    		echo '<h3>' . esc_html(__('Richiedi un certificato', 'wccd')) . $this->get_go_premium() . '</h3>';
-		    			echo '<p class="description">' . esc_html(__('Con questo strumento puoi generare un file .der necessario per richiedere il tuo certificato su Carta del docente.', 'wccd')) . '</p>';
+			    		echo '<h3>' . esc_html(__('Richiedi un certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
+		    			echo '<p class="description">' . esc_html(__('Con questo strumento puoi generare un file .der necessario per richiedere il tuo certificato su 18app.', 'wc18')) . '</p>';
 
 	    				echo '<form id="generate-certificate-request" method="post" class="one-of" enctype="multipart/form-data" action="">';
-							echo '<table class="form-table wccd-table">';
+							echo '<table class="form-table wc18-table">';
 					    		echo '<tr>';
-					    			echo '<th scope="row">' . esc_html(__('Stato', 'wccd')) . '</th>';
+					    			echo '<th scope="row">' . esc_html(__('Stato', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="countryName" placeholder="IT" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Provincia', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Provincia', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="stateOrProvinceName" placeholder="Es. Milano" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Località', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Località', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="localityName" placeholder="Es. Legnano" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Nome azienda', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Nome azienda', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="organizationName" placeholder="Es. Taldeitali srl" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Reparto azienda', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Reparto azienda', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="organizationalUnitName" placeholder="Es. Vendite" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Nome', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Nome', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="text" name="commonName" placeholder="Es. Franco Bianchi" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Email', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Email', 'wc18')) . '</th>';
 					    			echo '<td>';
 				    					echo '<input type="email" name="emailAddress" placeholder="Es. franco.bianchi@taldeitali.it" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
-				    			echo '<th scope="row">' . esc_html(__('Password', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="password" name="wccd-password" placeholder="**********" disabled>';
+				    					echo '<input type="password" name="wc18-password" placeholder="**********" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row"></th>';
 					    			echo '<td>';
 					    			echo '<input type="hidden" name="generate-der-hidden" value="1">';
-				    				echo '<input type="submit" name="generate-der" class="button-primary wccd-button generate-der" value="' . __('Scarica file .der', 'wccd') . '" disabled>';
+				    				echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . __('Scarica file .der', 'wc18') . '" disabled>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
@@ -292,23 +292,23 @@ class wccd_admin {
 
 
 			    		/*Genera certificato .pem*/
-			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wccd')) . $this->get_go_premium() . '</h3>';
-		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni del docente.', 'wccd')) . '</p>';
+			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
+		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18')) . '</p>';
 
-						echo '<form name="wccd-generate-certificate" class="wccd-generate-certificate" method="post" enctype="multipart/form-data" action="">';
-					    	echo '<table class="form-table wccd-table">';
+						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate" method="post" enctype="multipart/form-data" action="">';
+					    	echo '<table class="form-table wc18-table">';
 
 					    		/*Carica certificato*/
 					    		echo '<tr>';
-					    			echo '<th scope="row">' . esc_html(__('Genera certificato', 'wccd')) . '</th>';
+					    			echo '<th scope="row">' . esc_html(__('Genera certificato', 'wc18')) . '</th>';
 					    			echo '<td>';
 					    				
-						    			echo '<input type="file" accept=".cer" name="wccd-cert" class="wccd-cert" disabled>';
-						    			echo '<p class="description">' . esc_html(__('Carica il file .cer ottenuto da Carta del docente per procedere', 'wccd')) . '</p>';
+						    			echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert" disabled>';
+						    			echo '<p class="description">' . esc_html(__('Carica il file .cer ottenuto da 18app per procedere', 'wc18')) . '</p>';
 								    	
-								    	wp_nonce_field('wccd-generate-certificate', 'wccd-gen-certificate-nonce');
-								    	echo '<input type="hidden" name="wccd-gen-certificate-hidden" value="1">';
-								    	echo '<input type="submit" class="button-primary wccd-button" value="' . esc_html('Genera certificato', 'wccd') . '" disabled>';
+								    	wp_nonce_field('wc18-generate-certificate', 'wc18-gen-certificate-nonce');
+								    	echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
+								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '" disabled>';
 
 					    			echo '</td>';
 					    		echo '</tr>';
@@ -322,13 +322,13 @@ class wccd_admin {
 
 
 			    /*Options*/
-			    echo '<div id="wccd-options" class="wccd-admin">';
+			    echo '<div id="wc18-options" class="wc18-admin">';
 
-				    echo '<form name="wccd-options" class="wccd-form wccd-options" method="post" enctype="multipart/form-data" action="">';
+				    echo '<form name="wc18-options" class="wc18-form wc18-options" method="post" enctype="multipart/form-data" action="">';
 				    	echo '<table class="form-table">';
 				    		
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Categorie', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Categorie', 'wc18')) . '</th>';
 				    			echo '<td>';
 
 				    				echo '<ul  class="categories-container">';
@@ -342,32 +342,32 @@ class wccd_admin {
 				    					}
 
 						    		echo '</ul>';
-						    		echo '<input type="hidden" name="wccd-tot-cats" class="wccd-tot-cats" value="' . ($categories ? count($categories) : '') . '">';
-					    			echo '<p class="description">' . esc_html(__('Seleziona le categorie di prodotti corrispondenti ai beni acquistabili.', 'wccd')) . '</p>';
+						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : '') . '">';
+					    			echo '<p class="description">' . esc_html(__('Seleziona le categorie di prodotti corrispondenti ai beni acquistabili.', 'wc18')) . '</p>';
 				    			echo '</td>';
 				    		echo '</tr>';
 
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine ', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine ', 'wc18')) . '</th>';
 			    				echo '<td>';
 					    			echo '<label>';
-					    			echo '<input type="checkbox" name="wccd-image" value="1"' . ($wccd_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo esc_html(__('Mostra il logo Carta del docente nella pagine di checkout.', 'wccd'));
+					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
+					    			echo esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18'));
 					    			echo '</label>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
 				    	echo '</table>';
-				    	wp_nonce_field('wccd-save-settings', 'wccd-settings-nonce');
-				    	echo '<input type="hidden" name="wccd-settings-hidden" value="1">';
-				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wccd') . '">';
+				    	wp_nonce_field('wc18-save-settings', 'wc18-settings-nonce');
+				    	echo '<input type="hidden" name="wc18-settings-hidden" value="1">';
+				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wc18') . '">';
 				    echo '</form>';
 			    echo '</div>';
 
 		    echo '</div>';
 
 	    	echo '<div class="wrap-right">';
-				echo '<iframe width="300" height="900" scrolling="no" src="http://www.ilghera.com/images/wccd-iframe.html"></iframe>';
+				echo '<iframe width="300" height="900" scrolling="no" src="http://www.ilghera.com/images/wc18-iframe.html"></iframe>';
 			echo '</div>';
 			echo '<div class="clear"></div>';
 
@@ -383,7 +383,7 @@ class wccd_admin {
 	public function not_valid_certificate() {
 		?>
 		<div class="notice notice-error">
-	        <p><?php esc_html_e(__( 'ATTENZIONE! Il file caricato non sembra essere un certificato valido.', 'wccd' )); ?></p>
+	        <p><?php esc_html_e(__( 'ATTENZIONE! Il file caricato non sembra essere un certificato valido.', 'wc18' )); ?></p>
 	    </div>
 		<?php
 	}
@@ -392,17 +392,17 @@ class wccd_admin {
 	/**
 	 * Salvataggio delle impostazioni dell'utente
 	 */
-	public function wccd_save_settings() {
+	public function wc18_save_settings() {
 
-		if(isset($_POST['wccd-certificate-hidden']) && wp_verify_nonce($_POST['wccd-certificate-nonce'], 'wccd-upload-certificate')) {
+		if(isset($_POST['wc18-certificate-hidden']) && wp_verify_nonce($_POST['wc18-certificate-nonce'], 'wc18-upload-certificate')) {
 			
 			/*Carica certificato*/
-			if(isset($_FILES['wccd-certificate'])) {
-				$info = pathinfo($_FILES['wccd-certificate']['name']);
+			if(isset($_FILES['wc18-certificate'])) {
+				$info = pathinfo($_FILES['wc18-certificate']['name']);
 				$name = sanitize_file_name($info['basename']);
 				if($info) {
 					if($info['extension'] === 'pem') {
-						move_uploaded_file($_FILES['wccd-certificate']['tmp_name'], WCCD_PRIVATE . $name);	
+						move_uploaded_file($_FILES['wc18-certificate']['tmp_name'], WC18_PRIVATE . $name);	
 					} else {
 						add_action('admin_notices', array($this, 'not_valid_certificate'));
 					}					
@@ -410,31 +410,31 @@ class wccd_admin {
 			}
 		}
 
-		if(isset($_POST['wccd-settings-hidden']) && wp_verify_nonce($_POST['wccd-settings-nonce'], 'wccd-save-settings')) {
+		if(isset($_POST['wc18-settings-hidden']) && wp_verify_nonce($_POST['wc18-settings-nonce'], 'wc18-save-settings')) {
 
 			/*Impostazioni categorie per il controllo in fase di checkout*/
-			if(isset($_POST['wccd-tot-cats'])) {
-				$tot = sanitize_text_field($_POST['wccd-tot-cats']);
+			if(isset($_POST['wc18-tot-cats'])) {
+				$tot = sanitize_text_field($_POST['wc18-tot-cats']);
 
-				$wccd_categories = array();
+				$wc18_categories = array();
 
 				for ($i=1; $i <= $tot ; $i++) { 
-					$bene = isset($_POST['wccd-beni-' . $i]) ? sanitize_text_field($_POST['wccd-beni-' . $i]) : '';
-					$cat = isset($_POST['wccd-categories-' . $i]) ? sanitize_text_field($_POST['wccd-categories-' . $i]) : '';
+					$bene = isset($_POST['wc18-beni-' . $i]) ? sanitize_text_field($_POST['wc18-beni-' . $i]) : '';
+					$cat = isset($_POST['wc18-categories-' . $i]) ? sanitize_text_field($_POST['wc18-categories-' . $i]) : '';
 
 					if($bene && $cat) {
-						$wccd_categories[] = array($bene => $cat);
+						$wc18_categories[] = array($bene => $cat);
 					}
 				}
 
-				update_option('wccd-categories', $wccd_categories);
+				update_option('wc18-categories', $wc18_categories);
 			}
 
 			/*Immagine in pagina di checkout*/
-			$wccd_image = isset($_POST['wccd-image']) ? sanitize_text_field($_POST['wccd-image']) : '';															
-			update_option('wccd-image', $wccd_image);
+			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
+			update_option('wc18-image', $wc18_image);
 		}
 	}
 
 }
-new wccd_admin();
+new wc18_admin();

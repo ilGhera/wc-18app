@@ -1,19 +1,19 @@
 <?php
 /**
  * Estende la classe WC_Payment_Gateway di WooCommerce 
- * aggiungendo il nuovo gateway "buono docente".
+ * aggiungendo il nuovo gateway 18app.
  */
-class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
+class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 	public function __construct() {
-		$this->plugin_id = 'woocommerce_carta_docente';
-		$this->id = 'docente';
+		$this->plugin_id = 'woocommerce_18app';
+		$this->id = '18app';
 		$this->has_fields = true;
-		$this->method_title = 'Buono docente';
-		$this->method_description = 'Consente ai docenti di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
+		$this->method_title = '18app';
+		$this->method_description = 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
 		
-		if(get_option('wccd-image')) {
-			$this->icon = WCCD_URI . 'images/carta-docente.png';			
+		if(get_option('wc18-image')) {
+			$this->icon = WC18_URI . 'images/18app.png';			
 		}
 
 		$this->init_form_fields();
@@ -24,9 +24,9 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 
-		add_action('woocommerce_order_details_after_order_table', array($this, 'display_teacher_code'), 10, 1);
-		add_action('woocommerce_email_after_order_table', array($this, 'display_teacher_code'), 10, 1);
-		add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'display_teacher_code'), 10, 1);
+		add_action('woocommerce_order_details_after_order_table', array($this, 'display_18app_code'), 10, 1);
+		add_action('woocommerce_email_after_order_table', array($this, 'display_18app_code'), 10, 1);
+		add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'display_18app_code'), 10, 1);
 	}
 
 
@@ -39,20 +39,20 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 			'enabled' => array(
 		        'title' => __( 'Enable/Disable', 'woocommerce' ),
 		        'type' => 'checkbox',
-		        'label' => __( 'Abilita pagamento con buono docente', 'wccd' ),
+		        'label' => __( 'Abilita pagamento con buono 18app', 'wc18' ),
 		        'default' => 'yes'
 		    ),
 		    'title' => array(
 		        'title' => __( 'Title', 'woocommerce' ),
 		        'type' => 'text',
-		        'description' => __( 'This controls the title which the user sees during checkout.', 'wccd' ),
-		        'default' => __( 'Buono docente', 'wccd' ),
+		        'description' => __( 'This controls the title which the user sees during checkout.', 'wc18' ),
+		        'default' => __( 'Buono 18app', 'wc18' ),
 		        'desc_tip'      => true,
 		    ),
 		    'description' => array(
 		        'title' => __( 'Messaggio utente', 'woocommerce' ),
 		        'type' => 'textarea',
-		        'default' => 'Consente ai docenti di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.',
+		        'default' => 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.',
 		    )
 		));
 
@@ -66,11 +66,11 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 		?>
 		<p>
 			<?php echo $this->description; ?>
-			<label for="wc-codice-docente">
-				<?php echo __('Inserisci qui il tuo codice', 'wccd');?>
+			<label for="wc-codice-18app">
+				<?php echo __('Inserisci qui il tuo codice', 'wc18');?>
 				<span class="required">*</span>
 			</label>
-			<input type="text" class="wc-codice-docente" id="wc-codice-docente" name="wc-codice-docente" />
+			<input type="text" class="wc-codice-18app" id="wc-codice-18app" name="wc-codice-18app" />
 		</p>
 		<?php
 	}
@@ -83,12 +83,12 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 	 */
 	public function get_purchasable_cat($purchasable) {
 
-		$wccd_categories = get_option('wccd-categories');
+		$wc18_categories = get_option('wc18-categories');
 		$bene = strtolower($purchasable);
 		
-		for($i=0; $i < count($wccd_categories); $i++) { 
-			if(array_key_exists($bene, $wccd_categories[$i])) {
-				return $wccd_categories[$i][$bene];
+		for($i=0; $i < count($wc18_categories); $i++) { 
+			if(array_key_exists($bene, $wc18_categories[$i])) {
+				return $wc18_categories[$i][$bene];
 			}
 		}
 
@@ -96,7 +96,7 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 
 
 	/**
-	 * Tutti i prodotti dell'ordine devono essere della tipologia (cat) consentita dal buono docente. 
+	 * Tutti i prodotti dell'ordine devono essere della tipologia (cat) consentita dal buono 18app. 
 	 * @param  object $order  
 	 * @param  string $bene il bene acquistabile con il buono
 	 * @return bool
@@ -127,16 +127,16 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 
 
 	/**
-	 * Mostra il buono docente nella thankyou page, nelle mail e nella pagina dell'ordine.
+	 * Mostra il buono 18app nella thankyou page, nelle mail e nella pagina dell'ordine.
 	 * @param  object $order
 	 * @return mixed        testo formattato con il buono utilizzato per l'acquisto
 	 */
-	public function display_teacher_code($order) {
+	public function display_18app_code($order) {
 		
 		$data = $order->get_data();
 
-		if($data['payment_method'] === 'docente') {
-		    echo '<p><strong>' . __('Buono docente', 'wccd') . ': </strong>' . get_post_meta($order->get_id(), 'wc-codice-docente', true) . '</p>';
+		if($data['payment_method'] === '18app') {
+		    echo '<p><strong>' . __('Buono 18app', 'wc18') . ': </strong>' . get_post_meta($order->get_id(), 'wc-codice-18app', true) . '</p>';
 		}
 	}
 
@@ -158,11 +158,11 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 		);
 
 		$data = $this->get_post_data();
-	    $teacher_code = $data['wc-codice-docente']; //il buono inserito dall'utente
+	    $app_code = $data['wc-codice-18app']; //il buono inserito dall'utente
 
-	    if($teacher_code) {
+	    if($app_code) {
 
-		    $soapClient = new wccd_soap_client($teacher_code, $import);
+		    $soapClient = new wc18_soap_client($app_code, $import);
 		    
 		    try {
 
@@ -177,7 +177,7 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 
 			    if(!$purchasable) {
 
-					$notice = __('Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wccd');
+					$notice = __('Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18');
 
 				} else {
 
@@ -209,8 +209,8 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 						    /*Svuota carrello*/ 
 						    $woocommerce->cart->empty_cart();	
 
-						    /*Aggiungo il buono docente all'ordine*/
-							update_post_meta($order_id, 'wc-codice-docente', $teacher_code);
+						    /*Aggiungo il buono 18app all'ordine*/
+							update_post_meta($order_id, 'wc-codice-18app', $app_code);
 
 						    $output = array(
 						        'result' => 'success',
@@ -236,7 +236,7 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
 	    }	
 		
 		if($notice) {
-			wc_add_notice( __('<b>Buono docente</b> - ' . $notice, 'wccd'), 'error' );
+			wc_add_notice( __('<b>Buono 18app</b> - ' . $notice, 'wc18'), 'error' );
 		}
 
 		return $output;
@@ -250,11 +250,11 @@ class WCCD_Teacher_Gateway extends WC_Payment_Gateway {
  * Se presente un certificato, aggiunge il nuovo gateway a quelli disponibili in WooCommerce
  * @param array $methods gateways disponibili 
  */
-function wccd_add_teacher_gateway_class($methods) {
-	if(wccd_admin::get_the_file('.pem') && get_option('wccd-cert-activation')) {
-	    $methods[] = 'WCCD_Teacher_Gateway'; 
+function wc18_add_18app_gateway_class($methods) {
+	if(wc18_admin::get_the_file('.pem') && get_option('wc18-cert-activation')) {
+	    $methods[] = 'WC18_18app_Gateway'; 
 	}
 
     return $methods;
 }
-add_filter('woocommerce_payment_gateways', 'wccd_add_teacher_gateway_class');
+add_filter('woocommerce_payment_gateways', 'wc18_add_18app_gateway_class');
