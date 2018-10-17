@@ -30,9 +30,9 @@ function wc18_activation() {
 	define('WC18_PRIVATE_URI', WC18_URI . 'private/');
 
 	/*Requires*/
-	require WC18_INCLUDES . 'class-wc18-teacher-gateway.php';
-	require WC18_INCLUDES . 'class-wc18-soap-client.php';
-	require WC18_INCLUDES . 'class-wc18-admin.php';
+	require WC18_INCLUDES . 'class-18app-gateway.php';
+	require WC18_INCLUDES . 'class-18app-soap-client.php';
+	require WC18_INCLUDES . 'class-18app-admin.php';
 
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {

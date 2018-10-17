@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Pagina opzioni e gestione certificati
+ * @author ilGhera
+ * @package wc-18app/includes
+ * @version 0.9.0
+ */
 class wc18_admin {
 
 	public function __construct() {
@@ -367,7 +372,6 @@ class wc18_admin {
 		    echo '</div>';
 
 	    	echo '<div class="wrap-right">';
-				echo '<iframe width="300" height="900" scrolling="no" src="http://www.ilghera.com/images/wc18-iframe.html"></iframe>';
 			echo '</div>';
 			echo '<div class="clear"></div>';
 
