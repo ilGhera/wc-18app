@@ -1,8 +1,8 @@
 /**
- * WC Carta Docente - Admin CSS
+ * WC 18app - Admin CSS
  */
 
-#wccd-admin-menu {
+#wc18-admin-menu {
 	margin: 1rem 0 2rem;
 }
 
@@ -39,7 +39,7 @@ ul.categories-container {
 	margin: 0;
 }
 
-.wccd-field {
+.wc18-field {
 	width: 200px;
 	margin-right: 0.5rem;
 }
@@ -67,7 +67,7 @@ ul.categories-container {
 	display: inline;
 }
 
-.wccd-form, .wccd-table {
+.wc18-form, .wc18-table {
 	margin-top: 2rem;
 }
 
@@ -76,11 +76,11 @@ ul.categories-container {
 	border-bottom: 1px solid #ccc;
 }
 
-.wccd-button {
+.wc18-button {
 	margin-top: 1rem !important;
 }
 
-.wccd-admin {
+.wc18-admin {
 	display: none;
 }
 
