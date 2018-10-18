@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Pagina opzioni e gestione certificati
+ * @author ilGhera
+ * @package wc-18app/includes
+ * @version 0.9.0
+ */
 class wc18_admin {
 
 	public function __construct() {
@@ -226,7 +231,7 @@ class wc18_admin {
 		} catch(Exception $e) {
 
             $notice = isset($e->detail->FaultVoucher->exceptionMessage) ? $e->detail->FaultVoucher->exceptionMessage : $e->faultstring;
-		    error_log('Error wccd_cert_activation: ' . print_r($e, true));
+		    error_log('Error wc18_cert_activation: ' . print_r($e, true));
 		    return $notice;
 
         } 
@@ -240,6 +245,7 @@ class wc18_admin {
 
 		/*Recupero le opzioni salvate nel db*/
 		$premium_key = get_option('wc18-premium-key');
+		$passphrase = base64_decode(get_option('wc18-password'));
 		$categories = get_option('wc18-categories');
 		$tot_cats = $categories ? count($categories) : 0;
 		$wc18_image = get_option('wc18-image');
@@ -306,13 +312,24 @@ class wc18_admin {
 				    					}
 
 				    				} else {
+
 						    			echo '<input type="file" accept=".pem" name="wc18-certificate" class="wc18-certificate">';
 						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con 18app', 'wc18')) . '</p>';
 			
-								    	wp_nonce_field('wc18-upload-certificate', 'wc18-certificate-nonce');
-								    	echo '<input type="hidden" name="wc18-certificate-hidden" value="1">';
-								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Salva certificato', 'wc18') . '">';
 				    				}
+				    			echo '</td>';
+				    		echo '</tr>';
+
+				    		/*Password utilizzata per la creazione del certificato*/
+				    		echo '<tr>';
+				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
+				    			echo '<td>';
+			    					echo '<input type="password" name="wc18-password" placeholder="**********" value="' . $passphrase . '" required>';
+					    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
+
+							    	wp_nonce_field('wc18-upload-certificate', 'wc18-certificate-nonce');
+							    	echo '<input type="hidden" name="wc18-certificate-hidden" value="1">';
+							    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Salva certificato', 'wc18') . '">';
 				    			echo '</td>';
 				    		echo '</tr>';
 
@@ -550,6 +567,14 @@ class wc18_admin {
 					}					
 				}
 			}
+
+			/*Password*/
+            $wc18_password = isset($_POST['wc18-password']) ? sanitize_text_field($_POST['wc18-password']) : '';
+
+            /*Salvo passw nel db*/
+            if($wc18_password) {
+            	update_option('wc18-password', base64_encode($wc18_password));
+            }
 		}
 
 		if(isset($_POST['wc18-settings-hidden']) && wp_verify_nonce($_POST['wc18-settings-nonce'], 'wc18-save-settings')) {

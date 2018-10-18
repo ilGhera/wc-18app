@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Gestice le chiamate del web service 
+ * @author ilGhera
+ * @package wc-18app/includes
+ * @version 0.9.0
+ */
 class wc18_soap_client {
 
     public function __construct($codiceVoucher, $import) {
