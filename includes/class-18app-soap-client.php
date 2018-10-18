@@ -2,17 +2,10 @@
 /**
  * Gestice le chiamate del web service 
  * @author ilGhera
-<<<<<<< HEAD:includes/class-18app-soap-client.php
  * @package wc-18app/includes
  * @version 0.9.0
  */
 class wc18_soap_client {
-=======
- * @package wc-carta-docente/includes
- * @version 0.9.2
- */
-class wccd_soap_client {
->>>>>>> master:includes/class-wccd-soap-client.php
 
     public function __construct($codiceVoucher, $import) {
         $this->wsdl = WC18_PRIVATE_URI . 'VerificaVoucher.wsdl';
