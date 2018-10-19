@@ -384,7 +384,9 @@ class wc18_admin {
 		    echo '</div>';
 
 	    	echo '<div class="wrap-right">';
-			echo '</div>';
+				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wc18-iframe.html"></iframe>';
+
+	    	echo '</div>';
 			echo '<div class="clear"></div>';
 
 	    echo '</div>';

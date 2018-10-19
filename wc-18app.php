@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin name: WC 18app
+ * Plugin name: WooCommerce 18app
  * Plugin URI: https://www.ilghera.com/product/wc-18app-premium/
  * Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
  * Author: ilGhera
