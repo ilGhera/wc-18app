@@ -1,7 +1,7 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 0.9.0
+Version: 0.9.1
 Requires at least: 4.0
 Tested up to: 4.9
 

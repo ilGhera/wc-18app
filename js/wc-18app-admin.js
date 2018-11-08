@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @version 0.9.0
+ * @version 0.9.1 
  */
 
 /**
@@ -45,12 +45,6 @@ var wc18_add_cat = function() {
 				beni_values.push($(this).val());
 			})
 
-			/*Categorie già utilizzate da escludere*/
-			var cats_values = [];
-			$('.wc18-field.categories').each(function(){
-				cats_values.push($(this).val());
-			})
-
 			/*Se assegnate tutte le categorie visualizza messaggio*/
 			if(number > limit) {
 				alert('Tutte le categorie di prodotto sono state assegnate.');
@@ -60,7 +54,6 @@ var wc18_add_cat = function() {
 					'action': 'add-cat',
 					'number': number,
 					'exclude-beni': beni_values.toString(),
-					'exclude-cats': cats_values.toString()
 				}
 				$.post(ajaxurl, data, function(response){
 					$(response).appendTo('.categories-container');
