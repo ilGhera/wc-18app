@@ -51,7 +51,7 @@ var wc18_add_cat = function() {
 			} else {
 				
 				var data = {
-					'action': 'add-cat',
+					'action': 'add-cat-18app',
 					'number': number,
 					'exclude-beni': beni_values.toString(),
 				}
