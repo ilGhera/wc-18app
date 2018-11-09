@@ -120,7 +120,7 @@ class wc18_admin {
 
 				echo '<div class="add-cat-container">';
 	    			echo '<img class="add-cat" src="' . WC18_URI . 'images/add-cat.png">';
-	    			echo '<img class="add-cat-hover" src="' . WC18_URI . 'images/add-cat-hover.png">';
+	    			echo '<img class="add-cat-hover wc18" src="' . WC18_URI . 'images/add-cat-hover.png">';
 				echo '</div>';				
 
 			} else {
