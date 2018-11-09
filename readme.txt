@@ -76,6 +76,7 @@ This plugin sends data to an external service, like the categories and the price
 
 = 0.9.1 =
 Data di rilascio: 8 Novembre, 2018
+
 * Implementazione: Possibilità di abbinare differenti "beni" 18app alla stessa categoria WooCommeerce.
 * Implementazione: Aggiornata gamma "beni" disponibili.
 
