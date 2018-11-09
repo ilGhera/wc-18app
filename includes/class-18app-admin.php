@@ -11,7 +11,7 @@ class wc18_admin {
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_menu', array($this, 'register_options_page'));
 		add_action('wp_ajax_delete-certificate', array($this, 'delete_certificate_callback'));
-		add_action('wp_ajax_add-cat', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_add-cat-18app', array($this, 'add_cat_callback'));
 	}
 
 
