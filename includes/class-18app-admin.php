@@ -56,8 +56,8 @@ class wc18_admin {
 
 
 	/**
-	 * Restituisce il nome esatto del bene Carta del Docente partendo dallo slug
-	 * @param  array $beni       l'elenco dei beni di carta del docente
+	 * Restituisce il nome esatto del bene 18app partendo dallo slug
+	 * @param  array $beni       l'elenco dei beni di 18app
 	 * @param  string $bene_slug lo slug del bene
 	 * @return string
 	 */
@@ -84,17 +84,20 @@ class wc18_admin {
 			$beni_index = array(
 				'Abbonamento/Card',
 				'Bigletto d\'igresso',
-				'Hardware',
-				'Software',
-				'Libri',
-				'Riviste e pubblicazioni'
+				'Corsi di lingua straniera',
+				'Corsi di musica',
+				'Corsi di teatro',
+				'Audiolibro',
+				'Ebook',
+				'Libro',
+				'Musica registrata'
 			);
 
 			$beni_prepared = array_map('sanitize_title', $beni_index); 
 
 			$beni = array_diff($beni_prepared, explode(',', $exclude_beni));
 			$terms = get_terms('product_cat');
-
+			
 			$bene_value = is_array($data) ? key($data) : '';
 			$term_value = $bene_value ? $data[$bene_value] : '';
 
