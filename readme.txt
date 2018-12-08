@@ -3,7 +3,7 @@ Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
 Version: 0.9.1
 Requires at least: 4.0
-Tested up to: 4.9
+Tested up to: 5.0
 
 Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 
