@@ -70,7 +70,7 @@ This plugin sends data to an external service, like the categories and the price
 Data di rilascio: 5 Febbraio, 2019
 
 * Implementazione: Backup di ogni richiesta certificato generato con relativa chiave
-* Implementazione: Nuova cartella wccd-private in wp uploads directory
+* Implementazione: Nuova cartella wc18-private in wp uploads directory
 * Correzione bug: Eliminazione contenuto cartella private con aggiornamento 
 * Correzione bug: Mancato salvataggio di un singolo abbinamento di categorie prodotti 
 
