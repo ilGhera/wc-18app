@@ -3,12 +3,12 @@
  * Gestice le chiamate del web service 
  * @author ilGhera
  * @package wc-18app/includes
- * @version 0.9.0
+ * @version 1.0.0
  */
 class wc18_soap_client {
 
     public function __construct($codiceVoucher, $import) {
-        $this->wsdl = WC18_PRIVATE_URI . 'VerificaVoucher.wsdl';
+        $this->wsdl = WC18_INCLUDES_URI . 'VerificaVoucher.wsdl';
         $this->local_cert = WC18_PRIVATE . $this->get_local_cert();
         $this->location = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
         $this->codiceVoucher = $codiceVoucher;

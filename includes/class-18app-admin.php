@@ -3,7 +3,7 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 0.9.1
+ * @version 1.0.0
  */
 class wc18_admin {
 
@@ -175,59 +175,76 @@ class wc18_admin {
 
 		if(isset($_POST['generate-der-hidden'])) {
 
-			$cert_req_url = WC18_PRIVATE . 'files/certificate-request.der';
+			/*Crea il file .der*/
+            $countryName = isset($_POST['countryName']) ? sanitize_text_field($_POST['countryName']) : '';
+            $stateOrProvinceName = isset($_POST['stateOrProvinceName']) ? sanitize_text_field($_POST['stateOrProvinceName']) : '';
+            $localityName = isset($_POST['localityName']) ? sanitize_text_field($_POST['localityName']) : '';
+            $organizationName = isset($_POST['organizationName']) ? sanitize_text_field($_POST['organizationName']) : '';
+            $organizationalUnitName = isset($_POST['organizationalUnitName']) ? sanitize_text_field($_POST['organizationalUnitName']) : '';
+            $commonName = isset($_POST['commonName']) ? sanitize_text_field($_POST['commonName']) : '';
+            $emailAddress = isset($_POST['emailAddress']) ? sanitize_text_field($_POST['emailAddress']) : '';
+            $wc18_password = isset($_POST['wc18-password']) ? sanitize_text_field($_POST['wc18-password']) : '';
 
-			/*Crea il file .der se non presente*/
-			if(!file_exists($cert_req_url)) {
+            /*Salvo passw nel db*/
+            if($wc18_password) {
+            	update_option('wc18-password', base64_encode($wc18_password));
+            }
 
-	            $countryName = isset($_POST['countryName']) ? sanitize_text_field($_POST['countryName']) : '';
-	            $stateOrProvinceName = isset($_POST['stateOrProvinceName']) ? sanitize_text_field($_POST['stateOrProvinceName']) : '';
-	            $localityName = isset($_POST['localityName']) ? sanitize_text_field($_POST['localityName']) : '';
-	            $organizationName = isset($_POST['organizationName']) ? sanitize_text_field($_POST['organizationName']) : '';
-	            $organizationalUnitName = isset($_POST['organizationalUnitName']) ? sanitize_text_field($_POST['organizationalUnitName']) : '';
-	            $commonName = isset($_POST['commonName']) ? sanitize_text_field($_POST['commonName']) : '';
-	            $emailAddress = isset($_POST['emailAddress']) ? sanitize_text_field($_POST['emailAddress']) : '';
-	            $wc18_password = isset($_POST['wc18-password']) ? sanitize_text_field($_POST['wc18-password']) : '';
-
-	            /*Salvo passw nel db*/
-	            if($wc18_password) {
-	            	update_option('wc18-password', base64_encode($wc18_password));
-	            }
-
-				$dn = array(
-                    "countryName" => $countryName,
-                    "stateOrProvinceName" => $stateOrProvinceName,
-                    "localityName" => $localityName,
-                    "organizationName" => $organizationName,
-                    "organizationalUnitName" => $organizationalUnitName,
-                    "commonName" => $commonName,
-                    "emailAddress" => $emailAddress
-                );
+			$dn = array(
+                "countryName" => $countryName,
+                "stateOrProvinceName" => $stateOrProvinceName,
+                "localityName" => $localityName,
+                "organizationName" => $organizationName,
+                "organizationalUnitName" => $organizationalUnitName,
+                "commonName" => $commonName,
+                "emailAddress" => $emailAddress
+            );
 
 
-                /*Genera la private key*/
-                $privkey = openssl_pkey_new(array(
-                    "private_key_bits" => 2048,
-                    "private_key_type" => OPENSSL_KEYTYPE_RSA,
-                ));
+            /*Genera la private key*/
+            $privkey = openssl_pkey_new(array(
+                "private_key_bits" => 2048,
+                "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            ));
 
 
-                /*Genera ed esporta la richiesta di certificato .pem*/
-                $csr = openssl_csr_new($dn, $privkey, array('digest_alg' => 'sha256'));
-                openssl_csr_export_to_file($csr, WC18_PRIVATE . 'files/certificate-request.pem');
+            /*Genera ed esporta la richiesta di certificato .pem*/
+            $csr = openssl_csr_new($dn, $privkey, array('digest_alg' => 'sha256'));
+            openssl_csr_export_to_file($csr, WC18_PRIVATE . 'files/certificate-request.pem');
 
 
-                /*Trasforma la richiesta di certificato in .der e la esporta*/
-                $csr_der = $this->pem2der(file_get_contents(WC18_PRIVATE . 'files/certificate-request.pem'));
-                file_put_contents(WC18_PRIVATE . 'files/certificate-request.der', $csr_der);
+            /*Trasforma la richiesta di certificato in .der e la esporta*/
+            $csr_der = $this->pem2der(file_get_contents(WC18_PRIVATE . 'files/certificate-request.pem'));
+            file_put_contents(WC18_PRIVATE . 'files/certificate-request.der', $csr_der);
+
+             /*Preparo il backup*/
+            $bu_folder = WC18_PRIVATE . 'files/backups/';
+
+            $bu_new_folder_name   = count( glob( $bu_folder . '*' , GLOB_ONLYDIR ) ) + 1;
+            $bu_new_folder_create = wp_mkdir_p( trailingslashit( $bu_folder . $bu_new_folder_name ) );
+
+
+            /*Salvo file di backup*/
+            if( $bu_new_folder_create ) {
+
+				/*Esporta la richiesta di certificato .der*/
+                file_put_contents(WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/certificate-request.der', $csr_der);
                 
                 /*Esporta la private key*/
-                // openssl_csr_export_to_file($csr_der, WC18_PRIVATE . 'files/certificate-request.der');
-                openssl_pkey_export_to_file($privkey, WC18_PRIVATE . 'files/key.der');
+                openssl_pkey_export_to_file($privkey, WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/key.der');
 
-			}
+            }
+            
+            /*Esporta la richiesta di certificato .der*/
+            file_put_contents(WC18_PRIVATE . 'files/certificate-request.der', $csr_der);
+            
+            /*Esporta la private key*/
+            openssl_pkey_export_to_file($privkey, WC18_PRIVATE . 'files/key.der');
+
 
 			/*Download file .der*/
+			$cert_req_url = WC18_PRIVATE . 'files/certificate-request.der';
+
 			if($cert_req_url) {
 		    	header('Content-Description: File Transfer');
 			    header('Content-Type: application/octet-stream');
@@ -484,7 +501,7 @@ class wc18_admin {
 				    					}
 
 						    		echo '</ul>';
-						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : '') . '">';
+						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : 1) . '">';
 					    			echo '<p class="description">' . esc_html(__('Seleziona le categorie di prodotti corrispondenti ai beni acquistabili.', 'wc18')) . '</p>';
 				    			echo '</td>';
 				    		echo '</tr>';

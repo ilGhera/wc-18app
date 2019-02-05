@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 0.9.1
+Version: 1.0.0
 Requires at least: 4.0
 Tested up to: 5.0
 
@@ -65,6 +65,14 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.0.0 =
+Data di rilascio: 5 Febbraio, 2019
+
+* Implementazione: Backup di ogni richiesta certificato generato con relativa chiave
+* Implementazione: Nuova cartella wccd-private in wp uploads directory
+* Correzione bug: Eliminazione contenuto cartella private con aggiornamento 
+* Correzione bug: Mancato salvataggio di un singolo abbinamento di categorie prodotti 
 
 = 0.9.1 =
 Data di rilascio: 8 Novembre, 2018

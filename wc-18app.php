@@ -4,7 +4,7 @@
  * Plugin URI: https://www.ilghera.com/product/wc-18app-premium/
  * Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
  * Author: ilGhera
- * Version: 0.9.1
+ * Version: 1.0.0
  * Author URI: https://ilghera.com 
  * Requires at least: 4.0
  * Tested up to: 5.0
@@ -33,9 +33,17 @@ function wc18_premium_activation() {
 	define('WC18_DIR', plugin_dir_path(__FILE__));
 	define('WC18_URI', plugin_dir_url(__FILE__));
 	define('WC18_INCLUDES', WC18_DIR . 'includes/');
-	define('WC18_PRIVATE', WC18_DIR . 'private/');
-	define('WC18_PRIVATE_URI', WC18_URI . 'private/');
-	
+	define('WC18_INCLUDES_URI', WC18_URI . 'includes/');
+
+	/*Main directory di upload*/
+	$wp_upload_dir = wp_upload_dir();
+
+	/*Creo se necessario la cartella wc18-private*/
+	if( wp_mkdir_p( trailingslashit( $wp_upload_dir['basedir'] . '/wc18-private/files/backups' ) ) ) {
+		define('WC18_PRIVATE', $wp_upload_dir['basedir'] . '/wc18-private/');
+		define('WC18_PRIVATE_URI', $wp_upload_dir['baseurl'] . '/wc18-private/');
+	}
+
 	/*Requires*/
 	require WC18_INCLUDES . 'class-18app-gateway.php';
 	require WC18_INCLUDES . 'class-18app-soap-client.php';
