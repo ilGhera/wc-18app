@@ -1,6 +1,5 @@
 === WooCommerce 18app ===
 Contributors: ghera74
-<<<<<<< HEAD
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
 Version: 1.0.0
 Requires at least: 4.0
@@ -74,6 +73,11 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.0.0 =
+Data di rilascio: 27 Giugno, 2019
+
+* Correzione bug: SOAP-ERROR: Parsing WSDL: Couldn't load from .../wp-content/plugins/wc-18app/includes/VerificaVoucher.wsdl' : failed to load external entity .../wp-content/plugins/wc-18app/includes/VerificaVoucher.wsdl
 
 = 0.9.1 =
 Data di rilascio: 8 Novembre, 2018
