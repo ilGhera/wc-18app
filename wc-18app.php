@@ -36,7 +36,7 @@ function wc18_activation() {
 	}
 	
 	/*Requires*/
-	require WC18_INCLUDES . 'class-18app-teacher-gateway.php';
+	require WC18_INCLUDES . 'class-18app-gateway.php';
 	require WC18_INCLUDES . 'class-18app-soap-client.php';
 	require WC18_INCLUDES . 'class-18app-admin.php';
 
