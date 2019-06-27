@@ -117,3 +117,15 @@ ul.categories-container {
     margin: 1rem 1rem 0;
     padding: 0.4rem;
 }
+
+.wrap-left {
+    float: left;
+    width: 70%;
+}
+
+.wrap-right {
+    float: left;
+    width: 30%;
+    text-align: center;
+    padding-top: 3rem;
+}

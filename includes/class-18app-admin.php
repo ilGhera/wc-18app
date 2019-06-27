@@ -3,7 +3,7 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 0.9.1
+ * @version 1.0.0
  */
 class wc18_admin {
 

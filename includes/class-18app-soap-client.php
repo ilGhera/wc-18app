@@ -3,7 +3,7 @@
  * Gestice le chiamate del web service 
  * @author ilGhera
  * @package wc-18app/includes
- * @version 0.9.0
+ * @version 1.0.0
  */
 class wc18_soap_client {
 
@@ -45,9 +45,20 @@ class wc18_soap_client {
         $soapClient = new SoapClient(
             $this->wsdl, 
             array(
-              'local_cert'  => $this->local_cert,
-              'location'    => $this->location,
-              'passphrase'  => $this->get_user_passphrase()
+                'local_cert'     => $this->local_cert,
+                'location'       => $this->location,
+                'passphrase'     => $this->get_user_passphrase(),
+                'stream_context' => stream_context_create(
+                    array(
+                        'http' => array(
+                            'user_agent' => 'PHP/SOAP',
+                        ),
+                        'ssl' => array(
+                            'verify_peer'       => false,
+                            'verify_peer_name'  => false,
+                        ),
+                    )
+                ),
             )
         );
   
