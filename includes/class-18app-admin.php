@@ -3,7 +3,7 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.0.0
+ * @version 1.0.1
  */
 class wc18_admin {
 
@@ -81,15 +81,14 @@ class wc18_admin {
 
 			/*L'elenco dei beni dei vari ambiti previsti dalla piattaforma*/
 			$beni_index = array(
-				'Abbonamento/Card',
-				'Bigletto d\'igresso',
-				'Corsi di lingua straniera',
-				'Corsi di musica',
-				'Corsi di teatro',
-				'Audiolibro',
-				'Ebook',
-				'Libro',
-				'Musica registrata'
+				'Cinema',
+				'Concerti',
+				'Eventi culturali',
+				'Libri',
+				'Musei, monumenti e parchi',
+				'Teatro e danza',
+				'Musica registrata',
+				'Corsi di musica, di teatro o di lingua straniera',
 			);
 
 			$beni_prepared = array_map('sanitize_title', $beni_index); 
