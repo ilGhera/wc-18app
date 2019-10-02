@@ -3,7 +3,7 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.0.0
+ * @version 1.0.2
  */
 class wc18_admin {
 
@@ -72,30 +72,27 @@ class wc18_admin {
 
 	/**
 	 * Categoria per la verifica in fase di checkout
-	 * @param  int   $n            il numero dell'elemento aggiunto
-	 * @param  array $data         bene e categoria come chiave e velore
-	 * @param  array $exclude_beni beni già utilizzati da escludere
-	 * @return mixed]
+	 * @param  int   $n             il numero dell'elemento aggiunto
+	 * @param  array $data          bene e categoria come chiave e velore
+	 * @param  array $exclude_beni  buoni già abbinati a categorie WC (al momento non utilizzato)
+	 * @return mixed
 	 */
 	public function setup_cat($n, $data = null, $exclude_beni = null) {
 		echo '<li class="setup-cat cat-' . $n . '">';
 
 			/*L'elenco dei beni dei vari ambiti previsti dalla piattaforma*/
 			$beni_index = array(
-				'Abbonamento/Card',
-				'Bigletto d\'igresso',
-				'Corsi di lingua straniera',
-				'Corsi di musica',
-				'Corsi di teatro',
-				'Audiolibro',
-				'Ebook',
-				'Libro',
-				'Musica registrata'
+				'Cinema',
+				'Concerti',
+				'Eventi culturali',
+				'Libri',
+				'Musei, monumenti e parchi',
+				'Teatro e danza',
+				'Musica registrata',
+				'Corsi di musica, di teatro o di lingua straniera',
 			);
 
-			$beni_prepared = array_map('sanitize_title', $beni_index); 
-
-			$beni = array_diff($beni_prepared, explode(',', $exclude_beni));
+			$beni  = array_map('sanitize_title', $beni_index); 
 			$terms = get_terms('product_cat');
 			
 			$bene_value = is_array($data) ? key($data) : '';
@@ -304,7 +301,7 @@ class wc18_admin {
 			    	echo '<table class="form-table wc18-table">';
 						echo '<th scope="row">' . __('Premium Key', 'wc18') . '</th>';
 						echo '<td>';
-							echo '<input type="text" class="regular-text" name="wc18-premium-key" id="wc18-premium-key" placeholder="' . __('Inserisci la tua Premium Key', 'wc18' ) . '" value="' . $premium_key . '" />';
+							echo '<input type="text" class="regular-text code" name="wc18-premium-key" id="wc18-premium-key" placeholder="' . __('Inserisci la tua Premium Key', 'wc18' ) . '" value="' . $premium_key . '" />';
 							echo '<p class="description">' . __('Aggiungi la tua Premium Key e mantieni aggiornato <strong>Woocommerce 18app - Premium</strong>.', 'wc18') . '</p>';
 					    	wp_nonce_field('wc18-premium-key', 'wc18-premium-key-nonce');
 							echo '<input type="hidden" name="premium-key-sent" value="1" />';
