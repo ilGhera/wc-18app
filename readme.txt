@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.0.2
+Version: 1.0.3
 Requires at least: 4.0
 Tested up to: 5.2
 
@@ -66,6 +66,11 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
+
+= 1.0.3 =
+Data di rilascio: 30 Ottobre, 2019
+
+* Correzione bug: Categorie prodotti WooCommerce non riconosciute e conseguente impossibilità di completare l'acquisto.
 
 = 1.0.2 =
 Data di rilascio: 02 Ottobre, 2019
