@@ -3,7 +3,7 @@
  * Estende la classe WC_Payment_Gateway di WooCommerce aggiungendo il nuovo gateway 18app.
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.0.1
+ * @version 1.0.2
  */
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
@@ -85,7 +85,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	 */
 	public function get_purchasable_cats($purchasable) {
 
-		$wc18_categories = get_option('wccd-categories');
+		$wc18_categories = get_option('wc18-categories');
 
 		if ( $wc18_categories ) {
 	
