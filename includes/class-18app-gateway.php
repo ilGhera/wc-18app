@@ -89,7 +89,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		if ( $wc18_categories ) {
 	
-			$bene = strtolower(str_replace(' ', '-', $purchasable));
+			$purchasable = str_replace( '(', '', $purchasable );
+			$purchasable = str_replace( ')', '', $purchasable );
+			$bene        = strtolower( str_replace( ' ', '-', $purchasable ) );
 			
 			$output = array();
 
