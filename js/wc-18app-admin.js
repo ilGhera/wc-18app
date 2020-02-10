@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @version 0.9.1 
+ * @version 1.0.3 
  */
 
 /**
@@ -37,29 +37,22 @@ var wc18_add_cat = function() {
 	jQuery(function($){
 		$('.add-cat-hover.wc18').on('click', function(){
 			var number = $('.setup-cat').length + 1;
-			var limit = $('.wc18-field.beni:first option').size() -1;
 
 			/*Beni già impostati da escludere*/
 			var beni_values = [];
 			$('.wc18-field.beni').each(function(){
 				beni_values.push($(this).val());
 			})
-
-			/*Se assegnate tutte le categorie visualizza messaggio*/
-			if(number > limit) {
-				alert('Tutte le categorie di prodotto sono state assegnate.');
-			} else {
 				
-				var data = {
-					'action': 'add-cat-18app',
-					'number': number,
-					'exclude-beni': beni_values.toString(),
-				}
-				$.post(ajaxurl, data, function(response){
-					$(response).appendTo('.categories-container');
-					$('.wc18-tot-cats').val(number);
-				})				
+			var data = {
+				'action': 'add-cat-18app',
+				'number': number,
+				'exclude-beni': beni_values.toString(),
 			}
+			$.post(ajaxurl, data, function(response){
+				$(response).appendTo('.categories-container');
+				$('.wc18-tot-cats').val(number);
+			})				
 		})
 	})
 }
