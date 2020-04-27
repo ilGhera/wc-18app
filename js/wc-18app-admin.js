@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 /**
@@ -16,7 +16,7 @@ var wc18_delete_certificate = function() {
 				var cert = $('.cert-loaded').text();
 				var data = {
 					'action': 'delete-certificate',
-					'delete': true,
+					'wc18-delete': true,
 					'cert': cert
 				}			
 				$.post(ajaxurl, data, function(response){
