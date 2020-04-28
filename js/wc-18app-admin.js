@@ -10,7 +10,7 @@
  */
 var wc18_delete_certificate = function() {
 	jQuery(function($){
-		$('.delete-certificate').on('click', function(){
+		$('.wc18-delete-certificate').on('click', function(){
 			var sure = confirm('Sei sicuro di voler eliminare il certificato?');
 			if(sure) {
 				var cert = $('.cert-loaded').text();

@@ -338,7 +338,7 @@ class wc18_admin {
 				    					if($activation === 'ok') {
 
 					    					echo '<span class="cert-loaded">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . esc_html(__('File caricato e attivato correttamente.', 'wc18')) . '</p>';
 
 					    					update_option('wc18-cert-activation', 1);
@@ -346,7 +346,7 @@ class wc18_admin {
 				    					} else {
 
 					    					echo '<span class="cert-loaded error">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . sprintf(esc_html(__('L\'attivazione del certificato ha restituito il seguente errore: %s', 'wc18')), $activation) . '</p>';
 
 					    					delete_option('wc18-cert-activation');
