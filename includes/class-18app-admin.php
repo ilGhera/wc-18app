@@ -170,7 +170,7 @@ class wc18_admin {
 	 */
 	public function generate_cert_request() {
 
-		if(isset($_POST['generate-der-hidden'])) {
+		if(isset($_POST['wc18-generate-der-hidden'])) {
 
 			/*Crea il file .der*/
             $countryName = isset($_POST['countryName']) ? sanitize_text_field($_POST['countryName']) : '';
@@ -438,7 +438,7 @@ class wc18_admin {
 
 				    			echo '<th scope="row"></th>';
 					    			echo '<td>';
-					    			echo '<input type="hidden" name="generate-der-hidden" value="1">';
+					    			echo '<input type="hidden" name="wc18-generate-der-hidden" value="1">';
 				    				echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . __('Scarica file .der', 'wc18') . '">';
 					    			echo '</td>';
 					    		echo '</tr>';
