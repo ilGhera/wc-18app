@@ -11,8 +11,8 @@ class wc18_admin {
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_init', array($this, 'generate_cert_request'));
 		add_action('admin_menu', array($this, 'register_options_page'));
-		add_action('wp_ajax_delete-certificate', array($this, 'delete_certificate_callback'), 1);
-		add_action('wp_ajax_add-cat-18app', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'), 1);
+		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
 	}
 
 
@@ -364,7 +364,7 @@ class wc18_admin {
 
 				    		/*Password utilizzata per la creazione del certificato*/
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Password', 'wccd')) . '</th>';
 				    			echo '<td>';
 			    					echo '<input type="password" name="wc18-password" placeholder="**********" value="' . $passphrase . '" required>';
 					    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
