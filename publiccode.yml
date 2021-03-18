@@ -85,7 +85,7 @@ it:
     pagopa: false
     spid: false
 legal:
-  license: LGPL-2.0-only
+  license: GPL-3.0-only
   repoOwner: ilGhera | WordPress Development
 localisation:
   availableLanguages:
@@ -101,6 +101,6 @@ name: WooCommerce 18app
 platforms:
   - web
 releaseDate: '2020-02-10'
-softwareType: addon
+softwareType: standalone/desktop
 softwareVersion: 1.0.3
 url: 'https://github.com/ilGhera/wc-18app'
