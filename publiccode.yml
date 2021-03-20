@@ -12,7 +12,7 @@ description:
       - Carica il tuo certificato .pem
       - ' Abbina le categorie WooCommerce agli ambiti d''acquisto di Carta del Docente'
       - Nuovo metodo di pagamento in pagina di checkout
-    genericName: WooCommerce 18app
+    genericName: WordPress plugin
     longDescription: |
       Ogni diciottenne, in Italia, ha a disposizione un _Bonus Cultura_  del
 
@@ -24,9 +24,9 @@ description:
 
 
 
-      Con** Woocommerce 18app**, gli utenti potranno acquistare i tuoi prodotti
+      Con **Woocommerce 18app**, gli utenti potranno acquistare i tuoi prodotti
 
-      utilizzando i buoni generati su _18app.
+      utilizzando i buoni generati su _18app_.
 
 
       _
@@ -47,10 +47,7 @@ description:
 
 
 
-      ### 
-
-
-      Imposta i prodotti acquistabili
+      ### Imposta i prodotti acquistabili
 
 
 
@@ -59,9 +56,8 @@ description:
       per acquistare beni della stessa tipologia per i quali sono stati creati.
 
 
-      Impostando queste categorie con lo strumento dedicato, **Woocommerce
-
-      18app** effettuerà un controllo nella fase di checkout, avvisando se
+      Impostando queste categorie con lo strumento dedicato, **Woocommerce 18app** 
+      effettuerà un controllo nella fase di checkout, avvisando se
 
       necessario l'utente della mancata corrispondenza.
 
@@ -71,14 +67,11 @@ description:
 
 
 
-      ### 
-
-
-      Facile per l'utente
+      ### Facile per l'utente
 
 
 
-      Dopo aver attivato il certificato, **Woocommerce 18app **aggiungerà il
+      Dopo aver attivato il certificato, **Woocommerce 18app** aggiungerà il
 
       nuovo metodo di pagamento tra quelli disponibili nella pagina di checkout.
 
@@ -91,6 +84,8 @@ description:
 
       ![](https://i2.wp.com/www.ilghera.com/wp-content/uploads/2018/10/18app-woocommerce-checkout.png?w=336&ssl=1)
     screenshots:
+      - |-
+        https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/icon.jpg 
       - |-
         https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/carica-certificato.jpg
       - |-
