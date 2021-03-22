@@ -10,7 +10,7 @@ description:
     documentation: 'https://www.ilghera.com/category/documentation/wc-carta-docente-18app/'
     features:
       - Carica il tuo certificato .pem
-      - ' Abbina le categorie WooCommerce agli ambiti d''acquisto di Carta del Docente'
+      - Abbina le categorie WooCommerce agli ambiti d''acquisto di Carta del Docente
       - Nuovo metodo di pagamento in pagina di checkout
     genericName: WordPress plugin
     longDescription: |
