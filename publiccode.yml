@@ -129,6 +129,6 @@ name: WooCommerce 18app
 platforms:
   - web
 releaseDate: '2020-02-10'
-softwareType: standalone/desktop
+softwareType: addon
 softwareVersion: 1.0.3
 url: 'https://github.com/ilGhera/wc-18app'
