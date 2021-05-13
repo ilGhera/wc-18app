@@ -48,10 +48,20 @@ function wc18_premium_activation() {
 	require WC18_INCLUDES . 'class-18app-gateway.php';
 	require WC18_INCLUDES . 'class-18app-soap-client.php';
 	require WC18_INCLUDES . 'class-18app-admin.php';
+	require WC18_INCLUDES . 'class-18app.php';
 
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {
-		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-18app.css');
+		wp_enqueue_style('wc18-style', WCCD_URI . 'css/wc-carta-docente.css');
+		wp_enqueue_script('wc18-scripts', WCCD_URI . 'js/wc-carta-docente.js');
+        wp_localize_script(
+            'wc18-scripts',
+            'wc18Options',
+            array(
+                'ajaxURL'          => admin_url( 'admin-ajax.php' ),
+                'couponConversion' => get_option( 'wc18-coupon' ),
+            )
+        );
 	}
 
 	/*Script e folgi di stile back-end*/
