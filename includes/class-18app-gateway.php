@@ -7,6 +7,10 @@
  */
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
+    
+    public static $coupon_option;
+
+
 	public function __construct() {
 		$this->plugin_id = 'woocommerce_18app';
 		$this->id = '18app';
@@ -21,9 +25,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title = $this->get_option('title');
+		$this->title       = $this->get_option('title');
 		$this->description = $this->get_option('description');
-
+        
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 
 		add_action('woocommerce_order_details_after_order_table', array($this, 'display_18app_code'), 10, 1);
@@ -80,8 +84,10 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 * Restituisce la cateogia prodotto corrispondente al bene acquistabile con il buono
+     *
 	 * @param  string $purchasable bene acquistabile
-	 * @return int                 l'id di categoria acquistabile
+     *
+	 * @return int l'id di categoria acquistabile
 	 */
 	public function get_purchasable_cats($purchasable) {
 
@@ -100,6 +106,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 					$output[] = $wc18_categories[$i][$bene];
 				}
+
 			}
 
 			return $output;
@@ -115,25 +122,25 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	 * @param  string $bene il bene acquistabile con il buono
 	 * @return bool
 	 */
-	public function is_purchasable($order, $bene) {
+	public static function is_purchasable( $order, $bene ) {
 
-		$cats = $this->get_purchasable_cats($bene);
-
-		$items = $order->get_items();
-
+		$cats   = self::get_purchasable_cats( $bene );
+		$items  = $order->get_items();
 		$output = true;
 		
 		if ( is_array( $cats ) && ! empty( $cats ) ) {
 
-			foreach ($items as $item) {
-				$terms = get_the_terms($item['product_id'], 'product_cat');
-				$ids = array();
+			foreach ( $items as $item ) {
+				$terms = get_the_terms( $item['product_id'], 'product_cat' );
+				$ids   = array();
 
-				foreach($terms as $term) {
+				foreach ( $terms as $term ) {
+
 					$ids[] = $term->term_id;
+
 				}
 
-				$results = array_intersect($ids, $cats);
+				$results = array_intersect( $ids, $cats );
 
 				if ( ! is_array( $results ) || empty( $results ) ) {
 
@@ -166,120 +173,216 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	}
 
 
+    /**
+     * Ricava il coupon id dal suo codice
+     *
+     * @param string $coupon_code il codice del coupon.
+     *
+     * @return int l'id del coupon
+     */
+    private static function get_coupon_id( $coupon_code ) {
+
+        $coupon = get_page_by_title( $coupon_code, OBJECT, 'shop_coupon' );
+        
+        if ( $coupon && isset( $coupon->ID ) ) {
+
+            return $coupon->ID;
+
+        }
+
+    }
+
+    /**
+     * Crea un nuovo coupon
+     *
+     * @param int    $order_id     l'id dell'ordine.
+     * @param float  $amount       il valore da assegnare al coupon.
+     * @param string $code_18app   il codice del buono 18app.
+     *
+     * @return int l'id del coupon creato
+     */
+    private static function create_coupon( $order_id, $amount, $code_18app ) {
+        
+        $coupon_code = 'wc18-' . $order_id . '-' . $code_18app;
+
+        $args = array(
+            'post_title'   => $coupon_code,
+            'post_content' => '',
+            'post_type'    => 'shop_coupon',
+            'post_status'  => 'publish',
+            'post_author'  => 1,
+            'meta_input'   => array(
+                'discount_type' => 'fixed_cart',
+                'coupon_amount' => $amount,
+                'usage_limit'   => 1,
+            ),
+        );
+
+        $coupon_id = self::get_coupon_id( $coupon_code );
+
+        /* Aggiorna coupon se già presente */
+        if ( $coupon_id ) {
+
+            $args['ID'] = $coupon_id;
+            $coupon_id  = wp_update_post( $args );
+            
+        } else {
+
+            $coupon_id = wp_insert_post( $args );
+
+        }
+
+        if ( ! is_wp_error( $coupon_id ) ) {
+
+            return $coupon_code;
+
+        }
+
+    }
+
+
+    /**
+     * Processa il buono 18app inserito
+     *
+     * @param int    $order_id   l'id dell'ordine.
+     * @param string $code_18app il valore del buono 18app.
+     * @param float  $import     il totale dell'ordine o il valore del coupon.
+     * @param bool   $converted  se valorizzato il metodo viene utilizzato nella validazione del coupon - process_coupon().
+     *
+     * @return mixed string in caso di errore, 1 in alternativa
+     */
+    public static function process_code( $order_id, $code_18app, $import, $converted = false ) {
+
+        $output     = 1; 
+        $order      = wc_get_order( $order_id );
+        $soapClient = new wccd_soap_client( $code_18app, $import );
+        
+        try {
+
+            /*Prima verifica del buono*/
+            $response = $soapClient->check();
+
+            $bene          = $response->checkResp->ambito; //il bene acquistabile con il buono inserito
+            $importo_buono = floatval($response->checkResp->importo); //l'importo del buono inserito
+            
+            /*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
+            $purchasable = self::is_purchasable( $order, $bene );
+
+            if ( ! $purchasable ) {
+
+                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wccd' );
+
+            } else {
+
+                $type = null;
+
+                if ( self::$coupon_option && $importo_buono < $import && ! $converted  ) {
+
+                    $coupon_code = self::create_coupon( $order_id, $importo_buono, $code_18app );
+
+                    error_log( 'COUPON CODE: ' . $coupon_code );
+
+                    if ( $coupon_code && ! WC()->cart->has_discount( $coupon_code ) ) {
+
+                        WC()->cart->apply_coupon( $coupon_code );
+
+                        $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wccd' );
+
+                    }
+
+                } elseif ( $importo_buono === $import ) {
+
+                    $type = 'check';
+
+                } else {
+
+                    $type = 'confirm';
+
+                }
+
+                if ( $type ) {
+
+                    try {
+
+                        /*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
+                        $operation = $type === 'check' ? $soapClient->check( 2 ) : $soapClient->confirm();
+
+                        if ( ! $converted ) {
+
+                            /*Ordine completato*/
+                            $order->payment_complete();
+
+                            /*Svuota carrello*/ 
+                            $woocommerce->cart->empty_cart();	
+
+                        }
+
+                        /*Aggiungo il buono 18app all'ordine*/
+                        update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
+
+                    } catch ( Exception $e ) {
+        
+                        $output = $e->detail->FaultVoucher->exceptionMessage;
+                   
+                    } 
+
+                }
+
+            }
+
+        } catch ( Exception $e ) {
+
+            $output = $e->detail->FaultVoucher->exceptionMessage;
+        
+        }
+
+        return $output;
+
+    }
+
+
 	/**
 	 * Gestisce il processo di pagamento, verificando la validità del buono inserito dall'utente
 	 * @param  int $order_id l'id dell'ordine
 	 */
-	public function process_payment($order_id) {
+	public function process_payment( $order_id ) {
 
-		global $woocommerce;
-	    $order = new WC_Order($order_id);
-		$import = floatval($order->get_total()); //il totale dell'ordine
+        global $woocommerce;
+
+	    $order  = wc_get_order( $order_id );
+		$import = floatval( $order->get_total() ); //il totale dell'ordine
 
 		$notice = null;
 		$output = array(
-			'result' => 'failure',
-			'redirect' => ''
+			'result'   => 'failure',
+			'redirect' => '',
 		);
 
-		$data = $this->get_post_data();
-	    $app_code = $data['wc-codice-18app']; //il buono inserito dall'utente
+		$data         = $this->get_post_data();
+	    $code_18app = $data['wc-codice-18app']; //il buono inserito dall'utente
 
-	    if($app_code) {
+        if ( $code_18app ) {
 
-		    $soapClient = new wc18_soap_client($app_code, $import);
-		    
-		    try {
+            $notice = self::process_code( $order_id, $code_18app, $import );
 
-		    	/*Prima verifica del buono*/
-	            $response = $soapClient->check();
+            if ( 1 === intval( $notice ) ) {
 
-				$bene    = $response->checkResp->ambito; //il bene acquistabile con il buono inserito
-			    $importo_buono = floatval($response->checkResp->importo); //l'importo del buono inserito
-			    
-			    /*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
-			    $purchasable = $this->is_purchasable($order, $bene);
+                $output = array(
+                    'result'   => 'success',
+                    'redirect' => $this->get_return_url( $order ),
+                );
 
-			    if(!$purchasable) {
+            } else {
 
-					$notice = __('Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18');
+                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wccd' ), 'error' );
 
-				} else {
-
-					$type = null;
-					if($importo_buono === $import) {
-
-						$type = 'check';
-
-					} else {
-
-						$type = 'confirm';
-
-					}
-
-					if($type) {
-
-						try {
-
-							/*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
-							$operation = $type === 'check' ? $soapClient->check(2) : $soapClient->confirm();
-
-							/*Ordine completato*/
-						    $order->payment_complete();
-
-						    // Reduce stock levels
-						    // $order->reduce_order_stock();// Deprecated
-						    // wc_reduce_stock_levels($order_id);
-
-						    /*Svuota carrello*/ 
-						    $woocommerce->cart->empty_cart();	
-
-						    /*Aggiungo il buono 18app all'ordine*/
-							update_post_meta($order_id, 'wc-codice-18app', $app_code);
-
-						    $output = array(
-						        'result' => 'success',
-						        'redirect' => $this->get_return_url($order)
-						    );
-
-						} catch(Exception $e) {
-			
-				            $notice = $e->detail->FaultVoucher->exceptionMessage;
-				       
-				        } 
-
-					}
-
-				}
-
-	        } catch(Exception $e) {
-
-	            $notice = $e->detail->FaultVoucher->exceptionMessage;
-	        
-	        }  
+            }
 
 	    }	
 		
-		if($notice) {
-			wc_add_notice( __('<b>Buono 18app</b> - ' . $notice, 'wc18'), 'error' );
-		}
-
 		return $output;
 
 	}
 
 }
 
-
-/**
- * Se presente un certificato, aggiunge il nuovo gateway a quelli disponibili in WooCommerce
- * @param array $methods gateways disponibili 
- */
-function wc18_add_18app_gateway_class($methods) {
-	if(wc18_admin::get_the_file('.pem') && get_option('wc18-cert-activation')) {
-	    $methods[] = 'WC18_18app_Gateway'; 
-	}
-
-    return $methods;
-}
-add_filter('woocommerce_payment_gateways', 'wc18_add_18app_gateway_class');

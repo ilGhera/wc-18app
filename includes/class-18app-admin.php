@@ -287,10 +287,11 @@ class wc18_admin {
 
 		/*Recupero le opzioni salvate nel db*/
 		$premium_key = get_option('wc18-premium-key');
-		$passphrase = base64_decode(get_option('wc18-password'));
-		$categories = get_option('wc18-categories');
-		$tot_cats = $categories ? count($categories) : 0;
-		$wc18_image = get_option('wc18-image');
+		$passphrase  = base64_decode(get_option('wc18-password'));
+		$categories  = get_option('wc18-categories');
+		$tot_cats    = $categories ? count($categories) : 0;
+		$wc18_coupon = get_option('wc18-coupon');
+		$wc18_image  = get_option('wc18-image');
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
@@ -364,7 +365,7 @@ class wc18_admin {
 
 				    		/*Password utilizzata per la creazione del certificato*/
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Password', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
 				    			echo '<td>';
 			    					echo '<input type="password" name="wc18-password" placeholder="**********" value="' . $passphrase . '" required>';
 					    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
@@ -504,7 +505,17 @@ class wc18_admin {
 				    		echo '</tr>';
 
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine ', 'wc18')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Conversione in coupon', 'wc18')) . '</th>';
+			    				echo '<td>';
+					    			echo '<label>';
+					    			echo '<input type="checkbox" name="wc18-coupon" value="1"' . ($wc18_coupon === '1' ? ' checked="checked"' : '') . '>';
+					    			echo wp_kses_post( __( 'Nel caso in cui il buono <i>Carta del Docente</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) );
+					    			echo '</label>';
+			    				echo '</td>';
+				    		echo '</tr>';
+
+				    		echo '<tr>';
+				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
 			    				echo '<td>';
 					    			echo '<label>';
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
@@ -645,6 +656,10 @@ class wc18_admin {
 				update_option('wc18-categories', $wc18_categories);
 			}
 
+			/*Conversione in coupon*/
+			$wc18_coupon = isset($_POST['wc18-coupon']) ? sanitize_text_field($_POST['wc18-coupon']) : '';															
+			update_option('wc18-coupon', $wc18_coupon);
+
 			/*Immagine in pagina di checkout*/
 			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
 			update_option('wc18-image', $wc18_image);
@@ -653,3 +668,4 @@ class wc18_admin {
 
 }
 new wc18_admin();
+
