@@ -1,6 +1,7 @@
 <?php
 /**
  * Estende la classe WC_Payment_Gateway di WooCommerce aggiungendo il nuovo gateway 18app.
+ *
  * @author ilGhera
  * @package wc-18app/includes
  * @version 1.0.4
@@ -12,14 +13,18 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 
 	public function __construct() {
-		$this->plugin_id = 'woocommerce_18app';
-		$this->id = '18app';
-		$this->has_fields = true;
-		$this->method_title = '18app';
+		$this->plugin_id          = 'woocommerce_18app';
+		$this->id                 = '18app';
+		$this->has_fields         = true;
+		$this->method_title       = '18app';
 		$this->method_description = 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
 		
-		if(get_option('wc18-image')) {
+        self::$coupon_option      = get_option( 'wccd-coupon' );
+
+		if ( get_option( 'wc18-image' ) ) {
+
 			$this->icon = WC18_URI . 'images/18app.png';			
+
 		}
 
 		$this->init_form_fields();
@@ -29,10 +34,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->description = $this->get_option('description');
         
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-
-		add_action('woocommerce_order_details_after_order_table', array($this, 'display_18app_code'), 10, 1);
-		add_action('woocommerce_email_after_order_table', array($this, 'display_18app_code'), 10, 1);
-		add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'display_18app_code'), 10, 1);
+		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
+		add_action( 'woocommerce_email_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_18app_code' ), 10, 1 );
 	}
 
 
@@ -43,21 +47,21 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		
 		$this->form_fields = apply_filters( 'wc_offline_form_fields',array(
 			'enabled' => array(
-		        'title' => __( 'Enable/Disable', 'woocommerce' ),
-		        'type' => 'checkbox',
-		        'label' => __( 'Abilita pagamento con buono 18app', 'wc18' ),
-		        'default' => 'yes'
+		        'title'   => __( 'Enable/Disable', 'woocommerce' ),
+		        'type'    => 'checkbox',
+		        'label'   => __( 'Abilita pagamento con buono 18app', 'wc18' ),
+		        'default' => 'yes',
 		    ),
 		    'title' => array(
-		        'title' => __( 'Title', 'woocommerce' ),
-		        'type' => 'text',
+		        'title'       => __( 'Title', 'woocommerce' ),
+		        'type'        => 'text',
 		        'description' => __( 'This controls the title which the user sees during checkout.', 'wc18' ),
-		        'default' => __( 'Buono 18app', 'wc18' ),
-		        'desc_tip'      => true,
+		        'default'     => __( 'Buono 18app', 'wc18' ),
+		        'desc_tip'    => true,
 		    ),
 		    'description' => array(
-		        'title' => __( 'Messaggio utente', 'woocommerce' ),
-		        'type' => 'textarea',
+		        'title'   => __( 'Messaggio utente', 'woocommerce' ),
+		        'type'    => 'textarea',
 		        'default' => 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.',
 		    )
 		));
@@ -101,10 +105,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			
 			$output = array();
 
-			for($i=0; $i < count($wc18_categories); $i++) { 
-				if(array_key_exists($bene, $wc18_categories[$i])) {
+			for ( $i=0; $i < count( $wc18_categories ); $i++) { 
 
-					$output[] = $wc18_categories[$i][$bene];
+				if ( array_key_exists( $bene, $wc18_categories[ $i ] ) ) {
+
+					$output[] = $wc18_categories[ $i ][ $bene ];
+
 				}
 
 			}
@@ -167,9 +173,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		
 		$data = $order->get_data();
 
-		if($data['payment_method'] === '18app') {
+		if ( $data['payment_method'] === '18app' ) {
+
 		    echo '<p><strong>' . __('Buono 18app', 'wc18') . ': </strong>' . get_post_meta($order->get_id(), 'wc-codice-18app', true) . '</p>';
-		}
+        
+        }
+        
 	}
 
 
