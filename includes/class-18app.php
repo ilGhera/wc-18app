@@ -124,7 +124,7 @@ class WC18 {
 
         if ( $available && wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) {
 
-            $methods[] = 'WCCD_Teacher_Gateway'; 
+            $methods[] = 'WC18_18app_Gateway'; 
 
         }
 
