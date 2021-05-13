@@ -509,7 +509,7 @@ class wc18_admin {
 			    				echo '<td>';
 					    			echo '<label>';
 					    			echo '<input type="checkbox" name="wc18-coupon" value="1"' . ($wc18_coupon === '1' ? ' checked="checked"' : '') . '>';
-					    			echo wp_kses_post( __( 'Nel caso in cui il buono <i>Carta del Docente</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) );
+					    			echo wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) );
 					    			echo '</label>';
 			    				echo '</td>';
 				    		echo '</tr>';

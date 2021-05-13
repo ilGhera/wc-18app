@@ -155,7 +155,7 @@ class WC18 {
 
                 if ( 1 !== intval( $notice ) ) {
 
-                    wc_add_notice( __( 'Buono docente - ' . $notice, 'wc18' ), 'error' );         
+                    wc_add_notice( __( 'Buono 18app - ' . $notice, 'wc18' ), 'error' );         
 
                 }
             }
