@@ -151,7 +151,7 @@ class WC18 {
                 $coupon        = new WC_Coupon( $coupon_code );
                 $coupon_amount = $coupon->get_amount();
 
-                $notice = WCCD_Teacher_Gateway::process_code( $parts[1], $parts[2], $coupon_amount, true );
+                $notice = WC18_18app_Gateway::process_code( $parts[1], $parts[2], $coupon_amount, true );
 
                 if ( 1 !== intval( $notice ) ) {
 

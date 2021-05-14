@@ -19,7 +19,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->method_title       = '18app';
 		$this->method_description = 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
 		
-        self::$coupon_option      = get_option( 'wccd-coupon' );
+        self::$coupon_option      = get_option( 'wc18-coupon' );
 
 		if ( get_option( 'wc18-image' ) ) {
 
