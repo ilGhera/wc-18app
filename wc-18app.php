@@ -52,7 +52,7 @@ function wc18_premium_activation() {
 
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {
-		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-carta-docente.css');
+		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-18app.css');
 		wp_enqueue_script('wc18-scripts', WC18_URI . 'js/wc-carta-docente.js');
         wp_localize_script(
             'wc18-scripts',
