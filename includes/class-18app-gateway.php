@@ -93,7 +93,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
      *
 	 * @return int l'id di categoria acquistabile
 	 */
-	public function get_purchasable_cats($purchasable) {
+	public static function get_purchasable_cats($purchasable) {
 
 		$wc18_categories = get_option('wc18-categories');
 
@@ -274,6 +274,8 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
             $bene          = $response->checkResp->ambito; //il bene acquistabile con il buono inserito
             $importo_buono = floatval($response->checkResp->importo); //l'importo del buono inserito
             
+            error_log( 'BENE: ' . $bene );
+            error_log( 'IMPORTO: ' . $importo_buono );
             /*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
             $purchasable = self::is_purchasable( $order, $bene );
 
@@ -341,6 +343,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         } catch ( Exception $e ) {
 
+            error_log( 'REMOTE' );
             $output = $e->detail->FaultVoucher->exceptionMessage;
         
         }
@@ -352,6 +355,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 * Gestisce il processo di pagamento, verificando la validità del buono inserito dall'utente
+     *
 	 * @param  int $order_id l'id dell'ordine
 	 */
 	public function process_payment( $order_id ) {
@@ -367,7 +371,10 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			'redirect' => '',
 		);
 
-		$data         = $this->get_post_data();
+        $data       = $this->get_post_data();
+
+        error_log( 'DATA: ' . print_r( $data, true ) );
+
 	    $code_18app = $data['wc-codice-18app']; //il buono inserito dall'utente
 
         if ( $code_18app ) {
