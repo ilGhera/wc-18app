@@ -217,6 +217,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
         $args = array(
             'post_title'   => $coupon_code,
             'post_content' => '',
+            'post_excerpt' => $code_18app,
             'post_type'    => 'shop_coupon',
             'post_status'  => 'publish',
             'post_author'  => 1,
@@ -269,13 +270,10 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
         try {
 
             /*Prima verifica del buono*/
-            $response = $soapClient->check();
-
+            $response      = $soapClient->check();
             $bene          = $response->checkResp->ambito; //il bene acquistabile con il buono inserito
             $importo_buono = floatval($response->checkResp->importo); //l'importo del buono inserito
             
-            error_log( 'BENE: ' . $bene );
-            error_log( 'IMPORTO: ' . $importo_buono );
             /*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
             $purchasable = self::is_purchasable( $order, $bene );
 
@@ -290,8 +288,6 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                 if ( self::$coupon_option && $importo_buono < $import && ! $converted  ) {
 
                     $coupon_code = self::create_coupon( $order_id, $importo_buono, $code_18app );
-
-                    error_log( 'COUPON CODE: ' . $coupon_code );
 
                     if ( $coupon_code && ! WC()->cart->has_discount( $coupon_code ) ) {
 
@@ -343,10 +339,10 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         } catch ( Exception $e ) {
 
-            error_log( 'REMOTE' );
             $output = $e->detail->FaultVoucher->exceptionMessage;
         
         }
+
 
         return $output;
 
@@ -372,9 +368,6 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		);
 
         $data       = $this->get_post_data();
-
-        error_log( 'DATA: ' . print_r( $data, true ) );
-
 	    $code_18app = $data['wc-codice-18app']; //il buono inserito dall'utente
 
         if ( $code_18app ) {

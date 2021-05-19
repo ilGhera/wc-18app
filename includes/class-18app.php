@@ -150,8 +150,9 @@ class WC18 {
                 $parts         = explode( '-', $coupon_code );
                 $coupon        = new WC_Coupon( $coupon_code );
                 $coupon_amount = $coupon->get_amount();
+                $code_18app    = $coupon->get_description();
 
-                $notice = WC18_18app_Gateway::process_code( $parts[1], $parts[2], $coupon_amount, true );
+                $notice = WC18_18app_Gateway::process_code( $parts[1], $code_18app, $coupon_amount, true );
 
                 if ( 1 !== intval( $notice ) ) {
 
