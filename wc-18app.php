@@ -53,7 +53,7 @@ function wc18_premium_activation() {
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {
 		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-18app.css');
-		wp_enqueue_script('wc18-scripts', WC18_URI . 'js/wc-carta-docente.js');
+		wp_enqueue_script('wc18-scripts', WC18_URI . 'js/wc-18app.js');
         wp_localize_script(
             'wc18-scripts',
             'wc18Options',
@@ -66,8 +66,23 @@ function wc18_premium_activation() {
 
 	/*Script e folgi di stile back-end*/
 	function wc18_load_admin_scripts() {
-		wp_enqueue_style('wc18-admin-style', WC18_URI . 'css/wc-18app-admin.css');
-		wp_enqueue_script('wc18-admin-scripts', WC18_URI . 'js/wc-18app-admin.js');
+
+        $admin_page = get_current_screen();
+
+        if ( isset( $admin_page->base ) && 'woocommerce_page_wc18-settings' === $admin_page->base ) {
+
+            wp_enqueue_style('wc18-admin-style', WC18_URI . 'css/wc-18app-admin.css');
+            wp_enqueue_script('wc18-admin-scripts', WC18_URI . 'js/wc-18app-admin.js');
+
+            /*tzCheckBox*/
+            wp_enqueue_style( 'tzcheckbox-style', WC18_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
+            wp_enqueue_script( 'tzcheckbox', WC18_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
+            wp_enqueue_script( 'tzcheckbox-script', WC18_URI . 'js/tzCheckbox/js/script.js', array( 'jquery' ) );
+
+        }
+
+
+
 	}
 
 	/*Script e folgi di stile*/

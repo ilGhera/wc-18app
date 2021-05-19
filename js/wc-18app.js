@@ -1,11 +1,11 @@
 /**
- * WC Carta Docente - js
+ * WC 18app - js
  *
  * @author ilGhera
- * @package wc-carta-docente/js
+ * @package wc-18app/js
  * @version 1.0.5
  */
-var wccdController = function() {
+var wc18Controller = function() {
 
 	var self = this;
 
@@ -26,13 +26,13 @@ var wccdController = function() {
             
             $('body').on('checkout_error', function() {
                 
-                if ( wccdOptions.couponConversion ) {
+                if ( wc18Options.couponConversion ) {
 
                     var data = {
                         'action': 'check-for-coupon'
                     }
 
-                    $.post(wccdOptions.ajaxURL, data, function(response) {
+                    $.post(wc18Options.ajaxURL, data, function(response) {
                         
                         if (response) {
 
@@ -56,7 +56,7 @@ var wccdController = function() {
  */
 jQuery(document).ready(function($) {
 	
-	var Controller = new wccdController;
+	var Controller = new wc18Controller;
 	Controller.onLoad();
 
 });

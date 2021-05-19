@@ -507,20 +507,16 @@ class wc18_admin {
 				    		echo '<tr>';
 				    			echo '<th scope="row">' . esc_html(__('Conversione in coupon', 'wc18')) . '</th>';
 			    				echo '<td>';
-					    			echo '<label>';
 					    			echo '<input type="checkbox" name="wc18-coupon" value="1"' . ($wc18_coupon === '1' ? ' checked="checked"' : '') . '>';
-					    			echo wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) );
-					    			echo '</label>';
+					    			echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
 				    		echo '<tr>';
 				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
 			    				echo '<td>';
-					    			echo '<label>';
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18'));
-					    			echo '</label>';
+					    			echo '<p class="description">' .  esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18')) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
