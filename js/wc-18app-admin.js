@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @version 1.0.3 
+ * @version 1.1.0 
  */
 
 /**
@@ -10,13 +10,13 @@
  */
 var wc18_delete_certificate = function() {
 	jQuery(function($){
-		$('.delete-certificate').on('click', function(){
+		$('.wc18-delete-certificate').on('click', function(){
 			var sure = confirm('Sei sicuro di voler eliminare il certificato?');
 			if(sure) {
 				var cert = $('.cert-loaded').text();
 				var data = {
-					'action': 'delete-certificate',
-					'delete': true,
+					'action': 'wc18-delete-certificate',
+					'wc18-delete': true,
 					'cert': cert
 				}			
 				$.post(ajaxurl, data, function(response){
@@ -116,3 +116,4 @@ var wc18_menu_navigation = function() {
 	})
 }
 wc18_menu_navigation();
+

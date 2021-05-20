@@ -3,15 +3,16 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.0.1
+ * @version 1.0.5
  */
 class wc18_admin {
 
 	public function __construct() {
 		add_action('admin_init', array($this, 'wc18_save_settings'));
+		add_action('admin_init', array($this, 'generate_cert_request'));
 		add_action('admin_menu', array($this, 'register_options_page'));
-		add_action('wp_ajax_delete-certificate', array($this, 'delete_certificate_callback'));
-		add_action('wp_ajax_add-cat-18app', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'), 1);
+		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
 	}
 
 
@@ -43,7 +44,7 @@ class wc18_admin {
 	 * Cancella il certificato
 	 */
 	public function delete_certificate_callback() {
-		if(isset($_POST['delete'])) {
+		if(isset($_POST['wc18-delete'])) {
 			$cert = isset($_POST['cert']) ? sanitize_text_field($_POST['cert']) : '';
 			if($cert) {
 				unlink(WC18_PRIVATE . $cert);	
@@ -71,12 +72,12 @@ class wc18_admin {
 
 	/**
 	 * Categoria per la verifica in fase di checkout
-	 * @param  int   $n            il numero dell'elemento aggiunto
-	 * @param  array $data         bene e categoria come chiave e velore
-	 * @param  array $exclude_beni beni già utilizzati da escludere
-	 * @return mixed]
+	 * @param  int   $n             il numero dell'elemento aggiunto
+	 * @param  array $data          bene e categoria come chiave e velore
+	 * @param  array $exclude_beni  buoni già abbinati a categorie WC (al momento non utilizzato)
+	 * @return mixed
 	 */
-	public function setup_cat($n, $data = null, $exclude_beni = null, $exclude_cats = null) {
+	public function setup_cat($n, $data = null, $exclude_beni = null) {
 		echo '<li class="setup-cat cat-' . $n . '">';
 
 			/*L'elenco dei beni dei vari ambiti previsti dalla piattaforma*/
@@ -91,11 +92,9 @@ class wc18_admin {
 				'Corsi di musica, di teatro o di lingua straniera',
 			);
 
-			$beni_prepared = array_map('sanitize_title', $beni_index); 
-
-			$beni = array_diff($beni_prepared, explode(',', $exclude_beni));
+			$beni  = array_map('sanitize_title', $beni_index); 
 			$terms = get_terms('product_cat');
-
+			
 			$bene_value = is_array($data) ? key($data) : '';
 			$term_value = $bene_value ? $data[$bene_value] : '';
 
@@ -143,7 +142,7 @@ class wc18_admin {
 		$exclude_beni = isset($_POST['exclude-beni']) ? sanitize_text_field($_POST['exclude-beni']) : '';
 
 		if($number) {
-			$this->setup_cat($number, null, $exclude_beni, $exclude_cats);
+			$this->setup_cat($number, null, $exclude_beni);
 		}
 
 		exit;
@@ -151,14 +150,112 @@ class wc18_admin {
 
 
 	/**
-	 * Pulsante call to action Premium
+	 * Trasforma il contenuto di un certificato .pem in .der
+	 * @param  string $pem_data il certificato .pem
+	 * @return string           
 	 */
-	public function get_go_premium() {
-		$output = '<span class="label label-warning premium">';
-			$output .= '<a href="https://www.ilghera.com/product/woocommerce-18app-premium" target="_blank">Premium</a>';
-		$output .= '</span>';
+	public function pem2der($pem_data) {
+	   $begin = "-----BEGIN CERTIFICATE REQUEST-----";
+	   $end   = "-----END CERTIFICATE REQUEST-----";
+	   $pem_data = substr($pem_data, strpos($pem_data, $begin)+strlen($begin));   
+	   $pem_data = substr($pem_data, 0, strpos($pem_data, $end));
+	   $der = base64_decode($pem_data);
+	   return $der;
+	}
 
-		return $output;
+
+	/**
+	 * Download della richiesta di certificato da utilizzare sul portale 18app
+	 * Se non presenti, genera la chiave e la richiesta di certificato .der, 
+	 */
+	public function generate_cert_request() {
+
+		if(isset($_POST['wc18-generate-der-hidden'])) {
+
+			/*Crea il file .der*/
+            $countryName = isset($_POST['countryName']) ? sanitize_text_field($_POST['countryName']) : '';
+            $stateOrProvinceName = isset($_POST['stateOrProvinceName']) ? sanitize_text_field($_POST['stateOrProvinceName']) : '';
+            $localityName = isset($_POST['localityName']) ? sanitize_text_field($_POST['localityName']) : '';
+            $organizationName = isset($_POST['organizationName']) ? sanitize_text_field($_POST['organizationName']) : '';
+            $organizationalUnitName = isset($_POST['organizationalUnitName']) ? sanitize_text_field($_POST['organizationalUnitName']) : '';
+            $commonName = isset($_POST['commonName']) ? sanitize_text_field($_POST['commonName']) : '';
+            $emailAddress = isset($_POST['emailAddress']) ? sanitize_text_field($_POST['emailAddress']) : '';
+            $wc18_password = isset($_POST['wc18-password']) ? sanitize_text_field($_POST['wc18-password']) : '';
+
+            /*Salvo passw nel db*/
+            if($wc18_password) {
+            	update_option('wc18-password', base64_encode($wc18_password));
+            }
+
+			$dn = array(
+                "countryName" => $countryName,
+                "stateOrProvinceName" => $stateOrProvinceName,
+                "localityName" => $localityName,
+                "organizationName" => $organizationName,
+                "organizationalUnitName" => $organizationalUnitName,
+                "commonName" => $commonName,
+                "emailAddress" => $emailAddress
+            );
+
+
+            /*Genera la private key*/
+            $privkey = openssl_pkey_new(array(
+                "private_key_bits" => 2048,
+                "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            ));
+
+
+            /*Genera ed esporta la richiesta di certificato .pem*/
+            $csr = openssl_csr_new($dn, $privkey, array('digest_alg' => 'sha256'));
+            openssl_csr_export_to_file($csr, WC18_PRIVATE . 'files/certificate-request.pem');
+
+
+            /*Trasforma la richiesta di certificato in .der e la esporta*/
+            $csr_der = $this->pem2der(file_get_contents(WC18_PRIVATE . 'files/certificate-request.pem'));
+            file_put_contents(WC18_PRIVATE . 'files/certificate-request.der', $csr_der);
+
+             /*Preparo il backup*/
+            $bu_folder = WC18_PRIVATE . 'files/backups/';
+
+            $bu_new_folder_name   = count( glob( $bu_folder . '*' , GLOB_ONLYDIR ) ) + 1;
+            $bu_new_folder_create = wp_mkdir_p( trailingslashit( $bu_folder . $bu_new_folder_name ) );
+
+
+            /*Salvo file di backup*/
+            if( $bu_new_folder_create ) {
+
+				/*Esporta la richiesta di certificato .der*/
+                file_put_contents(WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/certificate-request.der', $csr_der);
+                
+                /*Esporta la private key*/
+                openssl_pkey_export_to_file($privkey, WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/key.der');
+
+            }
+            
+            /*Esporta la richiesta di certificato .der*/
+            file_put_contents(WC18_PRIVATE . 'files/certificate-request.der', $csr_der);
+            
+            /*Esporta la private key*/
+            openssl_pkey_export_to_file($privkey, WC18_PRIVATE . 'files/key.der');
+
+
+			/*Download file .der*/
+			$cert_req_url = WC18_PRIVATE . 'files/certificate-request.der';
+
+			if($cert_req_url) {
+		    	header('Content-Description: File Transfer');
+			    header('Content-Type: application/octet-stream');
+			    header("Content-Transfer-Encoding: binary");			    
+	    		header("Content-disposition: attachment; filename=\"" . basename($cert_req_url) . "\""); 
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+
+				readfile($cert_req_url); 
+
+				exit;
+			}
+		}
 	}
 
 
@@ -189,14 +286,30 @@ class wc18_admin {
 	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-		$passphrase = base64_decode(get_option('wc18-password'));
-		$categories = get_option('wc18-categories');
-		$tot_cats = $categories ? count($categories) : 0;
-		$wc18_image = get_option('wc18-image');
+		$premium_key = get_option('wc18-premium-key');
+		$passphrase  = base64_decode(get_option('wc18-password'));
+		$categories  = get_option('wc18-categories');
+		$tot_cats    = $categories ? count($categories) : 0;
+		$wc18_coupon = get_option('wc18-coupon');
+		$wc18_image  = get_option('wc18-image');
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
 			    echo '<h1>WooCommerce 18app - ' . esc_html(__('Impostazioni', 'wc18')) . '</h1>';
+
+			     /*Premium key form*/
+			    echo '<form method="post" action="">';
+			    	echo '<table class="form-table wc18-table">';
+						echo '<th scope="row">' . __('Premium Key', 'wc18') . '</th>';
+						echo '<td>';
+							echo '<input type="text" class="regular-text code" name="wc18-premium-key" id="wc18-premium-key" placeholder="' . __('Inserisci la tua Premium Key', 'wc18' ) . '" value="' . $premium_key . '" />';
+							echo '<p class="description">' . __('Aggiungi la tua Premium Key e mantieni aggiornato <strong>Woocommerce 18app - Premium</strong>.', 'wc18') . '</p>';
+					    	wp_nonce_field('wc18-premium-key', 'wc18-premium-key-nonce');
+							echo '<input type="hidden" name="premium-key-sent" value="1" />';
+							echo '<input type="submit" class="button button-primary wc18-button"" value="' . __('Salva ', 'wc18') . '" />';
+						echo '</td>';
+					echo '</table>';
+				echo '</form>';
 
 				/*Tabs*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"></div>';
@@ -226,7 +339,7 @@ class wc18_admin {
 				    					if($activation === 'ok') {
 
 					    					echo '<span class="cert-loaded">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . esc_html(__('File caricato e attivato correttamente.', 'wc18')) . '</p>';
 
 					    					update_option('wc18-cert-activation', 1);
@@ -234,7 +347,7 @@ class wc18_admin {
 				    					} else {
 
 					    					echo '<span class="cert-loaded error">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . sprintf(esc_html(__('L\'attivazione del certificato ha restituito il seguente errore: %s', 'wc18')), $activation) . '</p>';
 
 					    					delete_option('wc18-cert-activation');
@@ -255,7 +368,7 @@ class wc18_admin {
 				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
 				    			echo '<td>';
 			    					echo '<input type="password" name="wc18-password" placeholder="**********" value="' . $passphrase . '" required>';
-						    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
+					    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
 
 							    	wp_nonce_field('wc18-upload-certificate', 'wc18-certificate-nonce');
 							    	echo '<input type="hidden" name="wc18-certificate-hidden" value="1">';
@@ -270,7 +383,7 @@ class wc18_admin {
 		    		if(!self::get_the_file('.pem')) {
 				
 			    		/*Genera richiesta certificato .der*/
-			    		echo '<h3>' . esc_html(__('Richiedi un certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
+			    		echo '<h3>' . esc_html(__('Richiedi un certificato', 'wc18')) . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo strumento puoi generare un file .der necessario per richiedere il tuo certificato su 18app.', 'wc18')) . '</p>';
 
 	    				echo '<form id="generate-certificate-request" method="post" class="one-of" enctype="multipart/form-data" action="">';
@@ -278,56 +391,56 @@ class wc18_admin {
 					    		echo '<tr>';
 					    			echo '<th scope="row">' . esc_html(__('Stato', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="countryName" placeholder="IT" disabled>';
+				    					echo '<input type="text" name="countryName" placeholder="IT" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Provincia', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="stateOrProvinceName" placeholder="Es. Milano" disabled>';
+				    					echo '<input type="text" name="stateOrProvinceName" placeholder="Es. Milano" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Località', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="localityName" placeholder="Es. Legnano" disabled>';
+				    					echo '<input type="text" name="localityName" placeholder="Es. Legnano" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Nome azienda', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="organizationName" placeholder="Es. Taldeitali srl" disabled>';
+				    					echo '<input type="text" name="organizationName" placeholder="Es. Taldeitali srl" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Reparto azienda', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="organizationalUnitName" placeholder="Es. Vendite" disabled>';
+				    					echo '<input type="text" name="organizationalUnitName" placeholder="Es. Vendite" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Nome', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="text" name="commonName" placeholder="Es. Franco Bianchi" disabled>';
+				    					echo '<input type="text" name="commonName" placeholder="Es. Franco Bianchi" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Email', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="email" name="emailAddress" placeholder="Es. franco.bianchi@taldeitali.it" disabled>';
+				    					echo '<input type="email" name="emailAddress" placeholder="Es. franco.bianchi@taldeitali.it" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
 					    			echo '<td>';
-				    					echo '<input type="password" name="wc18-password" placeholder="**********" disabled>';
+				    					echo '<input type="password" name="wc18-password" placeholder="**********" required>';
 					    			echo '</td>';
 					    		echo '</tr>';
 
 				    			echo '<th scope="row"></th>';
 					    			echo '<td>';
-					    			echo '<input type="hidden" name="generate-der-hidden" value="1">';
-				    				echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . __('Scarica file .der', 'wc18') . '" disabled>';
+					    			echo '<input type="hidden" name="wc18-generate-der-hidden" value="1">';
+				    				echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . __('Scarica file .der', 'wc18') . '">';
 					    			echo '</td>';
 					    		echo '</tr>';
 
@@ -336,7 +449,7 @@ class wc18_admin {
 
 
 			    		/*Genera certificato .pem*/
-			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
+			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18')) . '</p>';
 
 						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate" method="post" enctype="multipart/form-data" action="">';
@@ -347,12 +460,12 @@ class wc18_admin {
 					    			echo '<th scope="row">' . esc_html(__('Genera certificato', 'wc18')) . '</th>';
 					    			echo '<td>';
 					    				
-						    			echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert" disabled>';
+						    			echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert">';
 						    			echo '<p class="description">' . esc_html(__('Carica il file .cer ottenuto da 18app per procedere', 'wc18')) . '</p>';
 								    	
 								    	wp_nonce_field('wc18-generate-certificate', 'wc18-gen-certificate-nonce');
 								    	echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
-								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '" disabled>';
+								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '">';
 
 					    			echo '</td>';
 					    		echo '</tr>';
@@ -386,18 +499,24 @@ class wc18_admin {
 				    					}
 
 						    		echo '</ul>';
-						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : '') . '">';
+						    		echo '<input type="hidden" name="wc18-tot-cats" class="wc18-tot-cats" value="' . ($categories ? count($categories) : 1) . '">';
 					    			echo '<p class="description">' . esc_html(__('Seleziona le categorie di prodotti corrispondenti ai beni acquistabili.', 'wc18')) . '</p>';
 				    			echo '</td>';
 				    		echo '</tr>';
 
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine ', 'wc18')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Conversione in coupon', 'wc18')) . '</th>';
 			    				echo '<td>';
-					    			echo '<label>';
+					    			echo '<input type="checkbox" name="wc18-coupon" value="1"' . ($wc18_coupon === '1' ? ' checked="checked"' : '') . '>';
+					    			echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
+			    				echo '</td>';
+				    		echo '</tr>';
+
+				    		echo '<tr>';
+				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
+			    				echo '<td>';
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18'));
-					    			echo '</label>';
+					    			echo '<p class="description">' .  esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18')) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
@@ -407,13 +526,12 @@ class wc18_admin {
 				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wc18') . '">';
 				    echo '</form>';
 			    echo '</div>';
-
+	
 		    echo '</div>';
-
+	
 	    	echo '<div class="wrap-right">';
-				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wc18-iframe.html"></iframe>';
-
-	    	echo '</div>';
+				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wc18-premium-iframe.html"></iframe>';
+			echo '</div>';
 			echo '<div class="clear"></div>';
 
 	    echo '</div>';
@@ -438,6 +556,57 @@ class wc18_admin {
 	 * Salvataggio delle impostazioni dell'utente
 	 */
 	public function wc18_save_settings() {
+
+		if(isset($_POST['premium-key-sent']) && wp_verify_nonce($_POST['wc18-premium-key-nonce'], 'wc18-premium-key')) {
+
+			/*Salvataggio Premium Key*/
+			$premium_key = isset($_POST['wc18-premium-key']) ? sanitize_text_field($_POST['wc18-premium-key']) : '';
+			update_option('wc18-premium-key', $premium_key);
+		
+		}
+
+		if(isset($_POST['wc18-gen-certificate-hidden']) && wp_verify_nonce($_POST['wc18-gen-certificate-nonce'], 'wc18-generate-certificate')) {
+
+			/*Salvataggio file .cer*/
+			if(isset($_FILES['wc18-cert'])) {
+				$info = pathinfo($_FILES['wc18-cert']['name']);
+				$name = sanitize_file_name($info['basename']);
+				if($info) {
+					if($info['extension'] === 'cer') {
+						move_uploaded_file($_FILES['wc18-cert']['tmp_name'], WC18_PRIVATE . $name);	
+									
+						/*Conversione da .cer a .pem*/
+	                    $certificateCAcer = WC18_PRIVATE . $name;
+	                    $certificateCAcerContent = file_get_contents($certificateCAcer);
+	                    $certificateCApemContent =  '-----BEGIN CERTIFICATE-----'.PHP_EOL
+	                        .chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL)
+	                        .'-----END CERTIFICATE-----'.PHP_EOL;
+	                    $certificateCApem = WC18_PRIVATE . 'files/wc18-cert.pem';
+	                    file_put_contents($certificateCApem, $certificateCApemContent); 
+	                    
+	                    /*Preparo i file necessari*/
+	                    $pem = openssl_x509_read(file_get_contents(WC18_PRIVATE . 'files/wc18-cert.pem'));
+	                    $get_key = file_get_contents(WC18_PRIVATE . 'files/key.der');
+
+	                    /*Richiamo la passphrase dal db*/
+	                    $wc18_password = base64_decode(get_option('wc18-password'));
+
+	                    $key = array($get_key, $wc18_password);
+
+	                    openssl_pkcs12_export_to_file($pem, WC18_PRIVATE . 'files/wc18-cert.p12', $key, $wc18_password);
+
+	                    /*Preparo i file necessari*/	                    
+	                    openssl_pkcs12_read(file_get_contents(WC18_PRIVATE . 'files/wc18-cert.p12'), $p12, $wc18_password);
+
+	                    /*Creo il certificato*/
+	                    file_put_contents(WC18_PRIVATE . 'wc18-certificate.pem', $p12['cert'] . $key[0]);
+
+					} else {
+						add_action('admin_notices', array($this, 'not_valid_certificate'));
+					}					
+				}
+			}
+		}
 
 		if(isset($_POST['wc18-certificate-hidden']) && wp_verify_nonce($_POST['wc18-certificate-nonce'], 'wc18-upload-certificate')) {
 			
@@ -483,6 +652,10 @@ class wc18_admin {
 				update_option('wc18-categories', $wc18_categories);
 			}
 
+			/*Conversione in coupon*/
+			$wc18_coupon = isset($_POST['wc18-coupon']) ? sanitize_text_field($_POST['wc18-coupon']) : '';															
+			update_option('wc18-coupon', $wc18_coupon);
+
 			/*Immagine in pagina di checkout*/
 			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
 			update_option('wc18-image', $wc18_image);
@@ -491,3 +664,4 @@ class wc18_admin {
 
 }
 new wc18_admin();
+

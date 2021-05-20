@@ -39,21 +39,36 @@ function wc18_activation() {
 	require WC18_INCLUDES . 'class-18app-gateway.php';
 	require WC18_INCLUDES . 'class-18app-soap-client.php';
 	require WC18_INCLUDES . 'class-18app-admin.php';
+	require WC18_INCLUDES . 'class-18app.php';
 
 	/*Script e folgi di stile front-end*/
 	function wc18_load_scripts() {
 		wp_enqueue_style('wc18-style', WC18_URI . 'css/wc-18app.css');
 	}
 
-
 	/*Script e folgi di stile back-end*/
 	function wc18_load_admin_scripts() {
-		wp_enqueue_style('wc18-admin-style', WC18_URI . 'css/wc-18app-admin.css');
-		wp_enqueue_script('wc18-admin-scripts', WC18_URI . 'js/wc-18app-admin.js');
+
+        $admin_page = get_current_screen();
+
+        if ( isset( $admin_page->base ) && 'woocommerce_page_wc18-settings' === $admin_page->base ) {
+
+            wp_enqueue_style('wc18-admin-style', WC18_URI . 'css/wc-18app-admin.css');
+            wp_enqueue_script('wc18-admin-scripts', WC18_URI . 'js/wc-18app-admin.js');
+
+            /*tzCheckBox*/
+            wp_enqueue_style( 'tzcheckbox-style', WC18_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
+            wp_enqueue_script( 'tzcheckbox', WC18_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
+            wp_enqueue_script( 'tzcheckbox-script', WC18_URI . 'js/tzCheckbox/js/script.js', array( 'jquery' ) );
+
+        }
+
 	}
 
 	/*Script e folgi di stile*/
 	add_action('wp_enqueue_scripts', 'wc18_load_scripts');
 	add_action('admin_enqueue_scripts', 'wc18_load_admin_scripts');
+
 } 
 add_action('plugins_loaded', 'wc18_activation', 100);
+
