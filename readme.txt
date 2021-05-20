@@ -66,6 +66,12 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
+= 1.1.0 =
+Data di rilascio: 20 Maggio, 2021
+
+* Implementazione: Opzione di conversione buono 18app in codice sconto applicato a carrello nel caso in cui il valore del buono sia inferiore al totale a carrello
+* Implementazione: Interfaccia migliorata. 
+
 = 1.0.5 =
 Data di rilascio: 28 Aprile, 2020
 
