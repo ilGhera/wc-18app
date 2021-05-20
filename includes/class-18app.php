@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 0.9.2
+ * @since 1.1.0
  */
 class WC18 {
 

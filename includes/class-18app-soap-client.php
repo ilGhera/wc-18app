@@ -3,7 +3,7 @@
  * Gestice le chiamate del web service 
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.0.0
+ * @version 1.1.0
  */
 class wc18_soap_client {
 
