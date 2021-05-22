@@ -10,8 +10,8 @@ class wc18_admin {
 	public function __construct() {
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_menu', array($this, 'register_options_page'));
-		add_action('wp_ajax_delete-certificate', array($this, 'delete_certificate_callback'));
-		add_action('wp_ajax_add-cat-18app', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'));
+		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
 	}
 
 
@@ -43,7 +43,7 @@ class wc18_admin {
 	 * Cancella il certificato
 	 */
 	public function delete_certificate_callback() {
-		if(isset($_POST['delete'])) {
+		if(isset($_POST['wc18-delete'])) {
 			$cert = isset($_POST['cert']) ? sanitize_text_field($_POST['cert']) : '';
 			if($cert) {
 				unlink(WC18_PRIVATE . $cert);	
@@ -226,7 +226,7 @@ class wc18_admin {
 				    					if($activation === 'ok') {
 
 					    					echo '<span class="cert-loaded">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . esc_html(__('File caricato e attivato correttamente.', 'wc18')) . '</p>';
 
 					    					update_option('wc18-cert-activation', 1);
@@ -234,7 +234,7 @@ class wc18_admin {
 				    					} else {
 
 					    					echo '<span class="cert-loaded error">' . esc_html(basename($file)) . '</span>';
-					    					echo '<a class="button delete delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
+					    					echo '<a class="button delete wc18-delete-certificate">' . esc_html(__('Elimina'), 'wc18') . '</a>';
 					    					echo '<p class="description">' . sprintf(esc_html(__('L\'attivazione del certificato ha restituito il seguente errore: %s', 'wc18')), $activation) . '</p>';
 
 					    					delete_option('wc18-cert-activation');

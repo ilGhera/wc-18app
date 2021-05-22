@@ -274,7 +274,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		);
 
 		$data       = $this->get_post_data();
-	    $code_18app = $data['wc-18app']; //il buono inserito dall'utente
+	    $code_18app = $data['wc-codice-18app']; //il buono inserito dall'utente
 
         if ( $code_18app ) {
 

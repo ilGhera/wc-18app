@@ -45,7 +45,7 @@ var wc18_add_cat = function() {
 			})
 				
 			var data = {
-				'action': 'add-cat-18app',
+				'action': 'wc18-add-cat',
 				'number': number,
 				'exclude-beni': beni_values.toString(),
 			}
