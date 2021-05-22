@@ -66,8 +66,8 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
-= 1.1.0 =
-Data di rilascio: 20 Maggio, 2021
+= 1.1.1 =
+Data di rilascio: 22 Maggio, 2021
 
 * Correzione bug: Mancata eliminazione ordine temporaneo in caso di conversione buono 18app in codice sconto
 
