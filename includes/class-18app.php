@@ -158,6 +158,11 @@ class WC18 {
 
                     wc_add_notice( __( 'Buono 18app - ' . $notice, 'wc18' ), 'error' );         
 
+                } else {
+
+                    /* Eliminazione ordine temporaneo */
+                    wp_delete_post( $parts[1] );
+
                 }
             }
 
