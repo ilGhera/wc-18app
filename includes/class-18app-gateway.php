@@ -263,6 +263,8 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
      */
     public static function process_code( $order_id, $code_18app, $import, $converted = false ) {
 
+        global $woocommerce;
+
         $output     = 1; 
         $order      = wc_get_order( $order_id );
         $soapClient = new wc18_soap_client( $code_18app, $import );
@@ -357,8 +359,6 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	 * @param  int $order_id l'id dell'ordine
 	 */
 	public function process_payment( $order_id ) {
-
-        global $woocommerce;
 
 	    $order  = wc_get_order( $order_id );
 		$import = floatval( $order->get_total() ); //il totale dell'ordine
