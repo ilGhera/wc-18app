@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.1.0
+Version: 1.1.1
 Requires at least: 4.0
 Tested up to: 5.7
 
@@ -65,6 +65,11 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.1.0 =
+Data di rilascio: 20 Maggio, 2021
+
+* Correzione bug: Mancata eliminazione ordine temporaneo in caso di conversione buono 18app in codice sconto
 
 = 1.1.0 =
 Data di rilascio: 20 Maggio, 2021
