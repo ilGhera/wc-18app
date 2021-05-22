@@ -10,7 +10,7 @@ class wc18_soap_client {
     public function __construct($codiceVoucher, $import) {
         $this->wsdl          = WC18_INCLUDES_URI . 'VerificaVoucher.wsdl';
         $this->local_cert    = WC18_PRIVATE . $this->get_local_cert();
-        $this->location      = 'https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
+        $this->location      = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
         $this->codiceVoucher = $codiceVoucher;
 		$this->import        = $import;
         $this->passphrase    = $this->get_user_passphrase(); 
