@@ -76,7 +76,7 @@ class wc18_admin {
 	 * @param  array $exclude_beni beni già utilizzati da escludere
 	 * @return mixed]
 	 */
-	public function setup_cat($n, $data = null, $exclude_beni = null, $exclude_cats = null) {
+	public function setup_cat($n, $data = null, $exclude_beni = null) {
 		echo '<li class="setup-cat cat-' . $n . '">';
 
 			/*L'elenco dei beni dei vari ambiti previsti dalla piattaforma*/
@@ -143,7 +143,7 @@ class wc18_admin {
 		$exclude_beni = isset($_POST['exclude-beni']) ? sanitize_text_field($_POST['exclude-beni']) : '';
 
 		if($number) {
-			$this->setup_cat($number, null, $exclude_beni, $exclude_cats);
+			$this->setup_cat($number, null, $exclude_beni);
 		}
 
 		exit;
