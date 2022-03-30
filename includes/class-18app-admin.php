@@ -31,7 +31,7 @@ class wc18_admin {
 	public static function get_the_file($ext) {
 		$files = [];
 		foreach (glob(WC18_PRIVATE . '*' . $ext) as $file) {
-			$files[] = $file; 
+			$files[] = $file;
 		}
 		$output = empty($files) ? false : $files[0];
 
@@ -46,7 +46,7 @@ class wc18_admin {
 		if(isset($_POST['wc18-delete'])) {
 			$cert = isset($_POST['cert']) ? sanitize_text_field($_POST['cert']) : '';
 			if($cert) {
-				unlink(WC18_PRIVATE . $cert);	
+				unlink(WC18_PRIVATE . $cert);
 			}
 		}
 
@@ -91,7 +91,7 @@ class wc18_admin {
 				'Corsi di musica, di teatro o di lingua straniera',
 			);
 
-			$beni_prepared = array_map('sanitize_title', $beni_index); 
+			$beni_prepared = array_map('sanitize_title', $beni_index);
 
 			$beni = array_diff($beni_prepared, explode(',', $exclude_beni));
 			$terms = get_terms('product_cat');
@@ -119,7 +119,7 @@ class wc18_admin {
 				echo '<div class="add-cat-container">';
 	    			echo '<img class="add-cat" src="' . WC18_URI . 'images/add-cat.png">';
 	    			echo '<img class="add-cat-hover wc18" src="' . WC18_URI . 'images/add-cat-hover.png">';
-				echo '</div>';				
+				echo '</div>';
 
 			} else {
 
@@ -179,7 +179,7 @@ class wc18_admin {
 		    error_log('Error wc18_cert_activation: ' . print_r($e, true));
 		    return $notice;
 
-        } 
+        }
 	}
 
 
@@ -245,7 +245,7 @@ class wc18_admin {
 
 						    			echo '<input type="file" accept=".pem" name="wc18-certificate" class="wc18-certificate">';
 						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con 18app', 'wc18')) . '</p>';
-			
+
 				    				}
 				    			echo '</td>';
 				    		echo '</tr>';
@@ -255,7 +255,7 @@ class wc18_admin {
 				    			echo '<th scope="row">' . esc_html(__('Password', 'wc18')) . '</th>';
 				    			echo '<td>';
 			    					echo '<input type="password" name="wc18-password" placeholder="**********" value="' . $passphrase . '" required>';
-						    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';	
+						    			echo '<p class="description">' . esc_html(__('La password utilizzata per la generazione del certificato', 'wc18')) . '</p>';
 
 							    	wp_nonce_field('wc18-upload-certificate', 'wc18-certificate-nonce');
 							    	echo '<input type="hidden" name="wc18-certificate-hidden" value="1">';
@@ -265,10 +265,10 @@ class wc18_admin {
 
 			    		echo '</table>';
 			    	echo '</form>';
-	
+
 				    /*Se il certificato non è presente vengono mostrati gli strumentui per generarlo*/
 		    		if(!self::get_the_file('.pem')) {
-				
+
 			    		/*Genera richiesta certificato .der*/
 			    		echo '<h3>' . esc_html(__('Richiedi un certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo strumento puoi generare un file .der necessario per richiedere il tuo certificato su 18app.', 'wc18')) . '</p>';
@@ -346,10 +346,10 @@ class wc18_admin {
 					    		echo '<tr>';
 					    			echo '<th scope="row">' . esc_html(__('Genera certificato', 'wc18')) . '</th>';
 					    			echo '<td>';
-					    				
+
 						    			echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert" disabled>';
 						    			echo '<p class="description">' . esc_html(__('Carica il file .cer ottenuto da 18app per procedere', 'wc18')) . '</p>';
-								    	
+
 								    	wp_nonce_field('wc18-generate-certificate', 'wc18-gen-certificate-nonce');
 								    	echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
 								    	echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '" disabled>';
@@ -358,7 +358,7 @@ class wc18_admin {
 					    		echo '</tr>';
 
 				    		echo '</table>';
-				    	echo '</form>';			
+				    	echo '</form>';
 
 					}
 
@@ -370,7 +370,7 @@ class wc18_admin {
 
 				    echo '<form name="wc18-options" class="wc18-form wc18-options" method="post" enctype="multipart/form-data" action="">';
 				    	echo '<table class="form-table">';
-				    		
+
 				    		echo '<tr>';
 				    			echo '<th scope="row">' . esc_html(__('Categorie', 'wc18')) . '</th>';
 				    			echo '<td>';
@@ -378,7 +378,7 @@ class wc18_admin {
 				    				echo '<ul  class="categories-container">';
 
 				    					if($categories) {
-				    						for ($i=1; $i <= $tot_cats ; $i++) { 
+				    						for ($i=1; $i <= $tot_cats ; $i++) {
 			    								$this->setup_cat($i, $categories[$i - 1]);
 				    						}
 				    					} else {
@@ -447,17 +447,17 @@ class wc18_admin {
 	public function wc18_save_settings() {
 
 		if(isset($_POST['wc18-certificate-hidden']) && wp_verify_nonce($_POST['wc18-certificate-nonce'], 'wc18-upload-certificate')) {
-			
+
 			/*Carica certificato*/
 			if(isset($_FILES['wc18-certificate'])) {
 				$info = pathinfo($_FILES['wc18-certificate']['name']);
 				$name = sanitize_file_name($info['basename']);
 				if($info) {
 					if($info['extension'] === 'pem') {
-						move_uploaded_file($_FILES['wc18-certificate']['tmp_name'], WC18_PRIVATE . $name);	
+						move_uploaded_file($_FILES['wc18-certificate']['tmp_name'], WC18_PRIVATE . $name);
 					} else {
 						add_action('admin_notices', array($this, 'not_valid_certificate'));
-					}					
+					}
 				}
 			}
 
@@ -475,10 +475,11 @@ class wc18_admin {
 			/*Impostazioni categorie per il controllo in fase di checkout*/
 			if(isset($_POST['wc18-tot-cats'])) {
 				$tot = sanitize_text_field($_POST['wc18-tot-cats']);
+				$tot_count = $tot == '' ? 1 : $tot;
 
 				$wc18_categories = array();
 
-				for ($i=1; $i <= $tot ; $i++) { 
+				for ($i=1; $i <= $tot_count ; $i++) {
 					$bene = isset($_POST['wc18-beni-' . $i]) ? sanitize_text_field($_POST['wc18-beni-' . $i]) : '';
 					$cat = isset($_POST['wc18-categories-' . $i]) ? sanitize_text_field($_POST['wc18-categories-' . $i]) : '';
 
@@ -491,11 +492,10 @@ class wc18_admin {
 			}
 
 			/*Immagine in pagina di checkout*/
-			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
+			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';
 			update_option('wc18-image', $wc18_image);
 		}
 	}
 
 }
 new wc18_admin();
-
