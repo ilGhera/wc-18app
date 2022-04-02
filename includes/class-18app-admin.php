@@ -3,7 +3,7 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.1.0
+ * @version 1.1.1
  */
 class wc18_admin {
 
@@ -475,11 +475,11 @@ class wc18_admin {
 			/*Impostazioni categorie per il controllo in fase di checkout*/
 			if(isset($_POST['wc18-tot-cats'])) {
 				$tot = sanitize_text_field($_POST['wc18-tot-cats']);
-				$tot_count = $tot == '' ? 1 : $tot;
+                $tot = $tot ? $tot : 1;
 
 				$wc18_categories = array();
 
-				for ($i=1; $i <= $tot_count ; $i++) {
+				for ($i=1; $i <= $tot ; $i++) {
 					$bene = isset($_POST['wc18-beni-' . $i]) ? sanitize_text_field($_POST['wc18-beni-' . $i]) : '';
 					$cat = isset($_POST['wc18-categories-' . $i]) ? sanitize_text_field($_POST['wc18-categories-' . $i]) : '';
 

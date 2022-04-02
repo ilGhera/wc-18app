@@ -1,9 +1,9 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.1.0
+Version: 1.1.1
 Requires at least: 4.0
-Tested up to: 5.7
+Tested up to: 5.9
 
 Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 
@@ -75,6 +75,11 @@ https://youtu.be/a94VpGu76Qw
 
 == Changelog ==
 
+
+= 1.1.1 =
+Data di rilascio: 2 Aprile, 2022
+
+* Correzione bug: Impossibile salvare un singolo abbinamento categoria WC/ Bene 18app (monteduro)
 
 = 1.1.0 =
 Data di rilascio: 22 Maggio, 2021
