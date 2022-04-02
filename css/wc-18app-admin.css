@@ -1,11 +1,11 @@
 /**
- * WC Carta Docente - Admin CSS
+ * WC 18app - Admin CSS
  * @author ilGhera
- * @package wc-carta-docente/css
- * @version 0.9.2
+ * @package wc-18app/css
+ * @version 1.1.0
  */
 
-#wccd-admin-menu {
+#wc18-admin-menu {
 	margin: 1rem 0 2rem;
 }
 
@@ -44,7 +44,7 @@ ul.categories-container {
 	margin: 0;
 }
 
-.wccd-field {
+.wc18-field {
 	width: 260px;
 	margin-right: 0.5rem;
 }
@@ -72,7 +72,7 @@ ul.categories-container {
 	display: inline;
 }
 
-.wccd-form, .wccd-table {
+.wc18-form, .wc18-table {
 	margin-top: 2rem;
 }
 
@@ -81,26 +81,47 @@ ul.categories-container {
 	border-bottom: 1px solid #ccc;
 }
 
-.wccd-button {
+.wc18-button {
 	margin-top: 1rem !important;
 }
 
-.wccd-admin {
+.wc18-admin {
 	display: none;
 }
 
-span.wccd-alert {
-	display: block;
-	margin: 1rem 0 0;
-	padding: 0.6rem;
-	background: #F2DEDE;
-	border-radius: 0.2rem;
-	color: #a94442;	
+.label {
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
-span.wccd-alert a {
-	color: #a94442;	
-	text-decoration: underline;
+.label a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.label a:hover {
+	color: #0073aa;
+}
+
+.label-warning {
+	background-color: #f0ad4e;
+}
+
+.label.premium {
+    display: inline-block;
+    margin: 1rem 1rem 0;
+    padding: 0.4rem;
+}
+
+.label.premium.no-margin {
+    margin: 1rem 0;
 }
 
 .wrap-left {

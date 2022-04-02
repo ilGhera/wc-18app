@@ -1,0 +1,18 @@
+/**
+ * WC 18app - CSS
+ * @author ilGhera
+ * @package wc-18app/css
+ * @version 0.9.0
+ */
+
+input#wc-codice-18app {
+	display: block;
+	margin-top: 0.5rem;
+	width: 100%;
+}
+
+label[for="wc-codice-18app"] {
+	text-transform: uppercase;
+	display: block;
+}
+

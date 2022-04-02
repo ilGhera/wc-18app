@@ -2,19 +2,19 @@
 /**
  * Gestice le chiamate del web service 
  * @author ilGhera
- * @package wc-carta-docente/includes
- * @version 0.9.2
+ * @package wc-18app/includes
+ * @version 1.0.0
  */
-class wccd_soap_client {
+class wc18_soap_client {
 
     public function __construct($codiceVoucher, $import) {
-        $this->wsdl = WCCD_INCLUDES_URI . 'VerificaVoucher.wsdl';
-        $this->local_cert = WCCD_PRIVATE . $this->get_local_cert();
-        $this->location = 'https://ws.cartadeldocente.istruzione.it/VerificaVoucherDocWEB/VerificaVoucher';
+        $this->wsdl          = WC18_INCLUDES_URI . 'VerificaVoucher.wsdl';
+        $this->local_cert    = WC18_PRIVATE . $this->get_local_cert();
+        $this->location      = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
         $this->codiceVoucher = $codiceVoucher;
-        $this->import = $import;
-        $this->passphrase = $this->get_user_passphrase(); 
-    }
+		$this->import        = $import;
+        $this->passphrase    = $this->get_user_passphrase(); 
+	}
 
 
     /**
@@ -22,7 +22,7 @@ class wccd_soap_client {
      * @return string
      */
     public function get_local_cert() {
-        $cert = wccd_admin::get_the_file('.pem');
+        $cert = wc18_admin::get_the_file('.pem');
         if($cert) {
             return esc_html(basename($cert));
         }
@@ -34,11 +34,11 @@ class wccd_soap_client {
      * @return string
      */
     public function get_user_passphrase() {
-        return base64_decode(get_option('wccd-password'));
+        return base64_decode(get_option('wc18-password'));
     }
 
 
-    /**
+	/**
      * Istanzia il SoapClient
      */
     public function soap_client() {

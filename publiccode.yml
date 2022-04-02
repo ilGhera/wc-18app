@@ -1,0 +1,134 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+categories:
+  - e-commerce
+description:
+  it:
+    documentation: 'https://www.ilghera.com/category/documentation/wc-carta-docente-18app/'
+    features:
+      - Carica il tuo certificato .pem
+      - Abbina le categorie WooCommerce agli ambiti d''acquisto di Carta del Docente
+      - Nuovo metodo di pagamento in pagina di checkout
+    genericName: WordPress plugin
+    longDescription: |
+      Ogni diciottenne, in Italia, ha a disposizione un _Bonus Cultura_  del
+
+      valore di € 500 da spendere in cinema, musica e concerti, eventi 
+
+      culturali, libri, musei, monumenti e parchi, teatro e danza, corsi di 
+
+      musica, di teatro o di lingua straniera.
+
+
+
+      Con **Woocommerce 18app**, gli utenti potranno acquistare i tuoi prodotti
+
+      utilizzando i buoni generati su _18app_.
+
+
+      _
+
+
+
+      ### Presentati come esercente
+
+
+
+      Carica il tuo certificato .pem ed identificati come esercente, una luce
+
+      verde confermerà l'avvenuto collegamento tra le due piattaforme.
+
+
+
+      ![](https://i0.wp.com/www.ilghera.com/wp-content/uploads/2018/10/18app-crea-certificato.png?w=637&ssl=1)
+
+
+
+      ### Imposta i prodotti acquistabili
+
+
+
+      I buoni generati sulla piattaforma _18app_, possono essere utilizzati solo
+
+      per acquistare beni della stessa tipologia per i quali sono stati creati.
+
+
+      Impostando queste categorie con lo strumento dedicato, **Woocommerce 18app** 
+      effettuerà un controllo nella fase di checkout, avvisando se
+
+      necessario l'utente della mancata corrispondenza.
+
+
+
+      ![](https://i1.wp.com/www.ilghera.com/wp-content/uploads/2018/10/18app-impostazioni.png?w=680&ssl=1)
+
+
+
+      ### Facile per l'utente
+
+
+
+      Dopo aver attivato il certificato, **Woocommerce 18app** aggiungerà il
+
+      nuovo metodo di pagamento tra quelli disponibili nella pagina di checkout.
+
+
+      L'utente non dovrà fare altro che inserire il codice del suo buono,
+
+      nient'altro.
+
+
+
+      ![](https://i2.wp.com/www.ilghera.com/wp-content/uploads/2018/10/18app-woocommerce-checkout.png?w=336&ssl=1)
+    screenshots:
+      - |-
+        https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/icon.jpg
+      - |-
+        https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/carica-certificato.jpg
+      - |-
+        https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/abbinamento-categorie.jpg
+      - |-
+        https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/metodo-di-pagamento.jpg
+    shortDescription: |-
+      Con Woocommerce 18app, consentirai ai diciottenni residenti in Italia di
+
+      acquistare i tuoi prodotti con il Bonus Cultura 18app.
+developmentStatus: stable
+intendedAudience:
+  countries:
+    - it
+it:
+  conforme:
+    gdpr: false
+    lineeGuidaDesign: false
+    misureMinimeSicurezza: false
+    modelloInteroperabilita: false
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: false
+legal:
+  license: GPL-3.0-only
+  repoOwner: ilGhera | WordPress Development
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: true
+logo: 'https://raw.githubusercontent.com/ilGhera/wc-18app/master/images/icon.png'
+maintenance:
+  contacts:
+    - email: andrea@ilghera.com
+      name: Andrea Gherardi
+  type: internal
+name: WooCommerce 18app
+platforms:
+  - web
+releaseDate: '2020-02-10'
+softwareType: addon
+softwareVersion: 1.0.3
+url: 'https://github.com/ilGhera/wc-18app'
