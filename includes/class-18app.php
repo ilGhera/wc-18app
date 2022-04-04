@@ -163,11 +163,6 @@ class WC18 {
                     /* Eliminazione ordine temporaneo */
                     wp_delete_post( $parts[1] );
 
-                } else {
-
-                    /* Eliminazione ordine temporaneo */
-                    wp_delete_post( $parts[1] );
-
                 }
             }
 
