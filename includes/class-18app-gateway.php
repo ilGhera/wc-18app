@@ -265,6 +265,8 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         global $woocommerce;
 
+        global $woocommerce;
+
         $output     = 1; 
         $order      = wc_get_order( $order_id );
         $soapClient = new wc18_soap_client( $code_18app, $import );
