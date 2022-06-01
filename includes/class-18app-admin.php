@@ -7,12 +7,18 @@
  */
 class wc18_admin {
 
+    private $sandbox;
+
 	public function __construct() {
+
+        $this->sandbox = get_option( 'wc18-sandbox' );
+
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_init', array($this, 'generate_cert_request'));
 		add_action('admin_menu', array($this, 'register_options_page'));
 		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'), 1);
 		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_wc18-sandbox', array($this, 'sandbox_callback'));
 	}
 
 
@@ -280,18 +286,53 @@ class wc18_admin {
 	}
 
 
+    /**
+     * Funzionalita Sandbox
+     *
+     * @return void
+     */
+    public function sandbox_callback() {
+
+        if ( isset( $_POST['sandbox'] ) && wp_verify_nonce($_POST['nonce'], 'wc18-sandbox')) {
+
+            $this->sandbox = $_POST['sandbox'];
+            update_option('wc18-sandbox', $_POST['sandbox']);
+            
+            if ( 1 === intval( $_POST['sandbox'] ) ) {
+
+                $activation = $this->wc18_cert_activation();
+                
+                if($activation === 'ok') {
+                
+                    update_option('wc18-cert-activation', 1);
+
+                } else {
+
+                    delete_option('wc18-cert-activation');
+
+                }
+            }
+
+        }
+
+        exit();
+
+    }
+
+
 	/**
 	 * Pagina opzioni plugin
 	 */
 	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-		$premium_key = get_option('wc18-premium-key');
-		$passphrase  = base64_decode(get_option('wc18-password'));
-		$categories  = get_option('wc18-categories');
-		$tot_cats    = $categories ? count($categories) : 0;
-		$wc18_coupon = get_option('wc18-coupon');
-		$wc18_image  = get_option('wc18-image');
+		$premium_key      = get_option('wc18-premium-key');
+		$passphrase       = base64_decode(get_option('wc18-password'));
+		$categories       = get_option('wc18-categories');
+		$tot_cats         = $categories ? count($categories) : 0;
+		$wc18_coupon      = get_option('wc18-coupon');
+		$wc18_image       = get_option('wc18-image');
+		$wc18_items_check = get_option('wc18-items-check');
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
@@ -360,6 +401,7 @@ class wc18_admin {
 						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con 18app', 'wc18')) . '</p>';
 			
 				    				}
+
 				    			echo '</td>';
 				    		echo '</tr>';
 
@@ -452,7 +494,7 @@ class wc18_admin {
 			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18')) . '</p>';
 
-						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate" method="post" enctype="multipart/form-data" action="">';
+						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
 					    	echo '<table class="form-table wc18-table">';
 
 					    		/*Carica certificato*/
@@ -477,6 +519,32 @@ class wc18_admin {
 
 			    echo '</div>';
 
+                /*Modalità Sandbox*/
+                echo '<div id="wc18-sandbox-option" class="wc18-admin" style="display: block;">';
+                    echo '<h3>' . esc_html(__('Modalità Sandbox', 'wc18')) . '</h3>';
+                echo '<p class="description">';
+                    printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@beniculturali.it</a>', 'wc18' ) ), 'mailto:numeroverde@beniculturali.it' );
+                echo '</p>';
+
+                    echo '<form name="wc18-sandbox" class="wc18-sandbox" method="post" enctype="multipart/form-data" action="">';
+                        echo '<table class="form-table wc18-table">';
+
+                            /*Carica certificato*/
+                            echo '<tr>';
+                                echo '<th scope="row">' . esc_html(__('Sandbox', 'wc18')) . '</th>';
+                                echo '<td class="wc18-sandbox-field">';
+                                    echo '<input type="checkbox" name="wc18-sandbox" class="wc18-sandbox"' . ( $this->sandbox ? ' checked="checked"' : null ) . '>';
+                                    echo '<p class="description">' . esc_html(__('Attiva modalità Sandbox', 'wc18')) . '</p>';
+                                    wp_nonce_field('wc18-sandbox', 'wc18-sandbox-nonce');
+                                    echo '<input type="hidden" name="wc18-sandbox-hidden" value="1">';
+                                    /* echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '">'; */
+
+                                echo '</td>';
+                            echo '</tr>';
+
+                        echo '</table>';
+                    echo '</form>';			
+                echo '</div>';
 
 			    /*Options*/
 			    echo '<div id="wc18-options" class="wc18-admin">';
@@ -516,11 +584,19 @@ class wc18_admin {
 				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
 			    				echo '<td>';
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo '<p class="description">' .  esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18')) . '</p>';
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il logo <i>18app</i> nella pagine di checkout.', 'wc18' ) ) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
+				    		echo '<tr>';
+				    			echo '<th scope="row">' . esc_html(__('Controllo prodotti', 'wc18')) . '</th>';
+			    				echo '<td>';
+                                        echo '<input type="checkbox" name="wc18-items-check" value="1"' . ($wc18_items_check === '1' ? ' checked="checked"' : '') . '>';
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono acquistabili con buoni <i>18app</i>.<br>Più prodotti dovranno prevedere l\'uso di buoni dello stesso ambito di utilizzo.', 'wc18' ) ) . '</p>';
+			    				echo '</td>';
+				    		echo '</tr>';
 				    	echo '</table>';
+
 				    	wp_nonce_field('wc18-save-settings', 'wc18-settings-nonce');
 				    	echo '<input type="hidden" name="wc18-settings-hidden" value="1">';
 				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wc18') . '">';
@@ -660,6 +736,10 @@ class wc18_admin {
 			/*Immagine in pagina di checkout*/
 			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
 			update_option('wc18-image', $wc18_image);
+
+			/*Controllo prodotti a carrello*/
+			$wc18_items_check = isset($_POST['wc18-items-check']) ? sanitize_text_field($_POST['wc18-items-check']) : '';															
+			update_option('wc18-items-check', $wc18_items_check);
 		}
 	}
 

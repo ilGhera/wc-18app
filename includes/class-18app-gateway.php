@@ -13,6 +13,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 
 	public function __construct() {
+
 		$this->plugin_id          = 'woocommerce_18app';
 		$this->id                 = '18app';
 		$this->has_fields         = true;
@@ -33,11 +34,85 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->title       = $this->get_option('title');
 		$this->description = $this->get_option('description');
         
+        add_filter( 'woocommerce_available_payment_gateways', array( $this, 'unset_18app_gateway' ) );
+
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_18app_code' ), 10, 1 );
 	}
+
+
+    /**
+     * Disabilita il metodo di pagamento se i prodotti a carrello richiedono buoni con ambito differente
+     *
+     * @param array $available_gateways I metodi di pagamento disponibili.
+     *
+     * @return array I metodi aggiornati
+     */
+    public function unset_18app_gateway( $available_gateways ) {
+
+        if ( is_admin() || ! is_checkout() || ! get_option('wc18-items-check') ) {
+
+            return $available_gateways;
+
+        }
+
+        $unset      = false;
+        $cat_ids    = array();
+        $categories = get_option('wc18-categories');
+
+        if ( empty( $categories ) ) {
+
+            return $available_gateways;
+
+        }
+
+        $categories = call_user_func_array( 'array_merge', $categories );
+
+        foreach ( $categories as $cat ) {
+
+            $cat_ids[] = $cat;
+
+        }
+
+        $items_term_ids = array();
+        
+        foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
+
+            $item_ids = array();
+            $terms    = get_the_terms( $values['product_id'], 'product_cat' );    
+
+            foreach ( $terms as $term ) {        
+
+                $item_ids[] = $term->term_id;
+
+            }
+
+            $results = array_intersect( $item_ids, $cat_ids );
+
+            if ( ! is_array( $results ) || empty( $results ) ) {
+
+                $unset = true;
+
+            } else {
+
+                $items_term_ids[] = $results;
+            }
+
+        }
+
+        $intersect = call_user_func_array( 'array_intersect', $items_term_ids );
+
+        if ( empty( $intersect ) || $unset ) {
+
+            unset( $available_gateways['18app'] );
+        
+        }
+
+        return $available_gateways;
+
+    }
 
 
 	/**
@@ -281,7 +356,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             if ( ! $purchasable ) {
 
-                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wccd' );
+                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18' );
 
             } else {
 
@@ -297,7 +372,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                         /* Coupon aggiunto all'ordine */
                         WC()->cart->apply_coupon( $coupon_code );
 
-                        $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wccd' );
+                        $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
 
                     }
 
@@ -318,6 +393,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                         /*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
                         $operation = $type === 'check' ? $soapClient->check( 2 ) : $soapClient->confirm();
 
+                        /*Aggiungo il buono 18app all'ordine*/
+                        update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
+
                         if ( ! $converted ) {
 
                             /*Ordine completato*/
@@ -327,9 +405,6 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                             $woocommerce->cart->empty_cart();	
 
                         }
-
-                        /*Aggiungo il buono 18app all'ordine*/
-                        update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
 
                     } catch ( Exception $e ) {
         
@@ -385,7 +460,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             } else {
 
-                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wccd' ), 'error' );
+                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wc18' ), 'error' );
 
             }
 

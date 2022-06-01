@@ -121,8 +121,9 @@ class WC18 {
     public function wc18_add_teacher_gateway_class( $methods ) {
         
         $available = ( $this->coupon_option && $this->wc18_coupon_applied() ) ? false : true;
+        $sandbox   = get_option( 'wc18-sandbox' );
 
-        if ( $available && wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) {
+        if ( $sandbox || ( $available && wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
             $methods[] = 'WC18_18app_Gateway'; 
 
