@@ -3,30 +3,22 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.1.2
+ * @since 1.2.0
  */
 class wc18_admin {
 
     private $sandbox;
 
 	public function __construct() {
-<<<<<<< HEAD:includes/class-18app-admin.php
+
+        $this->sandbox = get_option( 'wc18-sandbox' );
+
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_init', array($this, 'generate_cert_request'));
 		add_action('admin_menu', array($this, 'register_options_page'));
 		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'), 1);
 		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
-=======
-
-        $this->sandbox = get_option( 'wccd-sandbox' );
-
-		add_action('admin_init', array($this, 'wccd_save_settings'));
-		add_action('admin_init', array($this, 'generate_cert_request'));
-		add_action('admin_menu', array($this, 'register_options_page'));
-		add_action('wp_ajax_wccd-delete-certificate', array($this, 'delete_certificate_callback'), 1);
-		add_action('wp_ajax_wccd-add-cat', array($this, 'add_cat_callback'));
-		add_action('wp_ajax_wccd-sandbox', array($this, 'sandbox_callback'));
->>>>>>> master:includes/class-wccd-admin.php
+		add_action('wp_ajax_wc18-sandbox', array($this, 'sandbox_callback'));
 	}
 
 
@@ -301,12 +293,12 @@ class wc18_admin {
      */
     public function sandbox_callback() {
 
-        if ( isset( $_POST['sandbox'] ) && wp_verify_nonce($_POST['nonce'], 'wccd-sandbox')) {
+        if ( isset( $_POST['sandbox'] ) && wp_verify_nonce($_POST['nonce'], 'wc18-sandbox')) {
 
             $this->sandbox = sanitize_text_field( wp_unslash( $_POST['sandbox'] ) );
 
-            update_option( 'wccd-sandbox', $this->sandbox );
-            update_option( 'wccd-cert-activation', $this->sandbox );
+            update_option( 'wc18-sandbox', $this->sandbox );
+            update_option( 'wc18-cert-activation', $this->sandbox );
 
         }
 
@@ -321,22 +313,12 @@ class wc18_admin {
 	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-<<<<<<< HEAD:includes/class-18app-admin.php
 		$premium_key = get_option('wc18-premium-key');
 		$passphrase  = base64_decode(get_option('wc18-password'));
 		$categories  = get_option('wc18-categories');
 		$tot_cats    = $categories ? count($categories) : 0;
 		$wc18_coupon = get_option('wc18-coupon');
 		$wc18_image  = get_option('wc18-image');
-=======
-		$premium_key      = get_option('wccd-premium-key');
-		$passphrase       = base64_decode(get_option('wccd-password'));
-		$categories       = get_option('wccd-categories');
-		$tot_cats         = $categories ? count($categories) : 0;
-		$wccd_coupon      = get_option('wccd-coupon');
-		$wccd_image       = get_option('wccd-image');
-		$wccd_items_check = get_option('wccd-items-check');
->>>>>>> master:includes/class-wccd-admin.php
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
@@ -498,13 +480,8 @@ class wc18_admin {
 			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18')) . '</p>';
 
-<<<<<<< HEAD:includes/class-18app-admin.php
-						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate" method="post" enctype="multipart/form-data" action="">';
+						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
 					    	echo '<table class="form-table wc18-table">';
-=======
-						echo '<form name="wccd-generate-certificate" class="wccd-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
-					    	echo '<table class="form-table wccd-table">';
->>>>>>> master:includes/class-wccd-admin.php
 
 					    		/*Carica certificato*/
 					    		echo '<tr>';
@@ -529,24 +506,24 @@ class wc18_admin {
 			    echo '</div>';
 
                 /*Modalità Sandbox*/
-                echo '<div id="wccd-sandbox-option" class="wccd-admin" style="display: block;">';
-                    echo '<h3>' . esc_html(__('Modalità Sandbox', 'wccd')) . '</h3>';
+                echo '<div id="wc18-sandbox-option" class="wc18-admin" style="display: block;">';
+                    echo '<h3>' . esc_html(__('Modalità Sandbox', 'wc18')) . '</h3>';
                 echo '<p class="description">';
-                    printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni Carta del Docente in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">docenti@sogei.it</a>', 'wccd' ) ), 'mailto:docenti@sogei.it' );
+                    printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@beniculturali.it</a>', 'wc18' ) ), 'mailto:numeroverde@beniculturali.it' );
                 echo '</p>';
 
-                    echo '<form name="wccd-sandbox" class="wccd-sandbox" method="post" enctype="multipart/form-data" action="">';
-                        echo '<table class="form-table wccd-table">';
+                    echo '<form name="wc18-sandbox" class="wc18-sandbox" method="post" enctype="multipart/form-data" action="">';
+                        echo '<table class="form-table wc18-table">';
 
                             /*Carica certificato*/
                             echo '<tr>';
-                                echo '<th scope="row">' . esc_html(__('Sandbox', 'wccd')) . '</th>';
-                                echo '<td class="wccd-sandbox-field">';
-                                    echo '<input type="checkbox" name="wccd-sandbox" class="wccd-sandbox"' . ( $this->sandbox ? ' checked="checked"' : null ) . '>';
-                                    echo '<p class="description">' . esc_html(__('Attiva modalità Sandbox', 'wccd')) . '</p>';
-                                    wp_nonce_field('wccd-sandbox', 'wccd-sandbox-nonce');
-                                    echo '<input type="hidden" name="wccd-sandbox-hidden" value="1">';
-                                    /* echo '<input type="submit" class="button-primary wccd-button" value="' . esc_html('Genera certificato', 'wccd') . '">'; */
+                                echo '<th scope="row">' . esc_html(__('Sandbox', 'wc18')) . '</th>';
+                                echo '<td class="wc18-sandbox-field">';
+                                    echo '<input type="checkbox" name="wc18-sandbox" class="wc18-sandbox"' . ( $this->sandbox ? ' checked="checked"' : null ) . '>';
+                                    echo '<p class="description">' . esc_html(__('Attiva modalità Sandbox', 'wc18')) . '</p>';
+                                    wp_nonce_field('wc18-sandbox', 'wc18-sandbox-nonce');
+                                    echo '<input type="hidden" name="wc18-sandbox-hidden" value="1">';
+                                    /* echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '">'; */
 
                                 echo '</td>';
                             echo '</tr>';
@@ -592,34 +569,22 @@ class wc18_admin {
 				    		echo '<tr>';
 				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
 			    				echo '<td>';
-<<<<<<< HEAD:includes/class-18app-admin.php
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo '<p class="description">' .  esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18')) . '</p>';
-=======
-					    			echo '<input type="checkbox" name="wccd-image" value="1"' . ($wccd_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il logo <i>Carta del Docente</i> nella pagine di checkout.', 'wccd' ) ) . '</p>';
->>>>>>> master:includes/class-wccd-admin.php
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il logo <i>18app</i> nella pagine di checkout.', 'wc18' ) ) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
 				    		echo '<tr>';
-				    			echo '<th scope="row">' . esc_html(__('Controllo prodotti', 'wccd')) . '</th>';
+				    			echo '<th scope="row">' . esc_html(__('Controllo prodotti', 'wc18')) . '</th>';
 			    				echo '<td>';
-                                        echo '<input type="checkbox" name="wccd-items-check" value="1"' . ($wccd_items_check === '1' ? ' checked="checked"' : '') . '>';
-					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono acquistabili con buoni <i>Carta del Docente</i>.<br>Più prodotti dovranno prevedere l\'uso di buoni dello stesso ambito di utilizzo.', 'wccd' ) ) . '</p>';
+                                        echo '<input type="checkbox" name="wc18-items-check" value="1"' . ($wc18_items_check === '1' ? ' checked="checked"' : '') . '>';
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono acquistabili con buoni <i>18app</i>.<br>Più prodotti dovranno prevedere l\'uso di buoni dello stesso ambito di utilizzo.', 'wc18' ) ) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 				    	echo '</table>';
-<<<<<<< HEAD:includes/class-18app-admin.php
 				    	wp_nonce_field('wc18-save-settings', 'wc18-settings-nonce');
 				    	echo '<input type="hidden" name="wc18-settings-hidden" value="1">';
 				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wc18') . '">';
-=======
-
-				    	wp_nonce_field('wccd-save-settings', 'wccd-settings-nonce');
-				    	echo '<input type="hidden" name="wccd-settings-hidden" value="1">';
-				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wccd') . '">';
->>>>>>> master:includes/class-wccd-admin.php
 				    echo '</form>';
 			    echo '</div>';
 	
@@ -754,17 +719,8 @@ class wc18_admin {
 			update_option('wc18-coupon', $wc18_coupon);
 
 			/*Immagine in pagina di checkout*/
-<<<<<<< HEAD:includes/class-18app-admin.php
 			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
 			update_option('wc18-image', $wc18_image);
-=======
-			$wccd_image = isset($_POST['wccd-image']) ? sanitize_text_field($_POST['wccd-image']) : '';															
-			update_option('wccd-image', $wccd_image);
-
-			/*Controllo prodotti a carrello*/
-			$wccd_items_check = isset($_POST['wccd-items-check']) ? sanitize_text_field($_POST['wccd-items-check']) : '';															
-			update_option('wccd-items-check', $wccd_items_check);
->>>>>>> master:includes/class-wccd-admin.php
 		}
 	}
 

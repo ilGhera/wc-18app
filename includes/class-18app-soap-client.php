@@ -9,20 +9,20 @@ class wc18_soap_client {
 
     public function __construct($codiceVoucher, $import) {
 
-        $this->sandbox = get_option( 'wccd-sandbox' );
+        $this->sandbox = get_option( 'wc18-sandbox' );
 
         if ( $this->sandbox ) {
-            $this->local_cert = WCCD_DIR . 'demo/AAAAAA00H01H501P.pem';
+            $this->local_cert = WC18_DIR . 'demo/AAAAAA00H01H501P.pem';
             $this->location      = 'https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
             $this->passphrase = 'm3D0T4aM';
 
         } else {
-            $this->local_cert = WCCD_PRIVATE . $this->get_local_cert();
+            $this->local_cert = WC18_PRIVATE . $this->get_local_cert();
             $this->location      = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
             $this->passphrase = $this->get_user_passphrase(); 
         }            
 
-        $this->wsdl          = WCCD_INCLUDES_URI . 'VerificaVoucher.wsdl';
+        $this->wsdl          = WC18_INCLUDES_URI . 'VerificaVoucher.wsdl';
         $this->codiceVoucher = $codiceVoucher;
         $this->import        = $import;
 

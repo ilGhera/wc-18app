@@ -52,7 +52,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
      */
     public function unset_teacher_gateway( $available_gateways ) {
 
-        if ( is_admin() || ! is_checkout() || ! get_option('wccd-items-check') ) {
+        if ( is_admin() || ! is_checkout() || ! get_option('wc18-items-check') ) {
 
             return $available_gateways;
 
@@ -60,7 +60,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         $unset      = false;
         $cat_ids    = array();
-        $categories = get_option('wccd-categories');
+        $categories = get_option('wc18-categories');
 
         if ( empty( $categories ) ) {
 
@@ -106,7 +106,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         if ( empty( $intersect ) || $unset ) {
 
-            unset( $available_gateways['docente'] );
+            unset( $available_gateways['18app'] );
         
         }
 
@@ -356,7 +356,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             if ( ! $purchasable ) {
 
-                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wccd' );
+                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18' );
 
             } else {
 
@@ -372,7 +372,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                         /* Coupon aggiunto all'ordine */
                         WC()->cart->apply_coupon( $coupon_code );
 
-                        $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wccd' );
+                        $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
 
                     }
 
@@ -460,7 +460,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             } else {
 
-                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wccd' ), 'error' );
+                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wc18' ), 'error' );
 
             }
 
