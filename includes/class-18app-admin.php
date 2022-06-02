@@ -300,17 +300,8 @@ class wc18_admin {
             
             if ( 1 === intval( $_POST['sandbox'] ) ) {
 
-                $activation = $this->wc18_cert_activation();
-                
-                if($activation === 'ok') {
-                
-                    update_option('wc18-cert-activation', 1);
+                update_option('wc18-cert-activation', 1);
 
-                } else {
-
-                    delete_option('wc18-cert-activation');
-
-                }
             }
 
         }
