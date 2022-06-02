@@ -3,18 +3,30 @@
  * Gestice le chiamate del web service 
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.1.0
+ * @version 1.2.0
  */
 class wc18_soap_client {
 
     public function __construct($codiceVoucher, $import) {
-        $this->wsdl          = WC18_INCLUDES_URI . 'VerificaVoucher.wsdl';
-        $this->local_cert    = WC18_PRIVATE . $this->get_local_cert();
-        $this->location      = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
+
+        $this->sandbox = get_option( 'wccd-sandbox' );
+
+        if ( $this->sandbox ) {
+            $this->local_cert = WCCD_DIR . 'demo/AAAAAA00H01H501P.pem';
+            $this->location      = 'https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
+            $this->passphrase = 'm3D0T4aM';
+
+        } else {
+            $this->local_cert = WCCD_PRIVATE . $this->get_local_cert();
+            $this->location      = 'https://ws.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
+            $this->passphrase = $this->get_user_passphrase(); 
+        }            
+
+        $this->wsdl          = WCCD_INCLUDES_URI . 'VerificaVoucher.wsdl';
         $this->codiceVoucher = $codiceVoucher;
-		$this->import        = $import;
-        $this->passphrase    = $this->get_user_passphrase(); 
-	}
+        $this->import        = $import;
+
+    }
 
 
     /**
@@ -47,7 +59,7 @@ class wc18_soap_client {
             array(
                 'local_cert'     => $this->local_cert,
                 'location'       => $this->location,
-                'passphrase'     => $this->get_user_passphrase(),
+                'passphrase'     => $this->passphrase,
                 'stream_context' => stream_context_create(
                     array(
                         'http' => array(
@@ -79,7 +91,7 @@ class wc18_soap_client {
                 'codiceVoucher'  => $this->codiceVoucher
             )
         ));
-
+        
         return $check;
     }
 
