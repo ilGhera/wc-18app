@@ -3,15 +3,21 @@
  * Pagina opzioni e gestione certificati
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.1.1
+ * @since 1.2.0
  */
 class wc18_admin {
 
+    private $sandbox;
+
 	public function __construct() {
+
+        $this->sandbox = get_option( 'wc18-sandbox' );
+
 		add_action('admin_init', array($this, 'wc18_save_settings'));
 		add_action('admin_menu', array($this, 'register_options_page'));
 		add_action('wp_ajax_wc18-delete-certificate', array($this, 'delete_certificate_callback'));
 		add_action('wp_ajax_wc18-add-cat', array($this, 'add_cat_callback'));
+		add_action('wp_ajax_wc18-sandbox', array($this, 'sandbox_callback'));
 	}
 
 
@@ -183,6 +189,27 @@ class wc18_admin {
 	}
 
 
+    /**
+     * Funzionalita Sandbox
+     *
+     * @return void
+     */
+    public function sandbox_callback() {
+
+        if ( isset( $_POST['sandbox'] ) && wp_verify_nonce($_POST['nonce'], 'wc18-sandbox')) {
+
+            $this->sandbox = sanitize_text_field( wp_unslash( $_POST['sandbox'] ) );
+
+            update_option( 'wc18-sandbox', $this->sandbox );
+            update_option( 'wc18-cert-activation', $this->sandbox );
+
+        }
+
+        exit();
+
+    }
+
+
 	/**
 	 * Pagina opzioni plugin
 	 */
@@ -247,6 +274,7 @@ class wc18_admin {
 						    			echo '<p class="description">' . esc_html(__('Carica il certificato (.pem) necessario alla connessione con 18app', 'wc18')) . '</p>';
 
 				    				}
+
 				    			echo '</td>';
 				    		echo '</tr>';
 
@@ -339,7 +367,7 @@ class wc18_admin {
 			    		echo '<h3>' . esc_html(__('Crea il tuo certificato', 'wc18')) . $this->get_go_premium() . '</h3>';
 		    			echo '<p class="description">' . esc_html(__('Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18')) . '</p>';
 
-						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate" method="post" enctype="multipart/form-data" action="">';
+						echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
 					    	echo '<table class="form-table wc18-table">';
 
 					    		/*Carica certificato*/
@@ -364,6 +392,32 @@ class wc18_admin {
 
 			    echo '</div>';
 
+                /*Modalità Sandbox*/
+                echo '<div id="wc18-sandbox-option" class="wc18-admin" style="display: block;">';
+                    echo '<h3>' . esc_html(__('Modalità Sandbox', 'wc18')) . '</h3>';
+                echo '<p class="description">';
+                    printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@beniculturali.it</a>', 'wc18' ) ), 'mailto:numeroverde@beniculturali.it' );
+                echo '</p>';
+
+                    echo '<form name="wc18-sandbox" class="wc18-sandbox" method="post" enctype="multipart/form-data" action="">';
+                        echo '<table class="form-table wc18-table">';
+
+                            /*Carica certificato*/
+                            echo '<tr>';
+                                echo '<th scope="row">' . esc_html(__('Sandbox', 'wc18')) . '</th>';
+                                echo '<td class="wc18-sandbox-field">';
+                                    echo '<input type="checkbox" name="wc18-sandbox" class="wc18-sandbox"' . ( $this->sandbox ? ' checked="checked"' : null ) . '>';
+                                    echo '<p class="description">' . esc_html(__('Attiva modalità Sandbox', 'wc18')) . '</p>';
+                                    wp_nonce_field('wc18-sandbox', 'wc18-sandbox-nonce');
+                                    echo '<input type="hidden" name="wc18-sandbox-hidden" value="1">';
+                                    /* echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html('Genera certificato', 'wc18') . '">'; */
+
+                                echo '</td>';
+                            echo '</tr>';
+
+                        echo '</table>';
+                    echo '</form>';			
+                echo '</div>';
 
 			    /*Options*/
 			    echo '<div id="wc18-options" class="wc18-admin">';
@@ -404,10 +458,18 @@ class wc18_admin {
 				    			echo '<th scope="row">' . esc_html(__('Utilizzo immagine', 'wc18')) . '</th>';
 			    				echo '<td>';
 					    			echo '<input type="checkbox" name="wc18-image" value="1"' . ($wc18_image === '1' ? ' checked="checked"' : '') . '>';
-					    			echo '<p class="description">' . esc_html(__('Mostra il logo 18app nella pagine di checkout.', 'wc18')) . '</p>';
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il logo <i>18app</i> nella pagine di checkout.', 'wc18' ) ) . '</p>';
 			    				echo '</td>';
 				    		echo '</tr>';
 
+				    		echo '<tr>';
+				    			echo '<th scope="row">' . esc_html(__('Controllo prodotti', 'wc18')) . '</th>';
+			    				echo '<td>';
+                                        echo '<input type="checkbox" name="wc18-items-check" value="1" disabled>';
+					    			echo '<p class="description">' .  wp_kses_post( __( 'Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono acquistabili con buoni <i>18app</i>.<br>Più prodotti dovranno prevedere l\'uso di buoni dello stesso ambito di utilizzo.', 'wc18' ) ) . '</p>';
+                                    echo $this->get_go_premium( true );
+			    				echo '</td>';
+				    		echo '</tr>';
 				    	echo '</table>';
 				    	wp_nonce_field('wc18-save-settings', 'wc18-settings-nonce');
 				    	echo '<input type="hidden" name="wc18-settings-hidden" value="1">';

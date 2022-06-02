@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 1.1.0
+ * @since 1.2.0
  */
 class WC18 {
 
@@ -48,7 +48,9 @@ class WC18 {
      */
     public function wc18_add_teacher_gateway_class( $methods ) {
         
-        if ( wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) {
+        $sandbox   = get_option( 'wc18-sandbox' );
+
+        if ( $sandbox || ( wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
             $methods[] = 'WC18_18app_Gateway'; 
 

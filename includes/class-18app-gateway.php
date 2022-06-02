@@ -4,12 +4,13 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @version 1.1.0
+ * @since 1.2.0
  */
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
     
 	public function __construct() {
+
 		$this->plugin_id          = 'woocommerce_18app';
 		$this->id                 = '18app';
 		$this->has_fields         = true;
@@ -27,7 +28,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		$this->title       = $this->get_option('title');
 		$this->description = $this->get_option('description');
-
+        
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
@@ -189,8 +190,6 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         global $woocommerce;
 
-        global $woocommerce;
-
         $output     = 1; 
         $order      = wc_get_order( $order_id );
         $soapClient = new wc18_soap_client( $code_18app, $import );
@@ -207,7 +206,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             if ( ! $purchasable ) {
 
-                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wccd' );
+                $output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18' );
 
             } else {
 
@@ -230,14 +229,14 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
                         /*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
                         $operation = $type === 'check' ? $soapClient->check( 2 ) : $soapClient->confirm();
 
+                        /*Aggiungo il buono 18app all'ordine*/
+                        update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
+
                         /*Ordine completato*/
                         $order->payment_complete();
 
                         /*Svuota carrello*/ 
                         $woocommerce->cart->empty_cart();	
-
-                        /*Aggiungo il buono 18app all'ordine*/
-                        update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
 
                     } catch ( Exception $e ) {
         
@@ -291,7 +290,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
             } else {
 
-                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wccd' ), 'error' );
+                wc_add_notice( __( 'Buono 18app - ' . $notice, 'wc18' ), 'error' );
 
             }
 
