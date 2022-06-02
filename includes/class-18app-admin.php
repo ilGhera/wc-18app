@@ -295,14 +295,10 @@ class wc18_admin {
 
         if ( isset( $_POST['sandbox'] ) && wp_verify_nonce($_POST['nonce'], 'wc18-sandbox')) {
 
-            $this->sandbox = $_POST['sandbox'];
-            update_option('wc18-sandbox', $_POST['sandbox']);
-            
-            if ( 1 === intval( $_POST['sandbox'] ) ) {
+            $this->sandbox = sanitize_text_field( wp_unslash( $_POST['sandbox'] ) );
 
-                update_option('wc18-cert-activation', 1);
-
-            }
+            update_option( 'wc18-sandbox', $this->sandbox );
+            update_option( 'wc18-cert-activation', $this->sandbox );
 
         }
 
