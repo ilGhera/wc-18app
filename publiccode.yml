@@ -12,6 +12,11 @@ description:
       - Carica il tuo certificato .pem
       - Abbina le categorie WooCommerce agli ambiti d'acquisto di 18app
       - Nuovo metodo di pagamento in pagina di checkout
+      - Opzione Sandbox per effettuare test d'acquisto
+      - (Premium) Generazione richiesta certificato .der
+      - (Premium) Generazione certificato .pem
+      - (Premium) Conversione valore buono 18app in voucher WooCommerce
+      - (Premium) Mostra il metodo di pagamento solo se i prodotti a carrello sono acquistabili con 18app
     genericName: WordPress plugin
     longDescription: |
       Ogni diciottenne, in Italia, ha a disposizione un _Bonus Cultura_  del
@@ -128,7 +133,7 @@ maintenance:
 name: WooCommerce 18app
 platforms:
   - web
-releaseDate: '2020-02-10'
+releaseDate: '2022-06-03'
 softwareType: addon
-softwareVersion: 1.0.3
+softwareVersion: 1.2.0
 url: 'https://github.com/ilGhera/wc-18app'
