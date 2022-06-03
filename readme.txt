@@ -76,6 +76,13 @@ https://youtu.be/a94VpGu76Qw
 == Changelog ==
 
 
+= 1.2.0 =
+Data di rilascio: 3 Giugno, 2022
+
+* Implementazione: Nuova funzionalità sandbox
+* Implementazione: (Premium) Mostra metodo di pagamento solo se consentito dai prodotti presenti a carrello
+* Correzione bug: Codice 18app mancante in email di conferma d'ordine
+
 = 1.1.1 =
 Data di rilascio: 2 Aprile, 2022
 
