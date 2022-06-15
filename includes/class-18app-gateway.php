@@ -108,9 +108,18 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
         }
 
-        $intersect = call_user_func_array( 'array_intersect', $items_term_ids );
+        if ( ! $unset && ! empty( $items_term_ids ) ) {
 
-        if ( empty( $intersect ) || $unset ) {
+            $intersect = call_user_func_array( 'array_intersect', $items_term_ids );
+
+            if ( empty( $intersect ) ) {
+
+                $unset = true;
+
+            }
+        }
+
+        if ( $unset ) {
 
             unset( $available_gateways['18app'] );
         
