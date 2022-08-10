@@ -1,7 +1,7 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.1
+Version: 1.2.2
 Requires at least: 4.0
 Tested up to: 6.0
 
@@ -76,10 +76,15 @@ https://youtu.be/a94VpGu76Qw
 == Changelog ==
 
 
+= 1.2.2 =
+Data di rilascio: 10 Agosto, 2022
+
+* Correzione bug: Errore controllo buoni 18app con ambito formazione 
+
 = 1.2.1 =
 Data di rilascio: 23 Giugno, 2022
 
-* Correzione bug: Errore controllo abbinamenti Categorie/ Beni Carta del Docente
+* Correzione bug: Errore controllo abbinamenti Categorie/ Beni 18app
 
 = 1.2.0 =
 Data di rilascio: 3 Giugno, 2022
