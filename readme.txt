@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.2
+Version: 1.2.3
 Requires at least: 4.0
 Tested up to: 6.0
 
@@ -66,10 +66,15 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
+= 1.2.3 =
+Data di rilascio: 10 Agosto, 2022
+
+* Correzione bug: Errore controllo buoni 18app con ambito formazione 
+
 = 1.2.2 =
 Data di rilascio: 22 Giugno, 2022
 
-* Correzione bug: Errore controllo abbinamenti Categorie/ Beni Carta del Docente
+* Correzione bug: Errore controllo abbinamenti Categorie/ Beni 18app
 
 = 1.2.1 =
 Data di rilascio: 16 Giugno, 2022
