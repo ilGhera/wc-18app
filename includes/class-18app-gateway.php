@@ -193,6 +193,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			$purchasable = str_replace( '(', '', $purchasable );
 			$purchasable = str_replace( ')', '', $purchasable );
 			$bene        = strtolower( str_replace( ' ', '-', $purchasable ) );
+            $bene        = 'formazione' === $bene ? 'corsi-di-musica-di-teatro-o-di-lingua-straniera' : $bene;
 			
 			$output = array();
 
