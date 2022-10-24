@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.3
+Version: 1.2.4
 Requires at least: 4.0
 Tested up to: 6.0
 
@@ -65,6 +65,11 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.2.4 =
+Data di rilascio: 24 Ottobre, 2022
+
+* Update: Nuovo certificato per funzionalità Sandbox 
 
 = 1.2.3 =
 Data di rilascio: 10 Agosto, 2022
