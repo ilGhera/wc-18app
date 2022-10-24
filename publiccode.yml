@@ -133,7 +133,7 @@ maintenance:
 name: WooCommerce 18app
 platforms:
   - web
-releaseDate: '2022-06-23'
+releaseDate: '2022-10-24'
 softwareType: addon
-softwareVersion: 1.2.1
+softwareVersion: 1.2.3
 url: 'https://github.com/ilGhera/wc-18app'
