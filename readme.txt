@@ -1,7 +1,7 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.2
+Version: 1.2.3
 Requires at least: 4.0
 Tested up to: 6.0
 
@@ -75,6 +75,11 @@ https://youtu.be/a94VpGu76Qw
 
 == Changelog ==
 
+
+= 1.2.3 =
+Data di rilascio: 24 Ottobre, 2022
+
+* Update: Nuovo certificato per funzionalità Sandbox 
 
 = 1.2.2 =
 Data di rilascio: 10 Agosto, 2022
