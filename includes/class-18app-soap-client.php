@@ -12,7 +12,7 @@ class wc18_soap_client {
         $this->sandbox = get_option( 'wc18-sandbox' );
 
         if ( $this->sandbox ) {
-            $this->local_cert = WC18_DIR . 'demo/AAAAAA00H01H501P.pem';
+            $this->local_cert = WC18_DIR . 'demo/wc18-demo-certificate.pem';
             $this->location   = 'https://wstest.18app.italia.it/VerificaVoucherWEB/VerificaVoucher';
             $this->passphrase = 'm3D0T4aM';
 
@@ -60,6 +60,7 @@ class wc18_soap_client {
                 'local_cert'     => $this->local_cert,
                 'location'       => $this->location,
                 'passphrase'     => $this->passphrase,
+                /* 'cache_wsdl' => WSDL_CACHE_BOTH, */
                 'stream_context' => stream_context_create(
                     array(
                         'http' => array(
@@ -73,7 +74,7 @@ class wc18_soap_client {
                 ),
             )
         );
-  
+
         return $soapClient;
     }
 
