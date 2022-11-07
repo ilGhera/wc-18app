@@ -66,6 +66,12 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
+= 1.2.5 =
+Data di rilascio: 7 Novembre, 2022
+
+* Implementazione: Supporto WordPress 6.1
+* Update: Plugin Update Checker
+
 = 1.2.4 =
 Data di rilascio: 24 Ottobre, 2022
 
