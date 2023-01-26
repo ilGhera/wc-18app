@@ -130,9 +130,10 @@ wc18_sandbox();
  */
 var wc18_menu_navigation = function() {
 	jQuery(function($){
+
 		var contents = $('.wc18-admin')
-		var url = window.location.href.split("#")[0];
-		var hash = window.location.href.split("#")[1];
+		var url      = window.location.href.split("#")[0];
+		var hash     = window.location.href.split("#")[1];
 
 		if(hash) {
 	        contents.hide();		    

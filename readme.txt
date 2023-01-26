@@ -1,9 +1,9 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.1.2
+Version: 1.2.5
 Requires at least: 4.0
-Tested up to: 5.9
+Tested up to: 6.1
 
 Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 
@@ -65,6 +65,39 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.2.5 =
+Data di rilascio: 7 Novembre, 2022
+
+* Implementazione: Supporto WordPress 6.1
+* Update: Plugin Update Checker
+
+= 1.2.4 =
+Data di rilascio: 24 Ottobre, 2022
+
+* Update: Nuovo certificato per funzionalità Sandbox 
+
+= 1.2.3 =
+Data di rilascio: 10 Agosto, 2022
+
+* Correzione bug: Errore controllo buoni 18app con ambito formazione 
+
+= 1.2.2 =
+Data di rilascio: 22 Giugno, 2022
+
+* Correzione bug: Errore controllo abbinamenti Categorie/ Beni 18app
+
+= 1.2.1 =
+Data di rilascio: 16 Giugno, 2022
+
+* Correzione bug: Errore in array_intersect con opzione controllo prodotti a carrello attiva
+
+= 1.2.0 =
+Data di rilascio: 1 Giugno, 2022
+
+* Implementazione: Nuova funzionalità sandbox
+* Implementazione: Mostra metodo di pagamento solo se consentito dai prodotti presenti a carrello
+* Correzione bug: Codice 18app mancante in email di conferma d'ordine
 
 = 1.1.2 =
 Data di rilascio: 4 Aprile, 2022

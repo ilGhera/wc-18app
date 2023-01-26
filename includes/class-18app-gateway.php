@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 1.2.0
+ * @since 1.2.3
  */
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
@@ -34,7 +34,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->title       = $this->get_option('title');
 		$this->description = $this->get_option('description');
         
-        add_filter( 'woocommerce_available_payment_gateways', array( $this, 'unset_teacher_gateway' ) );
+        add_filter( 'woocommerce_available_payment_gateways', array( $this, 'unset_18app_gateway' ) );
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
@@ -50,7 +50,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
      *
      * @return array I metodi aggiornati
      */
-    public function unset_teacher_gateway( $available_gateways ) {
+    public function unset_18app_gateway( $available_gateways ) {
 
         if ( is_admin() || ! is_checkout() || ! get_option('wc18-items-check') ) {
 
@@ -193,6 +193,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			$purchasable = str_replace( '(', '', $purchasable );
 			$purchasable = str_replace( ')', '', $purchasable );
 			$bene        = strtolower( str_replace( ' ', '-', $purchasable ) );
+            $bene        = 'formazione' === $bene ? 'corsi-di-musica-di-teatro-o-di-lingua-straniera' : $bene;
 			
 			$output = array();
 

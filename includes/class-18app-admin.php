@@ -313,12 +313,13 @@ class wc18_admin {
 	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-		$premium_key = get_option('wc18-premium-key');
-		$passphrase  = base64_decode(get_option('wc18-password'));
-		$categories  = get_option('wc18-categories');
-		$tot_cats    = $categories ? count($categories) : 0;
-		$wc18_coupon = get_option('wc18-coupon');
-		$wc18_image  = get_option('wc18-image');
+		$premium_key      = get_option('wc18-premium-key');
+		$passphrase       = base64_decode(get_option('wc18-password'));
+		$categories       = get_option('wc18-categories');
+		$tot_cats         = $categories ? count($categories) : 0;
+		$wc18_coupon      = get_option('wc18-coupon');
+		$wc18_image       = get_option('wc18-image');
+		$wc18_items_check = get_option('wc18-items-check');
 
 		echo '<div class="wrap">';
 	    	echo '<div class="wrap-left">';
@@ -582,6 +583,7 @@ class wc18_admin {
 			    				echo '</td>';
 				    		echo '</tr>';
 				    	echo '</table>';
+
 				    	wp_nonce_field('wc18-save-settings', 'wc18-settings-nonce');
 				    	echo '<input type="hidden" name="wc18-settings-hidden" value="1">';
 				    	echo '<input type="submit" class="button-primary" value="' . esc_html('Salva impostazioni', 'wc18') . '">';
@@ -721,6 +723,10 @@ class wc18_admin {
 			/*Immagine in pagina di checkout*/
 			$wc18_image = isset($_POST['wc18-image']) ? sanitize_text_field($_POST['wc18-image']) : '';															
 			update_option('wc18-image', $wc18_image);
+
+			/*Controllo prodotti a carrello*/
+			$wc18_items_check = isset($_POST['wc18-items-check']) ? sanitize_text_field($_POST['wc18-items-check']) : '';															
+			update_option('wc18-items-check', $wc18_items_check);
 		}
 	}
 
