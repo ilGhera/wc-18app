@@ -1,0 +1,19 @@
+/**
+ * ilGhera notice style
+ *
+ * @author ilGhera
+ * @package ilghera-notice/css/ 
+ * @since 0.9.0
+ */
+
+.ilghera-notice-warning {
+    display: block;
+    position: relative;
+    padding: 20px 10px 20px 65px;
+}
+
+.ilghera-notice-warning img {
+    position: absolute;
+    left: 13px;
+    margin-top: -10px;
+}
