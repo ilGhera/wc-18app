@@ -92,6 +92,7 @@ class wc18_admin {
 				'Concerti',
 				'Eventi culturali',
 				'Libri',
+                'Quotidiani e periodici',
 				'Musei, monumenti e parchi',
 				'Teatro e danza',
 				'Musica registrata',
