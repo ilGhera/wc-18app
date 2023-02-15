@@ -1,7 +1,7 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.6
+Version: 1.2.7
 Requires at least: 4.0
 Tested up to: 6.1
 
@@ -66,8 +66,15 @@ This plugin sends data to an external service, like the categories and the price
 
 == Changelog ==
 
+= 1.2.7 =
+Data di rilascio: 15 Febbraio, 2023
+
+* Implementazione: Notifica admin chiave di licenza 
+* Update: POT file
+
+
 = 1.2.6 =
-Data di rilascio: 29 January, 2023
+Data di rilascio: 29 Gennaio, 2023
 
 * Implementazione: Aggiunto ambito buoni 18app "Quotidiani e periodici"
 * Implementazione: Sistema di notifica chiave di licenza
