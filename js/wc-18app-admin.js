@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @since 1.2.0
+ * @since 1.3.0
  */
 
 /**
