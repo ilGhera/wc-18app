@@ -89,6 +89,20 @@ ul.categories-container {
 	display: none;
 }
 
+.wc18-email-details {
+    display: none;
+}
+
+.shortcodes {
+    display: block;
+}
+
+.wc18-divider {
+    padding-bottom: 2rem;
+    margin: 2rem 0;
+    border-bottom: 1px solid #ccc;
+}
+
 span.wc18-alert {
 	display: block;
 	margin: 1rem 0 0;
