@@ -144,7 +144,7 @@ class WC18 {
 
 		if ( $available ) {
 
-			if ( $sandbox || ( $wc18_admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
+			if ( $sandbox || ( WC18_Admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
 				$methods[] = 'WC18_18app_Gateway';
 

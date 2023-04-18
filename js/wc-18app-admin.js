@@ -190,12 +190,12 @@ wc18_menu_navigation();
  *
  * @return void
  */
-var wccd_email_details = function() {
+var wc18_email_details = function() {
     jQuery(function($){
         $(document).ready(function() {
 
-            var on_hold       = $('.wccd-orders-on-hold');
-            var email_details = $('.wccd-email-details');
+            var on_hold       = $('.wc18-orders-on-hold');
+            var email_details = $('.wc18-email-details');
 
             if ( $('.tzCheckBox', on_hold).hasClass( 'checked' ) ) {
                 $(email_details).show();
@@ -214,4 +214,4 @@ var wccd_email_details = function() {
         })
     })
 }
-wccd_email_details();
+wc18_email_details();
