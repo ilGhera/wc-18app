@@ -67,7 +67,7 @@ This plugin sends data to an external service, like the categories and the price
 == Changelog ==
 
 = 1.3.0 =
-Data di rilascio: 18 Aprile, 2023
+Data di rilascio: 19 Aprile, 2023
 
 * Implementazione: Opzione ordini in sospeso 
 * Implementazione: Opzione personalizzazione email per ordini completati manualmente
