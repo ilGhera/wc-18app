@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WC 18app 0.9.0\n"
-"POT-Creation-Date: 2023-04-18 15:10+0200\n"
+"POT-Creation-Date: 2023-04-19 12:08+0200\n"
 "PO-Revision-Date: 2018-07-02 12:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -227,45 +227,25 @@ msgstr ""
 msgid "There is no changelog available."
 msgstr ""
 
-#: wc-18app.php:131
-msgid ""
-"Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a "
-"href=\""
-msgstr ""
-
-#: wc-18app.php:141
-msgid ""
-"Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a "
-"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
-"target=\"_blank\">qui</a> per maggiori informazioni."
-msgstr ""
-
-#: wc-18app.php:143
-msgid ""
-"Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a "
-"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
-"target=\"_blank\">qui</a> per maggiori informazioni."
-msgstr ""
-
-#: wc-carta-docente.php:168
+#: wc-18app.php:168
 #, php-format
 msgid ""
 "Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a "
-"href=\"%sadmin.php/?page=wccd-settings\">impostazioni del plugin</a>. Clicca "
-"<a href=\"https://www.ilghera.com/product/woocommerce-carta-docente-premium/"
-"\" target=\"_blank\">qui</a> per maggiori informazioni."
-msgstr ""
-
-#: wc-carta-docente.php:178
-msgid ""
-"Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a "
-"href=\"https://www.ilghera.com/product/woocommerce-carta-docente-premium/\" "
+"href=\"%sadmin.php/?page=wc18-settings\">impostazioni del plugin</a>. Clicca "
+"<a href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
 "target=\"_blank\">qui</a> per maggiori informazioni."
 msgstr ""
 
-#: wc-carta-docente.php:180
+#: wc-18app.php:178
+msgid ""
+"Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a "
+"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
+"target=\"_blank\">qui</a> per maggiori informazioni."
+msgstr ""
+
+#: wc-18app.php:180
 msgid ""
 "Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a "
-"href=\"https://www.ilghera.com/product/woocommerce-carta-docente-premium/\" "
+"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
 "target=\"_blank\">qui</a> per maggiori informazioni."
 msgstr ""
