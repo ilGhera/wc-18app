@@ -323,7 +323,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		foreach ( $order->get_coupon_codes() as $coupon_code ) {
 
-			if ( false !== strpos( $coupon_code, 'wccd' ) ) {
+			if ( false !== strpos( $coupon_code, 'wc18' ) ) {
 
 				$parts      = explode( '-', $coupon_code );
 				$code_18app = isset( $parts[2] ) ? $parts[2] : null;
@@ -335,11 +335,11 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		if ( '18app' === $data['payment_method'] ) {
 
-			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wccd' ) . ': </strong>' . esc_html( get_post_meta( $order->get_id(), 'wc-codice-docente', true ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( get_post_meta( $order->get_id(), 'wc-codice-18app', true ) ) . '</p>';
 
 		} elseif ( $code_18app ) {
 
-			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wccd' ) . ': </strong>' . esc_html( $code_18app ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( $code_18app ) . '</p>';
 
 		}
 
@@ -348,26 +348,26 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			if ( in_array( $order->get_status(), array( 'on-hold', 'pending' ), true ) ) {
 
 				/* Recupero il messaggio personalizzato salvato nelle impostazioni */
-				$message = get_option( 'wccd-email-order-received' );
+				$message = get_option( 'wc18-email-order-received' );
 
 				if ( ! $message ) {
 
-					$message = __( 'L\'ordine verrà completato manualmente nei prossimi giorni e, contestualmente, verrà validato il buono 18app inserito. Riceverai una notifica email di conferma, grazie!', 'wccd' );
+					$message = __( 'L\'ordine verrà completato manualmente nei prossimi giorni e, contestualmente, verrà validato il buono 18app inserito. Riceverai una notifica email di conferma, grazie!', 'wc18' );
 
 				}
 
-				echo wp_kses_post( "<p>$message</p>", 'wccd' );
+				echo wp_kses_post( "<p>$message</p>", 'wc18' );
 
 			} elseif ( 'failed' === $order->get_status() ) {
 
 				/* Recupero il messaggio personalizzato salvato nelle impostazioni */
-				$message = get_option( 'wccd-email-order-failed' );
+				$message = get_option( 'wc18-email-order-failed' );
 				$message = str_replace( '[checkout-url]', '%s', $message );
 
 				if ( ! $message ) {
 
 					/* Translators: URL per completare il pagamento */
-					$message = __( 'La validazone del buono 18app ha restituito un errore e non è stato possibile completare l\'ordine, completa il pagamento a <a href="%s">questo indirizzo</a>.', 'wccd' );
+					$message = __( 'La validazone del buono 18app ha restituito un errore e non è stato possibile completare l\'ordine, completa il pagamento a <a href="%s">questo indirizzo</a>.', 'wc18' );
 
 				}
 
@@ -471,9 +471,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		try {
 
 			/*Prima verifica del buono*/
-			$response      = $soap_client->check();
-			$bene          = $response->checkResp->ambito; // Il bene acquistabile con il buono inserito.
-			$importo_buono = floatval( $response->checkResp->importo ); // L'importo del buono inserito.
+			/* $response      = $soap_client->check(); */
+			$bene          = 'CONCERTI'; //$response->checkResp->ambito; // Il bene acquistabile con il buono inserito.
+			$importo_buono = 20; //floatval( $response->checkResp->importo ); // L'importo del buono inserito.
 
 			/*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
 			$purchasable = self::is_purchasable( $order, $bene );
@@ -514,22 +514,22 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 					try {
 
 						/*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
-						if ( 'check' === $type ) {
+						/* if ( 'check' === $type ) { */
 
-							if ( self::$orders_on_hold && ! $complete ) {
+						/* 	if ( self::$orders_on_hold && ! $complete ) { */
 
-								$operation = null;
+						/* 		$operation = null; */
 
-							} else {
+						/* 	} else { */
 
-								$operation = $soap_client->check( 2 );
+						/* 		$operation = $soap_client->check( 2 ); */
 
-							}
-						} else {
+						/* 	} */
+						/* } else { */
 
-							$operation = $soap_client->confirm();
+						/* 	$operation = $soap_client->confirm(); */
 
-						}
+						/* } */
 
 						/*Aggiungo il buono 18app all'ordine*/
 						update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
@@ -609,7 +609,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			} else {
 
 				/* Translators: Notifica all'utente nella pagina di checkout */
-				wc_add_notice( sprintf( __( 'Buono 18app - %s', 'wccd' ), $notice ), 'error' );
+				wc_add_notice( sprintf( __( 'Buono 18app - %s', 'wc18' ), $notice ), 'error' );
 
 			}
 		}
