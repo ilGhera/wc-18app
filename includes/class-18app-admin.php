@@ -30,7 +30,6 @@ class WC18_Admin {
 		$this->sandbox = get_option( 'wc18-sandbox' );
 
 		add_action( 'admin_init', array( $this, 'wc18_save_settings' ) );
-		add_action( 'admin_init', array( $this, 'generate_cert_request' ) );
 		add_action( 'admin_menu', array( $this, 'register_options_page' ) );
 		add_action( 'wp_ajax_wc18-delete-certificate', array( $this, 'delete_certificate_callback' ), 1 );
 		add_action( 'wp_ajax_wc18-add-cat', array( $this, 'add_cat_callback' ) );
@@ -207,113 +206,20 @@ class WC18_Admin {
 
 
 	/**
-	 * Trasforma il contenuto di un certificato .pem in .der
+	 * Pulsante call to action Premium
 	 *
-	 * @param  string $pem_data il certificato .pem.
+	 * @param bool $no_margin aggiunge la classe CSS con true.
 	 *
 	 * @return string
 	 */
-	public function pem2der( $pem_data ) {
+	public function get_go_premium( $no_margin = false ) {
 
-		$begin    = '-----BEGIN CERTIFICATE REQUEST-----';
-		$end      = '-----END CERTIFICATE REQUEST-----';
-		$pem_data = substr( $pem_data, strpos( $pem_data, $begin ) + strlen( $begin ) );
-		$pem_data = substr( $pem_data, 0, strpos( $pem_data, $end ) );
-		$der      = base64_decode( $pem_data );
+		$output      = '<span class="label label-warning premium' . ( $no_margin ? ' no-margin' : null ) . '">';
+			$output .= '<a href="https://www.ilghera.com/product/woocommerce-18app-premium" target="_blank">Premium</a>';
+		$output     .= '</span>';
 
-		return $der;
-	}
+		return $output;
 
-
-	/**
-	 * Download della richiesta di certificato da utilizzare sul portale 18app
-	 * Se non presenti, genera la chiave e la richiesta di certificato .der.
-	 *
-	 * @return void
-	 */
-	public function generate_cert_request() {
-
-		if ( isset( $_POST['wc18-generate-der-hidden'], $_POST['wc18-generate-der-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wc18-generate-der-nonce'] ) ), 'wc18-generate-der' ) ) {
-
-			/*Crea il file .der*/
-			$country_name             = isset( $_POST['countryName'] ) ? sanitize_text_field( wp_unslash( $_POST['countryName'] ) ) : '';
-			$state_or_provice_name    = isset( $_POST['stateOrProvinceName'] ) ? sanitize_text_field( wp_unslash( $_POST['stateOrProvinceName'] ) ) : '';
-			$locality_name            = isset( $_POST['localityName'] ) ? sanitize_text_field( wp_unslash( $_POST['localityName'] ) ) : '';
-			$organization_name        = isset( $_POST['organizationName'] ) ? sanitize_text_field( wp_unslash( $_POST['organizationName'] ) ) : '';
-			$organizational_unit_name = isset( $_POST['organizationalUnitName'] ) ? sanitize_text_field( wp_unslash( $_POST['organizationalUnitName'] ) ) : '';
-			$common_name              = isset( $_POST['commonName'] ) ? sanitize_text_field( wp_unslash( $_POST['commonName'] ) ) : '';
-			$email_address            = isset( $_POST['emailAddress'] ) ? sanitize_text_field( wp_unslash( $_POST['emailAddress'] ) ) : '';
-			$wc18_password            = isset( $_POST['wc18-password'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-password'] ) ) : '';
-
-			/*Salvo passw nel db*/
-			if ( $wc18_password ) {
-				update_option( 'wc18-password', base64_encode( $wc18_password ) );
-			}
-
-			$dn = array(
-				'countryName'            => $country_name,
-				'stateOrProvinceName'    => $state_or_provice_name,
-				'localityName'           => $locality_name,
-				'organizationName'       => $organization_name,
-				'organizationalUnitName' => $organizational_unit_name,
-				'commonName'             => $common_name,
-				'emailAddress'           => $email_address,
-			);
-
-			/*Genera la private key*/
-			$privkey = openssl_pkey_new(
-				array(
-					'private_key_bits' => 2048,
-					'private_key_type' => OPENSSL_KEYTYPE_RSA,
-				)
-			);
-
-			/*Genera ed esporta la richiesta di certificato .pem*/
-			$csr = openssl_csr_new( $dn, $privkey, array( 'digest_alg' => 'sha256' ) );
-			openssl_csr_export_to_file( $csr, WC18_PRIVATE . 'files/certificate-request.pem' );
-
-			/*Trasforma la richiesta di certificato in .der e la esporta*/
-			$csr_der = $this->pem2der( file_get_contents( WC18_PRIVATE . 'files/certificate-request.pem' ) );
-
-			/*Preparo il backup*/
-			$bu_folder            = WC18_PRIVATE . 'files/backups/';
-			$bu_new_folder_name   = count( glob( $bu_folder . '*', GLOB_ONLYDIR ) ) + 1;
-			$bu_new_folder_create = wp_mkdir_p( trailingslashit( $bu_folder . $bu_new_folder_name ) );
-
-			/*Salvo file di backup*/
-			if ( $bu_new_folder_create ) {
-
-				/*Esporta la richiesta di certificato .der*/
-				file_put_contents( WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/certificate-request.der', $csr_der );
-
-				/*Esporta la private key*/
-				openssl_pkey_export_to_file( $privkey, WC18_PRIVATE . 'files/backups/' . $bu_new_folder_name . '/key.der' );
-
-			}
-
-			/*Esporta la richiesta di certificato .der*/
-			file_put_contents( WC18_PRIVATE . 'files/certificate-request.der', $csr_der );
-
-			/*Esporta la private key*/
-			openssl_pkey_export_to_file( $privkey, WC18_PRIVATE . 'files/key.der' );
-
-			/*Download file .der*/
-			$cert_req_url = WC18_PRIVATE . 'files/certificate-request.der';
-
-			if ( $cert_req_url ) {
-				header( 'Content-Description: File Transfer' );
-				header( 'Content-Type: application/octet-stream' );
-				header( 'Content-Transfer-Encoding: binary' );
-				header( 'Content-disposition: attachment; filename="' . basename( $cert_req_url ) . '"' );
-				header( 'Expires: 0' );
-				header( 'Cache-Control: must-revalidate' );
-				header( 'Pragma: public' );
-
-				readfile( $cert_req_url );
-
-				exit;
-			}
-		}
 	}
 
 
@@ -371,38 +277,14 @@ class WC18_Admin {
 	public function wc18_settings() {
 
 		/*Recupero le opzioni salvate nel db*/
-		$premium_key               = get_option( 'wc18-premium-key' );
-		$passphrase                = base64_decode( get_option( 'wc18-password' ) );
-		$categories                = get_option( 'wc18-categories' );
-		$tot_cats                  = $categories ? count( $categories ) : 0;
-		$wc18_coupon               = get_option( 'wc18-coupon' );
-		$wc18_image                = get_option( 'wc18-image' );
-		$wc18_items_check          = get_option( 'wc18-items-check' );
-		$wc18_orders_on_hold       = get_option( 'wc18-orders-on-hold' );
-		$wc18_email_subject        = get_option( 'wc18-email-subject' );
-		$wc18_email_heading        = get_option( 'wc18-email-heading' );
-		$wc18_email_order_received = get_option( 'wc18-email-order-received' );
-		$wc18_email_order_failed   = get_option( 'wc18-email-order-failed' );
+		$passphrase = base64_decode( get_option( 'wc18-password' ) );
+		$categories = get_option( 'wc18-categories' );
+		$tot_cats   = $categories ? count( $categories ) : 0;
+		$wc18_image = get_option( 'wc18-image' );
 
 		echo '<div class="wrap">';
 			echo '<div class="wrap-left">';
 				echo '<h1>WooCommerce 18app - ' . esc_html( __( 'Impostazioni', 'wc18' ) ) . '</h1>';
-
-				/*Premium key form*/
-				echo '<form method="post" action="">';
-					echo '<table class="form-table wc18-table">';
-						echo '<th scope="row">' . esc_html__( 'Premium Key', 'wc18' ) . '</th>';
-						echo '<td>';
-							echo '<input type="text" class="regular-text code" name="wc18-premium-key" id="wc18-premium-key" placeholder="' . esc_attr__( 'Inserisci la tua Premium Key', 'wc18' ) . '" value="' . esc_attr( $premium_key ) . '" />';
-							echo '<p class="description">' . esc_html__( 'Aggiungi la tua Premium Key e mantieni aggiornato <strong>Woocommerce 18app - Premium</strong>.', 'wc18' ) . '</p>';
-
-							wp_nonce_field( 'wc18-premium-key', 'wc18-premium-key-nonce' );
-
-							echo '<input type="hidden" name="premium-key-sent" value="1" />';
-							echo '<input type="submit" class="button button-primary wc18-button"" value="' . esc_html__( 'Salva ', 'wc18' ) . '" />';
-						echo '</td>';
-					echo '</table>';
-				echo '</form>';
 
 				/*Tabs*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"></div>';
@@ -479,7 +361,7 @@ class WC18_Admin {
 		if ( ! self::get_the_file( '.pem' ) ) {
 
 			/*Genera richiesta certificato .der*/
-			echo '<h3>' . esc_html__( 'Richiedi un certificato', 'wc18' ) . '</h3>';
+			echo '<h3>' . esc_html__( 'Richiedi un certificato', 'wc18' ) . wp_kses_post( $this->get_go_premium() ) . '</h3>';
 			echo '<p class="description">' . esc_html__( 'Con questo strumento puoi generare un file .der necessario per richiedere il tuo certificato su 18app.', 'wc18' ) . '</p>';
 
 			echo '<form id="generate-certificate-request" method="post" class="one-of" enctype="multipart/form-data" action="">';
@@ -487,49 +369,49 @@ class WC18_Admin {
 					echo '<tr>';
 						echo '<th scope="row">' . esc_html__( 'Stato', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="countryName" placeholder="IT" required>';
+							echo '<input type="text" name="countryName" placeholder="IT" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Provincia', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="stateOrProvinceName" placeholder="Es. Milano" required>';
+							echo '<input type="text" name="stateOrProvinceName" placeholder="Es. Milano" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Località', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="localityName" placeholder="Es. Legnano" required>';
+							echo '<input type="text" name="localityName" placeholder="Es. Legnano" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Nome azienda', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="organizationName" placeholder="Es. Taldeitali srl" required>';
+							echo '<input type="text" name="organizationName" placeholder="Es. Taldeitali srl" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Reparto azienda', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="organizationalUnitName" placeholder="Es. Vendite" required>';
+							echo '<input type="text" name="organizationalUnitName" placeholder="Es. Vendite" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Nome', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="text" name="commonName" placeholder="Es. Franco Bianchi" required>';
+							echo '<input type="text" name="commonName" placeholder="Es. Franco Bianchi" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Email', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="email" name="emailAddress" placeholder="Es. franco.bianchi@taldeitali.it" required>';
+							echo '<input type="email" name="emailAddress" placeholder="Es. franco.bianchi@taldeitali.it" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
 					echo '<th scope="row">' . esc_html__( 'Password', 'wc18' ) . '</th>';
 						echo '<td>';
-							echo '<input type="password" name="wc18-password" placeholder="**********" required>';
+							echo '<input type="password" name="wc18-password" placeholder="**********" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
@@ -537,7 +419,7 @@ class WC18_Admin {
 						echo '<td>';
 						wp_nonce_field( 'wc18-generate-der', 'wc18-generate-der-nonce' );
 						echo '<input type="hidden" name="wc18-generate-der-hidden" value="1">';
-						echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . esc_attr__( 'Scarica file .der', 'wc18' ) . '">';
+						echo '<input type="submit" name="generate-der" class="button-primary wc18-button generate-der" value="' . esc_attr__( 'Scarica file .der', 'wc18' ) . '" disabled>';
 						echo '</td>';
 					echo '</tr>';
 
@@ -545,7 +427,7 @@ class WC18_Admin {
 			echo '</form>';
 
 			/*Genera certificato .pem*/
-			echo '<h3>' . esc_html( __( 'Crea il tuo certificato', 'wc18' ) ) . '</h3>';
+			echo '<h3>' . esc_html( __( 'Crea il tuo certificato', 'wc18' ) ) . wp_kses_post( $this->get_go_premium() ) . '</h3>';
 			echo '<p class="description">' . esc_html( __( 'Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18' ) ) . '</p>';
 
 			echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
@@ -556,35 +438,11 @@ class WC18_Admin {
 						echo '<th scope="row">' . esc_html( __( 'Genera certificato', 'wc18' ) ) . '</th>';
 						echo '<td>';
 
-							echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert">';
+							echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert" disabled>';
 							echo '<p class="description">' . esc_html( __( 'Carica il file .cer ottenuto da 18app per procedere', 'wc18' ) ) . '</p>';
 
-							wp_nonce_field( 'wc18-generate-certificate', 'wc18-gen-certificate-nonce' );
 							echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
-							echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html__( 'Genera certificato', 'wc18' ) . '">';
-
-			/*Genera certificato .pem*/
-			echo '<h3>' . esc_html( __( 'Crea il tuo certificato', 'wc18' ) ) . '</h3>';
-			echo '<p class="description">' . esc_html__( 'Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18' ) . '</p>';
-
-			echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
-				echo '<table class="form-table wc18-table">';
-
-					/*Carica certificato*/
-					echo '<tr>';
-						echo '<th scope="row">' . esc_html__( 'Genera certificato', 'wc18' ) . '</th>';
-						echo '<td>';
-
-							echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert">';
-							echo '<p class="description">' . esc_html__( 'Carica il file .cer ottenuto da 18app per procedere', 'wc18' ) . '</p>';
-
-							wp_nonce_field( 'wc18-generate-certificate', 'wc18-gen-certificate-nonce' );
-
-							echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
-							echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html__( 'Genera certificato', 'wc18' ) . '">';
-
-						echo '</td>';
-					echo '</tr>';
+							echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html__( 'Genera certificato', 'wc18' ) . '" disabled>';
 
 				echo '</table>';
 			echo '</form>';
@@ -656,8 +514,9 @@ class WC18_Admin {
 							echo '<tr>';
 								echo '<th scope="row">' . esc_html__( 'Conversione in coupon', 'wc18' ) . '</th>';
 								echo '<td>';
-									echo '<input type="checkbox" name="wc18-coupon" value="1"' . ( 1 === intval( $wc18_coupon ) ? ' checked="checked"' : '' ) . '>';
+									echo '<input type="checkbox" name="wc18-coupon" value="1" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
+									echo wp_kses_post( $this->get_go_premium( true ) );
 								echo '</td>';
 							echo '</tr>';
 
@@ -672,16 +531,20 @@ class WC18_Admin {
 							echo '<tr>';
 								echo '<th scope="row">' . esc_html__( 'Controllo prodotti', 'wc18' ) . '</th>';
 								echo '<td>';
-										echo '<input type="checkbox" name="wc18-items-check" value="1"' . ( 1 === intval( $wc18_items_check ) ? ' checked="checked"' : '' ) . '>';
+										echo '<input type="checkbox" name="wc18-items-check" value="1" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono acquistabili con buoni <i>18app</i>.<br>Più prodotti dovranno prevedere l\'uso di buoni dello stesso ambito di utilizzo.', 'wc18' ) ) . '</p>';
+
+									echo wp_kses_post( $this->get_go_premium( true ) );
 								echo '</td>';
 							echo '</tr>';
 
 							echo '<tr class="wc18-orders-on-hold">';
 								echo '<th scope="row">' . esc_html__( 'Ordini in sospeso', 'wc18' ) . '</th>';
 								echo '<td>';
-										echo '<input type="checkbox" name="wc18-orders-on-hold" value="1"' . ( 1 === intval( $wc18_orders_on_hold ) ? ' checked="checked"' : '' ) . '>';
+										echo '<input type="checkbox" name="wc18-orders-on-hold" value="1" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'I buoni 18app verranno validati con il completamento manuale degli ordini.', 'wc18' ) ) . '</p>';
+
+									echo wp_kses_post( $this->get_go_premium( true ) );
 								echo '</td>';
 							echo '</tr>';
 
@@ -689,7 +552,7 @@ class WC18_Admin {
 								echo '<th scope="row">' . esc_html__( 'Ordine ricevuto', 'wc18' ) . '</th>';
 								echo '<td>';
 									$default_order_received_message = __( 'L\'ordine verrà completato manualmente nei prossimi giorni e, contestualmente, verrà validato il buono 18app inserito. Riceverai una notifica email di conferma, grazie!', 'wc18' );
-									echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-received" placeholder="' . esc_html( $default_order_received_message ) . '" value="' . esc_html( $wc18_email_order_received ) . '">' . esc_html( $wc18_email_order_received ) . '</textarea>';
+									echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-received" placeholder="' . esc_html( $default_order_received_message ) . '" disabled></textarea>';
 									echo '<p class="description">';
 										echo wp_kses_post( __( 'Messaggio della mail inviata all\'utente al ricevimento dell\'ordine.', 'wc18' ) );
 									echo '</p>';
@@ -700,7 +563,7 @@ class WC18_Admin {
 							echo '<tr class="wc18-email-subject wc18-email-details">';
 								echo '<th scope="row">' . esc_html__( 'Oggetto email', 'wc18' ) . '</th>';
 								echo '<td>';
-										echo '<input type="text" class="regular-text" name="wc18-email-subject" placeholder="' . esc_attr__( 'Ordine fallito', 'wc18' ) . '" value="' . esc_attr( $wc18_email_subject ) . '">';
+										echo '<input type="text" class="regular-text" name="wc18-email-subject" placeholder="' . esc_attr__( 'Ordine fallito', 'wc18' ) . '" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'Oggetto della mail inviata all\'utente nel caso in cui la validazione del buono non sia andata a buon fine.', 'wc18' ) ) . '</p>';
 								echo '</td>';
 							echo '</tr>';
@@ -708,7 +571,7 @@ class WC18_Admin {
 							echo '<tr class="wc18-email-heading wc18-email-details">';
 								echo '<th scope="row">' . esc_html__( 'Intestazione email', 'wc18' ) . '</th>';
 								echo '<td>';
-										echo '<input type="text" class="regular-text" name="wc18-email-heading" placeholder="' . esc_attr__( 'Ordine fallito', 'wc18' ) . '" value="' . esc_attr( $wc18_email_heading ) . '">';
+										echo '<input type="text" class="regular-text" name="wc18-email-heading" placeholder="' . esc_attr__( 'Ordine fallito', 'wc18' ) . '" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'Intestazione della mail inviata all\'utente nel caso in cui la validazione del buono non sia andata a buon fine.', 'wc18' ) ) . '</p>';
 								echo '</td>';
 							echo '</tr>';
@@ -717,7 +580,7 @@ class WC18_Admin {
 								echo '<th scope="row">' . esc_html__( 'Ordine fallito', 'wc18' ) . '</th>';
 								echo '<td>';
 										$default_order_failed_message = __( 'La validazone del buono 18app ha restituito un errore e non è stato possibile completare l\'ordine, effettua il pagamento a <a href="[checkout-url]">questo indirizzo</a>.' );
-										echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-failed" placeholder="' . esc_html( $default_order_failed_message ) . '" value="' . esc_html( $wc18_email_order_failed ) . '">' . esc_html( $wc18_email_order_failed ) . '</textarea>';
+										echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-failed" placeholder="' . esc_html( $default_order_failed_message ) . '" disabled>' . esc_html( $wc18_email_order_failed ) . '</textarea>';
 										echo '<p class="description">';
 											echo '<span class="shortcodes">';
 												echo '<code>[checkout-url]</code>';
@@ -769,68 +632,6 @@ class WC18_Admin {
 	 * @return void
 	 */
 	public function wc18_save_settings() {
-
-		if ( isset( $_POST['premium-key-sent'], $_POST['wc18-premium-key-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wc18-premium-key-nonce'] ) ), 'wc18-premium-key' ) ) {
-
-			/*Salvataggio Premium Key*/
-			$premium_key = isset( $_POST['wc18-premium-key'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-premium-key'] ) ) : '';
-
-			update_option( 'wc18-premium-key', $premium_key );
-
-		}
-
-		if ( isset( $_POST['wc18-gen-certificate-hidden'], $_POST['wc18-gen-certificate-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wc18-gen-certificate-nonce'] ) ), 'wc18-generate-certificate' ) ) {
-
-			/*Salvataggio file .cer*/
-			if ( isset( $_FILES['wc18-cert']['name'] ) ) {
-
-				$file_name = sanitize_text_field( wp_unslash( $_FILES['wc18-cert']['name'] ) );
-				$info      = isset( $_FILES['wc18-cert']['name'] ) ? pathinfo( $file_name ) : null;
-				$name      = isset( $info['basename'] ) ? sanitize_file_name( $info['basename'] ) : null;
-
-				if ( $info ) {
-
-					if ( 'cer' === $info['extension'] ) {
-
-						if ( isset( $_FILES['wc18-cert']['tmp_name'] ) ) {
-
-							$tmp_name = sanitize_text_field( wp_unslash( $_FILES['wc18-cert']['tmp_name'] ) );
-							move_uploaded_file( $tmp_name, WC18_PRIVATE . $name );
-
-						}
-
-						/*Conversione da .cer a .pem*/
-						$certificate_ca_cer         = WC18_PRIVATE . $name;
-						$certificate_ca_cer_content = file_get_contents( $certificate_ca_cer );
-						$certificate_ca_pem_content = '-----BEGIN CERTIFICATE-----' . PHP_EOL
-							. chunk_split( base64_encode( $certificate_ca_cer_content ), 64, PHP_EOL )
-							. '-----END CERTIFICATE-----' . PHP_EOL;
-						$certificate_ca_pem         = WC18_PRIVATE . 'files/wc18-cert.pem';
-						file_put_contents( $certificate_ca_pem, $certificate_ca_pem_content );
-
-						/*Preparo i file necessari*/
-						$pem     = openssl_x509_read( file_get_contents( WC18_PRIVATE . 'files/wc18-cert.pem' ) );
-						$get_key = file_get_contents( WC18_PRIVATE . 'files/key.der' );
-
-						/*Richiamo la passphrase dal db*/
-						$wc18_password = base64_decode( get_option( 'wc18-password' ) );
-
-						$key = array( $get_key, $wc18_password );
-
-						openssl_pkcs12_export_to_file( $pem, WC18_PRIVATE . 'files/wc18-cert.p12', $key, $wc18_password );
-
-						/*Preparo i file necessari*/
-						openssl_pkcs12_read( file_get_contents( WC18_PRIVATE . 'files/wc18-cert.p12' ), $p12, $wc18_password );
-
-						/*Creo il certificato*/
-						file_put_contents( WC18_PRIVATE . 'wc18-certificate.pem', $p12['cert'] . $key[0] );
-
-					} else {
-						add_action( 'admin_notices', array( $this, 'not_valid_certificate' ) );
-					}
-				}
-			}
-		}
 
 		if ( isset( $_POST['wc18-certificate-hidden'], $_POST['wc18-certificate-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wc18-certificate-nonce'] ) ), 'wc18-upload-certificate' ) ) {
 
@@ -894,37 +695,9 @@ class WC18_Admin {
 				update_option( 'wc18-categories', $wc18_categories );
 			}
 
-			/*Conversione in coupon*/
-			$wc18_coupon = isset( $_POST['wc18-coupon'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-coupon'] ) ) : '';
-			update_option( 'wc18-coupon', $wc18_coupon );
-
 			/*Immagine in pagina di checkout*/
 			$wc18_image = isset( $_POST['wc18-image'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-image'] ) ) : '';
 			update_option( 'wc18-image', $wc18_image );
-
-			/*Controllo prodotti a carrello*/
-			$wc18_items_check = isset( $_POST['wc18-items-check'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-items-check'] ) ) : '';
-			update_option( 'wc18-items-check', $wc18_items_check );
-
-			/*Ordini in sospeso*/
-			$wc18_orders_on_hold = isset( $_POST['wc18-orders-on-hold'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-orders-on-hold'] ) ) : '';
-			update_option( 'wc18-orders-on-hold', $wc18_orders_on_hold );
-
-			/*Messaggio email ordine ricevuto*/
-			$wc18_email_order_received = isset( $_POST['wc18-email-order-received'] ) ? wp_kses_post( wp_unslash( $_POST['wc18-email-order-received'] ) ) : '';
-			update_option( 'wc18-email-order-received', $wc18_email_order_received );
-
-			/*Oggetto email*/
-			$wc18_email_subject = isset( $_POST['wc18-email-subject'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-email-subject'] ) ) : '';
-			update_option( 'wc18-email-subject', $wc18_email_subject );
-
-			/*Intestazione email*/
-			$wc18_email_heading = isset( $_POST['wc18-email-heading'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-email-heading'] ) ) : '';
-			update_option( 'wc18-email-heading', $wc18_email_heading );
-
-			/*Messaggio email ordine ricevuto*/
-			$wc18_email_order_failed = isset( $_POST['wc18-email-order-failed'] ) ? wp_kses_post( wp_unslash( $_POST['wc18-email-order-failed'] ) ) : '';
-			update_option( 'wc18-email-order-failed', $wc18_email_order_failed );
 
 		}
 	}
