@@ -13,22 +13,6 @@
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 	/**
-	 * Coupon option
-	 *
-	 * @var bool
-	 */
-	public static $coupon_option;
-
-
-	/**
-	 * Orders on hold option
-	 *
-	 * @var bool
-	 */
-	public static $orders_on_hold;
-
-
-	/**
 	 * The constructor
 	 *
 	 * @return void
@@ -39,10 +23,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->id                 = '18app';
 		$this->has_fields         = true;
 		$this->method_title       = '18app';
-		$this->method_description = 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
-
-		self::$coupon_option  = get_option( 'wc18-coupon' );
-		self::$orders_on_hold = get_option( 'wc18-orders-on-hold' );
+		$this->method_description = __( 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.', 'wc18' );
 
 		if ( get_option( 'wc18-image' ) ) {
 
@@ -56,104 +37,11 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->title       = $this->get_option( 'title' );
 		$this->description = $this->get_option( 'description' );
 
-		/* Filters */
-		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'unset_18app_gateway' ) );
-
 		/* Actions */
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'display_18app_code' ), 10, 1 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_18app_code' ), 10, 1 );
-
-		/* Shortcodes */
-		add_shortcode( 'checkout-url', array( $this, 'get_checkout_payment_url' ) );
-
-	}
-
-
-	/**
-	 * Disabilita il metodo di pagamento se i prodotti a carrello richiedono buoni con ambito differente
-	 *
-	 * @param array $available_gateways I metodi di pagamento disponibili.
-	 *
-	 * @return array I metodi aggiornati
-	 */
-	public function unset_18app_gateway( $available_gateways ) {
-
-		if ( is_admin() || ! is_checkout() || ! get_option( 'wc18-items-check' ) ) {
-
-			return $available_gateways;
-
-		}
-
-		$unset      = false;
-		$cat_ids    = array();
-		$categories = get_option( 'wc18-categories' );
-
-		if ( empty( $categories ) ) {
-
-			return $available_gateways;
-
-		}
-
-		if ( is_array( $categories ) ) {
-
-			foreach ( $categories as $key => $value ) {
-
-				if ( is_array( $value ) ) {
-
-					$cat_ids = array_unique( array_merge( $cat_ids, array_values( $value ) ) );
-
-				}
-			}
-		}
-
-		$items_term_ids = array();
-
-		foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
-
-			$item_ids = array();
-			$terms    = get_the_terms( $values['product_id'], 'product_cat' );
-
-			if ( is_array( $terms ) ) {
-
-				foreach ( $terms as $term ) {
-
-					$item_ids[] = $term->term_id;
-
-				}
-			}
-
-			$results = array_intersect( $item_ids, $cat_ids );
-
-			if ( ! is_array( $results ) || empty( $results ) ) {
-
-				$unset = true;
-
-			} else {
-
-				$items_term_ids[] = $results;
-			}
-		}
-
-		if ( ! $unset && 1 < count( $items_term_ids ) ) {
-
-			$intersect = call_user_func_array( 'array_intersect', $items_term_ids );
-
-			if ( empty( $intersect ) ) {
-
-				$unset = true;
-
-			}
-		}
-
-		if ( $unset ) {
-
-			unset( $available_gateways['18app'] );
-
-		}
-
-		return $available_gateways;
 
 	}
 
@@ -321,128 +209,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$data       = $order->get_data();
 		$code_18app = null;
 
-		foreach ( $order->get_coupon_codes() as $coupon_code ) {
-
-			if ( false !== strpos( $coupon_code, 'wc18' ) ) {
-
-				$parts      = explode( '-', $coupon_code );
-				$code_18app = isset( $parts[2] ) ? $parts[2] : null;
-
-			}
-
-			break;
-		}
-
 		if ( '18app' === $data['payment_method'] ) {
 
 			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( get_post_meta( $order->get_id(), 'wc-codice-18app', true ) ) . '</p>';
-
-		} elseif ( $code_18app ) {
-
-			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( $code_18app ) . '</p>';
-
-		}
-
-		if ( self::$orders_on_hold ) {
-
-			if ( in_array( $order->get_status(), array( 'on-hold', 'pending' ), true ) ) {
-
-				/* Recupero il messaggio personalizzato salvato nelle impostazioni */
-				$message = get_option( 'wc18-email-order-received' );
-
-				if ( ! $message ) {
-
-					$message = __( 'L\'ordine verrà completato manualmente nei prossimi giorni e, contestualmente, verrà validato il buono 18app inserito. Riceverai una notifica email di conferma, grazie!', 'wc18' );
-
-				}
-
-				echo wp_kses_post( "<p>$message</p>", 'wc18' );
-
-			} elseif ( 'failed' === $order->get_status() ) {
-
-				/* Recupero il messaggio personalizzato salvato nelle impostazioni */
-				$message = get_option( 'wc18-email-order-failed' );
-				$message = str_replace( '[checkout-url]', '%s', $message );
-
-				if ( ! $message ) {
-
-					/* Translators: URL per completare il pagamento */
-					$message = __( 'La validazone del buono 18app ha restituito un errore e non è stato possibile completare l\'ordine, completa il pagamento a <a href="%s">questo indirizzo</a>.', 'wc18' );
-
-				}
-
-				echo wp_kses_post( sprintf( "<p>$message</p>", do_shortcode( '[checkout-url order-id=' . $order->get_id() . ']' ) ) );
-
-			}
-		}
-
-	}
-
-
-	/**
-	 * Ricava il coupon id dal suo codice
-	 *
-	 * @param string $coupon_code il codice del coupon.
-	 *
-	 * @return int l'id del coupon
-	 */
-	private static function get_coupon_id( $coupon_code ) {
-
-		$coupon = get_page_by_title( $coupon_code, OBJECT, 'shop_coupon' );
-
-		if ( $coupon && isset( $coupon->ID ) ) {
-
-			return $coupon->ID;
-
-		}
-
-	}
-
-
-	/**
-	 * Crea un nuovo coupon
-	 *
-	 * @param int    $order_id     l'id dell'ordine.
-	 * @param float  $amount       il valore da assegnare al coupon.
-	 * @param string $code_18app   il codice del buono 18app.
-	 *
-	 * @return int l'id del coupon creato
-	 */
-	private static function create_coupon( $order_id, $amount, $code_18app ) {
-
-		$coupon_code = 'wc18-' . $order_id . '-' . $code_18app;
-
-		$args = array(
-			'post_title'   => $coupon_code,
-			'post_content' => '',
-			'post_excerpt' => $code_18app,
-			'post_type'    => 'shop_coupon',
-			'post_status'  => 'publish',
-			'post_author'  => 1,
-			'meta_input'   => array(
-				'discount_type' => 'fixed_cart',
-				'coupon_amount' => $amount,
-				'usage_limit'   => 1,
-			),
-		);
-
-		$coupon_id = self::get_coupon_id( $coupon_code );
-
-		/* Aggiorna coupon se già presente */
-		if ( $coupon_id ) {
-
-			$args['ID'] = $coupon_id;
-			$coupon_id  = wp_update_post( $args );
-
-		} else {
-
-			$coupon_id = wp_insert_post( $args );
-
-		}
-
-		if ( ! is_wp_error( $coupon_id ) ) {
-
-			return $coupon_code;
 
 		}
 
@@ -486,20 +255,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 				$type = null;
 
-				if ( self::$coupon_option && $importo_buono < $import && ! $converted ) {
-
-					/* Creazione coupon */
-					$coupon_code = self::create_coupon( $order_id, $importo_buono, $code_18app );
-
-					if ( $coupon_code && ! WC()->cart->has_discount( $coupon_code ) ) {
-
-						/* Coupon aggiunto all'ordine */
-						WC()->cart->apply_coupon( $coupon_code );
-
-						$output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
-
-					}
-				} elseif ( $importo_buono === $import || ( self::$orders_on_hold && ! $complete ) ) {
+				if ( $importo_buono === $import ) {
 
 					$type = 'check';
 
@@ -516,15 +272,8 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						/*Operazione differente in base al rapporto tra valore del buono e totale dell'ordine*/
 						if ( 'check' === $type ) {
 
-							if ( self::$orders_on_hold && ! $complete ) {
+							$operation = $soap_client->check( 2 );
 
-								$operation = null;
-
-							} else {
-
-								$operation = $soap_client->check( 2 );
-
-							}
 						} else {
 
 							$operation = $soap_client->confirm();
@@ -534,28 +283,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						/*Aggiungo il buono 18app all'ordine*/
 						update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
 
-						if ( ! $converted ) {
+						/* Ordine completato */
+						$order->payment_complete();
 
-							if ( self::$orders_on_hold && ! $complete ) {
+						/*Svuota carrello*/
+						$woocommerce->cart->empty_cart();
 
-								/* Ordine in sospeso */
-								$order->update_status( 'wc-on-hold' );
-
-							} else {
-
-								/* Ordine completato */
-								$order->payment_complete();
-
-							}
-
-							/* A completamento di un ordine il carrello è già vuoto */
-							if ( ! $complete ) {
-
-								/*Svuota carrello*/
-								$woocommerce->cart->empty_cart();
-
-							}
-						}
 					} catch ( Exception $e ) {
 
 						$output = $e->detail->FaultVoucher->exceptionMessage;
