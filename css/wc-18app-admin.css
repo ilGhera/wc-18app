@@ -1,7 +1,7 @@
 /**
  * WC 18app - Admin CSS
  * @author ilGhera
- * @package wc-18app/includes
+ * @package wc-18app/css
  * @version 1.3.0
  */
 
@@ -87,6 +87,41 @@ ul.categories-container {
 
 .wc18-admin {
 	display: none;
+}
+
+.label {
+	display: inline;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+
+.label a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.label a:hover {
+	color: #0073aa;
+}
+
+.label-warning {
+	background-color: #f0ad4e;
+}
+
+.label.premium {
+    display: inline-block;
+    margin: 1rem 1rem 0;
+    padding: 0.4rem;
+}
+
+.label.premium.no-margin {
+    margin: 1rem 0;
 }
 
 .wc18-email-details {
