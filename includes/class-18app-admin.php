@@ -580,7 +580,7 @@ class WC18_Admin {
 								echo '<th scope="row">' . esc_html__( 'Ordine fallito', 'wc18' ) . '</th>';
 								echo '<td>';
 										$default_order_failed_message = __( 'La validazone del buono 18app ha restituito un errore e non è stato possibile completare l\'ordine, effettua il pagamento a <a href="[checkout-url]">questo indirizzo</a>.' );
-										echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-failed" placeholder="' . esc_html( $default_order_failed_message ) . '" disabled>' . esc_html( $wc18_email_order_failed ) . '</textarea>';
+										echo '<textarea cols="6" rows="6" class="regular-text" name="wc18-email-order-failed" placeholder="' . esc_html( $default_order_failed_message ) . '" disabled></textarea>';
 										echo '<p class="description">';
 											echo '<span class="shortcodes">';
 												echo '<code>[checkout-url]</code>';
@@ -602,7 +602,7 @@ class WC18_Admin {
 			echo '</div>';
 
 			echo '<div class="wrap-right">';
-				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wc18-premium-iframe.html"></iframe>';
+				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wc18-iframe.html"></iframe>';
 			echo '</div>';
 			echo '<div class="clear"></div>';
 
