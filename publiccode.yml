@@ -17,6 +17,7 @@ description:
       - (Premium) Generazione certificato .pem
       - (Premium) Conversione valore buono 18app in voucher WooCommerce
       - (Premium) Mostra il metodo di pagamento solo se i prodotti a carrello sono acquistabili con 18app
+      - (Premium) Opzione ordini in sospeso con validazione buoni 18app solo a completamento manuale dell'ordine 
     genericName: WordPress plugin
     longDescription: |
       Ogni diciottenne, in Italia, ha a disposizione un _Bonus Cultura_  del
@@ -133,7 +134,8 @@ maintenance:
 name: WooCommerce 18app
 platforms:
   - web
-releaseDate: '2022-10-24'
+releaseDate: '2023-05-02'
 softwareType: addon
-softwareVersion: 1.2.3
+softwareVersion: 1.3.0
 url: 'https://github.com/ilGhera/wc-18app'
+
