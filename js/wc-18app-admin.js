@@ -2,7 +2,7 @@
  * WC 18app - Admin js
  * @author ilGhera
  * @package wc-18app/js
- * @since 1.2.0
+ * @since 1.3.0
  */
 
 /**
@@ -17,6 +17,7 @@ var wc18_delete_certificate = function() {
 				var data = {
 					'action': 'wc18-delete-certificate',
 					'wc18-delete': true,
+                    'delete-nonce': wc18Data.delCertNonce,
 					'cert': cert
 				}			
 				$.post(ajaxurl, data, function(response){
@@ -47,6 +48,7 @@ var wc18_add_cat = function() {
 				'action': 'wc18-add-cat',
 				'number': number,
 				'exclude-beni': beni_values.toString(),
+                'add-cat-nonce': wc18Data.addCatNonce,
 			}
 			$.post(ajaxurl, data, function(response){
 				$(response).appendTo('.categories-container');
@@ -130,9 +132,10 @@ wc18_sandbox();
  */
 var wc18_menu_navigation = function() {
 	jQuery(function($){
+
 		var contents = $('.wc18-admin')
-		var url = window.location.href.split("#")[0];
-		var hash = window.location.href.split("#")[1];
+		var url      = window.location.href.split("#")[0];
+		var hash     = window.location.href.split("#")[1];
 
 		if(hash) {
 	        contents.hide();		    
@@ -181,3 +184,34 @@ var wc18_menu_navigation = function() {
 }
 wc18_menu_navigation();
 
+/**
+ * Mostra i dettagli della mail all'utente
+ * nel caso la funzione ordini in sospeso sia stata attivata
+ *
+ * @return void
+ */
+var wc18_email_details = function() {
+    jQuery(function($){
+        $(document).ready(function() {
+
+            var on_hold       = $('.wc18-orders-on-hold');
+            var email_details = $('.wc18-email-details');
+
+            if ( $('.tzCheckBox', on_hold).hasClass( 'checked' ) ) {
+                $(email_details).show();
+            }
+
+            $('.tzCheckBox', on_hold).on( 'click', function() {
+
+                if ( $(this).hasClass( 'checked' ) ) {
+                    $(email_details).show('slow');
+                } else {
+                    $(email_details).hide();
+                }
+
+            })
+            
+        })
+    })
+}
+wc18_email_details();

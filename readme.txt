@@ -1,9 +1,9 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: woocommerce, 18app, bonus cultura, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.2.3
+Version: 1.3.0
 Requires at least: 4.0
-Tested up to: 6.0
+Tested up to: 6.2
 
 Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 
@@ -75,6 +75,16 @@ https://youtu.be/a94VpGu76Qw
 
 == Changelog ==
 
+= 1.3.0 =
+Data di rilascio: 2 Maggio, 2023
+
+* Implementazione: (Premium) Opzione ordini in sospeso 
+* Implementazione: (Premium) Opzione personalizzazione email per ordini completati manualmente
+* Implementazione: (Premium) Opzione personalizzazione email per ordini rifiutati per buono non valido
+* Implementazione: WordPress Coding standards
+* Update: POT file
+* Bug: (Premium) Buono 18app non presente in dettagli ordine in caso di trasformazione in voucher
+* Bug: (Premium) Metodo di pagamento disponibile dopo voucher applicato in modalità sandbox
 
 = 1.2.3 =
 Data di rilascio: 24 Ottobre, 2022
@@ -140,4 +150,3 @@ Data di rilascio: 8 Novembre, 2018
 Data di rilascio: 16 Ottobre, 2018
 
 * Prima release.
-
