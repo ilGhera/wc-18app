@@ -560,25 +560,6 @@ class WC18_Admin {
 							echo '<p class="description">' . esc_html( __( 'Carica il file .cer ottenuto da 18app per procedere', 'wc18' ) ) . '</p>';
 
 							wp_nonce_field( 'wc18-generate-certificate', 'wc18-gen-certificate-nonce' );
-							echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
-							echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html__( 'Genera certificato', 'wc18' ) . '">';
-
-			/*Genera certificato .pem*/
-			echo '<h3>' . esc_html( __( 'Crea il tuo certificato', 'wc18' ) ) . '</h3>';
-			echo '<p class="description">' . esc_html__( 'Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso buoni 18app.', 'wc18' ) . '</p>';
-
-			echo '<form name="wc18-generate-certificate" class="wc18-generate-certificate one-of" method="post" enctype="multipart/form-data" action="">';
-				echo '<table class="form-table wc18-table">';
-
-					/*Carica certificato*/
-					echo '<tr>';
-						echo '<th scope="row">' . esc_html__( 'Genera certificato', 'wc18' ) . '</th>';
-						echo '<td>';
-
-							echo '<input type="file" accept=".cer" name="wc18-cert" class="wc18-cert">';
-							echo '<p class="description">' . esc_html__( 'Carica il file .cer ottenuto da 18app per procedere', 'wc18' ) . '</p>';
-
-							wp_nonce_field( 'wc18-generate-certificate', 'wc18-gen-certificate-nonce' );
 
 							echo '<input type="hidden" name="wc18-gen-certificate-hidden" value="1">';
 							echo '<input type="submit" class="button-primary wc18-button" value="' . esc_html__( 'Genera certificato', 'wc18' ) . '">';
