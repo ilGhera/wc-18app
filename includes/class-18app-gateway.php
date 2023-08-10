@@ -196,7 +196,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public function payment_fields() {
 		?>
 		<p>
-			<?php echo esc_html( $this->description ); ?>
+			<?php echo wp_kses_post( $this->description ); ?>
 			<label for="wc-codice-18app">
 				<?php esc_html_e( 'Inserisci qui il tuo codice', 'wc18' ); ?>
 				<span class="required">*</span>
