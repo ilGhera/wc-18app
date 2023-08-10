@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.3.0
+ * @since 1.3.1
  */
 
 /**
