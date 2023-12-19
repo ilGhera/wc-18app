@@ -4,11 +4,14 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 1.3.1
+ *
+ * @since 1.4.0
  */
 
 /**
  * WC18_18app_Gateway class
+ *
+ * @since 1.4.0
  */
 class WC18_18app_Gateway extends WC_Payment_Gateway {
 
