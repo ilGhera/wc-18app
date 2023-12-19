@@ -50,10 +50,10 @@ function wc18_premium_activation() {
 	}
 
 	/*Requires*/
-	require WC18_INCLUDES . 'class-18app-gateway.php';
-	require WC18_INCLUDES . 'class-18app-soap-client.php';
-	require WC18_INCLUDES . 'class-18app-admin.php';
-	require WC18_INCLUDES . 'class-18app.php';
+	require WC18_INCLUDES . 'class-wc18-gateway.php';
+	require WC18_INCLUDES . 'class-wc18-soap-client.php';
+	require WC18_INCLUDES . 'class-wc18-admin.php';
+	require WC18_INCLUDES . 'class-wc18.php';
 	require WC18_INCLUDES . 'ilghera-notice/class-ilghera-notice.php';
 
 	/**
