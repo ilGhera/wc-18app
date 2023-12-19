@@ -9,11 +9,11 @@
  */
 
 /**
- * WC18_18app_Gateway class
+ * WC18_Gateway class
  *
  * @since 1.4.0
  */
-class WC18_18app_Gateway extends WC_Payment_Gateway {
+class WC18_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 * Coupon option
@@ -31,12 +31,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public static $orders_on_hold;
 
 
-    /**
-     * Exclude shipping from the payment
-     *
-     * @var bool
-     */
-    public static $exclude_shipping;
+	/**
+	 * Exclude shipping from the payment
+	 *
+	 * @var bool
+	 */
+	public static $exclude_shipping;
 
 
 	/**
@@ -54,7 +54,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		self::$coupon_option    = get_option( 'wc18-coupon' );
 		self::$orders_on_hold   = get_option( 'wc18-orders-on-hold' );
-        self::$exclude_shipping = get_option( 'wc18-exclude-shipping' );
+		self::$exclude_shipping = get_option( 'wc18-exclude-shipping' );
 
 		if ( get_option( 'wc18-image' ) ) {
 
@@ -490,11 +490,11 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			/*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
 			$purchasable = self::is_purchasable( $order, $bene );
 
-            /* Importo inferiore al totale dell'ordine */
-            $convert = self::$coupon_option && $importo_buono < $import ? true : false;
+			/* Importo inferiore al totale dell'ordine */
+			$convert = self::$coupon_option && $importo_buono < $import ? true : false;
 
-            /* Spese di spedizione escluse dal pagamento */
-            $no_shipping = self::$exclude_shipping && $order->get_shipping_total() ? true : false;
+			/* Spese di spedizione escluse dal pagamento */
+			$no_shipping = self::$exclude_shipping && $order->get_shipping_total() ? true : false;
 
 			if ( ! $purchasable ) {
 
@@ -506,12 +506,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 				if ( ! $converted && $convert || $no_shipping ) {
 
-                    if ( $no_shipping ) {
+					if ( $no_shipping ) {
 
-                        /* Definizione del valore del vouscher con spese di spedizione escluse */
-                        $importo_buono = min( $importo_buono, $import );
+						/* Definizione del valore del vouscher con spese di spedizione escluse */
+						$importo_buono = min( $importo_buono, $import );
 
-                    }
+					}
 
 					/* Creazione coupon */
 					$coupon_code = self::create_coupon( $order_id, $importo_buono, $code_18app );
@@ -521,14 +521,13 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						/* Coupon aggiunto all'ordine */
 						WC()->cart->apply_coupon( $coupon_code );
 
-                        if ( $convert ) {
+						if ( $convert ) {
 
-                            $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
-                        } else {
+							$output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
+						} else {
 
-                            $output = __( 'Le spese di spedizione devono essere saldate con altro metodo di pagamento.', 'wc18' );
-                        }
-
+							$output = __( 'Le spese di spedizione devono essere saldate con altro metodo di pagamento.', 'wc18' );
+						}
 					}
 				} elseif ( $importo_buono === $import || ( self::$orders_on_hold && ! $complete ) ) {
 
@@ -615,13 +614,13 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 
 		$order  = wc_get_order( $order_id );
-		$import = floatval( $order->get_total() ); 
+		$import = floatval( $order->get_total() );
 
-        if ( self::$exclude_shipping ) {
+		if ( self::$exclude_shipping ) {
 
-            $import = floatval( $order->get_total() - $order->get_shipping_total() - $order->get_shipping_tax() ); // Il totale dell'ordine.
+			$import = floatval( $order->get_total() - $order->get_shipping_total() - $order->get_shipping_tax() ); // Il totale dell'ordine.
 
-        }
+		}
 
 		$notice = null;
 		$output = array(

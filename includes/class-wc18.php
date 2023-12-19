@@ -149,7 +149,7 @@ class WC18 {
 
 			if ( $sandbox || ( WC18_Admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
-				$methods[] = 'WC18_18app_Gateway';
+				$methods[] = 'WC18_Gateway';
 
 			}
 		}
@@ -178,7 +178,7 @@ class WC18 {
 				$coupon_amount = $coupon->get_amount();
 				$code_18app    = $coupon->get_description();
 
-				$notice = WC18_18app_Gateway::process_code( $parts[1], $code_18app, $coupon_amount, true );
+				$notice = WC18_Gateway::process_code( $parts[1], $code_18app, $coupon_amount, true );
 
 				if ( 1 !== intval( $notice ) ) {
 
@@ -243,7 +243,7 @@ class WC18 {
 
 				$code_18app = $order->get_meta( 'wc-codice-18app' );
 				$total      = $order->get_total();
-				$validate   = WC18_18app_Gateway::process_code( $order_id, $code_18app, $total, false, true );
+				$validate   = WC18_Gateway::process_code( $order_id, $code_18app, $total, false, true );
 
 				if ( 1 !== intval( $validate ) ) {
 
