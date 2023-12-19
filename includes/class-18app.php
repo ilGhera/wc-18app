@@ -238,7 +238,7 @@ class WC18 {
 
 			if ( '18app' === $order->get_payment_method() ) {
 
-				$code_18app = get_post_meta( $order_id, 'wc-codice-18app', true );
+				$code_18app = $order->get_meta( 'wc-codice-18app' );
 				$total      = $order->get_total();
 				$validate   = WC18_18app_Gateway::process_code( $order_id, $code_18app, $total, false, true );
 

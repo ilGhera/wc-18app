@@ -28,6 +28,14 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public static $orders_on_hold;
 
 
+    /**
+     * Exclude shipping from the payment
+     *
+     * @var bool
+     */
+    public static $exclude_shipping;
+
+
 	/**
 	 * The constructor
 	 *
@@ -41,8 +49,9 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		$this->method_title       = '18app';
 		$this->method_description = 'Consente ai diciottenni di utilizzare il buono a loro riservato per l\'acquisto di materiale didattico.';
 
-		self::$coupon_option  = get_option( 'wc18-coupon' );
-		self::$orders_on_hold = get_option( 'wc18-orders-on-hold' );
+		self::$coupon_option    = get_option( 'wc18-coupon' );
+		self::$orders_on_hold   = get_option( 'wc18-orders-on-hold' );
+        self::$exclude_shipping = get_option( 'wc18-exclude-shipping' );
 
 		if ( get_option( 'wc18-image' ) ) {
 
@@ -335,7 +344,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		if ( '18app' === $data['payment_method'] ) {
 
-			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( get_post_meta( $order->get_id(), 'wc-codice-18app', true ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( $order->get_meta( 'wc-codice-18app' ) ) . '</p>';
 
 		} elseif ( $code_18app ) {
 
@@ -478,6 +487,12 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 			/*Verifica se i prodotti dell'ordine sono compatibili con i beni acquistabili con il buono*/
 			$purchasable = self::is_purchasable( $order, $bene );
 
+            /* Importo inferiore al totale dell'ordine */
+            $convert = self::$coupon_option && $importo_buono < $import ? true : false;
+
+            /* Spese di spedizione escluse dal pagamento */
+            $no_shipping = self::$exclude_shipping && $order->get_shipping_total() ? true : false;
+
 			if ( ! $purchasable ) {
 
 				$output = __( 'Uno o più prodotti nel carrello non sono acquistabili con il buono inserito.', 'wc18' );
@@ -486,7 +501,14 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 				$type = null;
 
-				if ( self::$coupon_option && $importo_buono < $import && ! $converted ) {
+				if ( ! $converted && $convert || $no_shipping ) {
+
+                    if ( $no_shipping ) {
+
+                        /* Definizione del valore del vouscher con spese di spedizione escluse */
+                        $importo_buono = min( $importo_buono, $import );
+
+                    }
 
 					/* Creazione coupon */
 					$coupon_code = self::create_coupon( $order_id, $importo_buono, $code_18app );
@@ -496,7 +518,13 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						/* Coupon aggiunto all'ordine */
 						WC()->cart->apply_coupon( $coupon_code );
 
-						$output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
+                        if ( $convert ) {
+
+                            $output = __( 'Il valore del buono inserito non è sufficiente ed è stato convertito in buono sconto.', 'wc18' );
+                        } else {
+
+                            $output = __( 'Le spese di spedizione devono essere saldate con altro metodo di pagamento.', 'wc18' );
+                        }
 
 					}
 				} elseif ( $importo_buono === $import || ( self::$orders_on_hold && ! $complete ) ) {
@@ -532,7 +560,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						}
 
 						/*Aggiungo il buono 18app all'ordine*/
-						update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
+						$order->update_meta_data( 'wc-codice-18app', $code_18app );
 
 						if ( ! $converted ) {
 
@@ -584,7 +612,13 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 
 		$order  = wc_get_order( $order_id );
-		$import = floatval( $order->get_total() ); // Il totale dell'ordine.
+		$import = floatval( $order->get_total() ); 
+
+        if ( self::$exclude_shipping ) {
+
+            $import = floatval( $order->get_total() - $order->get_shipping_total() - $order->get_shipping_tax() ); // Il totale dell'ordine.
+
+        }
 
 		$notice = null;
 		$output = array(

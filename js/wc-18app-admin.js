@@ -215,3 +215,39 @@ var wc18_email_details = function() {
     })
 }
 wc18_email_details();
+
+/**
+ * Attivazione opzione coupon con esclusione spese di spedizione
+ *
+ * @return void
+ */
+var wc18_exclude_shipping = function() {
+
+    jQuery(function($){
+        $(document).ready(function() {
+
+            var excludeShipping = $('.wc18-exclude-shipping');
+            var coupon          = $('.wc18-coupon');
+
+            $('.tzCheckBox', excludeShipping).on( 'click', function() {
+
+                if ( $(this).hasClass( 'checked' ) && ! $('.tzCheckBox', coupon).hasClass( 'checked' ) ) {
+                    $('.tzCheckBox', coupon).trigger('click');
+                }
+
+            })
+
+            // Non disattivare opzione coupon con esclusione spese di spedizione attive
+            $('.tzCheckBox', coupon).on( 'click', function() {
+
+                if ( ! $(this).hasClass( 'checked' ) && $('.tzCheckBox', excludeShipping).hasClass( 'checked' ) ) {
+                    alert( 'L\'esclusione delle spese di spedizione prevedere l\'utilizzo di questa funzionalità.' );
+                    $('.tzCheckBox', coupon).trigger('click');
+                }
+
+            })
+        })
+    })
+
+}
+wc18_exclude_shipping();

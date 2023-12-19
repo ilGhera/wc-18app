@@ -375,10 +375,11 @@ class WC18_Admin {
 		$passphrase                = base64_decode( get_option( 'wc18-password' ) );
 		$categories                = get_option( 'wc18-categories' );
 		$tot_cats                  = $categories ? count( $categories ) : 0;
-		$wc18_coupon               = get_option( 'wc18-coupon' );
 		$wc18_image                = get_option( 'wc18-image' );
 		$wc18_items_check          = get_option( 'wc18-items-check' );
 		$wc18_orders_on_hold       = get_option( 'wc18-orders-on-hold' );
+		$wc18_exclude_shipping     = get_option( 'wc18-exclude-shipping' );
+		$wc18_coupon               = get_option( 'wc18-coupon' );
 		$wc18_email_subject        = get_option( 'wc18-email-subject' );
 		$wc18_email_heading        = get_option( 'wc18-email-heading' );
 		$wc18_email_order_received = get_option( 'wc18-email-order-received' );
@@ -635,14 +636,6 @@ class WC18_Admin {
 							echo '</tr>';
 
 							echo '<tr>';
-								echo '<th scope="row">' . esc_html__( 'Conversione in coupon', 'wc18' ) . '</th>';
-								echo '<td>';
-									echo '<input type="checkbox" name="wc18-coupon" value="1"' . ( 1 === intval( $wc18_coupon ) ? ' checked="checked"' : '' ) . '>';
-									echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
-								echo '</td>';
-							echo '</tr>';
-
-							echo '<tr>';
 								echo '<th scope="row">' . esc_html__( 'Utilizzo immagine', 'wc18' ) . '</th>';
 								echo '<td>';
 									echo '<input type="checkbox" name="wc18-image" value="1"' . ( 1 === intval( $wc18_image ) ? ' checked="checked"' : '' ) . '>';
@@ -663,6 +656,21 @@ class WC18_Admin {
 								echo '<td>';
 										echo '<input type="checkbox" name="wc18-orders-on-hold" value="1"' . ( 1 === intval( $wc18_orders_on_hold ) ? ' checked="checked"' : '' ) . '>';
 									echo '<p class="description">' . wp_kses_post( __( 'I buoni 18app verranno validati con il completamento manuale degli ordini.', 'wc18' ) ) . '</p>';
+								echo '</td>';
+
+							echo '<tr class="wc18-exclude-shipping">';
+								echo '<th scope="row">' . esc_html__( 'Spese di spedizione', 'wc18' ) . '</th>';
+								echo '<td>';
+										echo '<input type="checkbox" name="wc18-exclude-shipping" value="1"' . ( 1 === intval( $wc18_exclude_shipping ) ? ' checked="checked"' : '' ) . '>';
+									echo '<p class="description">' . wp_kses_post( __( 'Escludi le spese di spedizione dal pagamento con 18app.', 'wc18' ) ) . '</p>';
+								echo '</td>';
+							echo '</tr>';
+
+							echo '<tr class="wc18-coupon">';
+								echo '<th scope="row">' . esc_html__( 'Conversione in coupon', 'wc18' ) . '</th>';
+								echo '<td>';
+									echo '<input type="checkbox" name="wc18-coupon" value="1"' . ( 1 === intval( $wc18_coupon ) ? ' checked="checked"' : '' ) . '>';
+									echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
 								echo '</td>';
 							echo '</tr>';
 
@@ -890,6 +898,10 @@ class WC18_Admin {
 			/*Ordini in sospeso*/
 			$wc18_orders_on_hold = isset( $_POST['wc18-orders-on-hold'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-orders-on-hold'] ) ) : '';
 			update_option( 'wc18-orders-on-hold', $wc18_orders_on_hold );
+
+			/*Spese di spedizione*/
+			$wc18_exclude_shipping = isset( $_POST['wc18-exclude-shipping'] ) ? sanitize_text_field( wp_unslash( $_POST['wc18-exclude-shipping'] ) ) : '';
+			update_option( 'wc18-exclude-shipping', $wc18_exclude_shipping );
 
 			/*Messaggio email ordine ricevuto*/
 			$wc18_email_order_received = isset( $_POST['wc18-email-order-received'] ) ? wp_kses_post( wp_unslash( $_POST['wc18-email-order-received'] ) ) : '';
