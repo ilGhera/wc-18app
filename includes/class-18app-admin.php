@@ -582,7 +582,7 @@ class WC18_Admin {
 					echo '<h3>' . esc_html( __( 'Modalità Sandbox', 'wc18' ) ) . '</h3>';
 				echo '<p class="description">';
 					/* Translators: the email address */
-					printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@beniculturali.it</a>', 'wc18' ) ), 'mailto:numeroverde@beniculturali.it' );
+					printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@cultura.gov.it</a>', 'wc18' ) ), 'mailto:numeroverde@cultura.gov.it' );
 				echo '</p>';
 
 					echo '<form name="wc18-sandbox" class="wc18-sandbox" method="post" enctype="multipart/form-data" action="">';
