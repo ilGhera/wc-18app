@@ -67,7 +67,7 @@ This plugin sends data to an external service, like the categories and the price
 == Changelog ==
 
 = 1.4.0 =
-Data di rilascio: 19 Dicembre, 2023
+Data di rilascio: 22 Dicembre, 2023
 
     * Implementazione: Opzione esclusione spese di spedizione dal pagamento 
     * Implementazione: Supporto WooCommerce HPOS 
