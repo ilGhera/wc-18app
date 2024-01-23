@@ -513,7 +513,7 @@ class WC18_Admin {
 								echo '</td>';
 							echo '</tr>';
 
-                            echo '<tr>';
+							echo '<tr>';
 								echo '<th scope="row">' . esc_html__( 'Utilizzo immagine', 'wc18' ) . '</th>';
 								echo '<td>';
 									echo '<input type="checkbox" name="wc18-image" value="1"' . ( 1 === intval( $wc18_image ) ? ' checked="checked"' : '' ) . '>';

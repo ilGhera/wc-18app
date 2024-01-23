@@ -59,7 +59,7 @@ class WC18 {
 
 		if ( $sandbox || ( WC18_Admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
-            $methods[] = 'WC18_Gateway';
+			$methods[] = 'WC18_Gateway';
 
 		}
 
