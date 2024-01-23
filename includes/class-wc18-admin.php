@@ -543,8 +543,10 @@ class WC18_Admin {
 							echo '<tr class="wc18-exclude-shipping">';
 								echo '<th scope="row">' . esc_html__( 'Spese di spedizione', 'wc18' ) . '</th>';
 								echo '<td>';
-										echo '<input type="checkbox" name="wc18-exclude-shipping" value="1"' . ( 1 === intval( $wc18_exclude_shipping ) ? ' checked="checked"' : '' ) . '>';
+										echo '<input type="checkbox" name="wc18-exclude-shipping" value="1" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'Escludi le spese di spedizione dal pagamento con 18app.', 'wc18' ) ) . '</p>';
+
+									echo wp_kses_post( $this->get_go_premium( true ) );
 								echo '</td>';
 							echo '</tr>';
 
