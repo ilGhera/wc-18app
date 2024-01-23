@@ -4,11 +4,14 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 1.3.0
+ *
+ * @since 1.4.0
  */
 
 /**
  * WC18 class
+ *
+ * @since 1.4.0
  */
 class WC18 {
 
@@ -56,7 +59,7 @@ class WC18 {
 
 		if ( $sandbox || ( WC18_Admin::get_the_file( '.pem' ) && get_option( 'wc18-cert-activation' ) ) ) {
 
-			$methods[] = 'WC18_18app_Gateway';
+            $methods[] = 'WC18_Gateway';
 
 		}
 

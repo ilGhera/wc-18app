@@ -1,143 +1,60 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WC 18app 1.2.0\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"Project-Id-Version: WC 18app 0.9.0\n"
+"POT-Creation-Date: 2023-12-19 09:48+0100\n"
+"PO-Revision-Date: 2018-07-02 12:47+0200\n"
 "Last-Translator: \n"
-"Language-Team: \n"
+"Language-Team: ilGhera\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
-"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
 "X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: _;__\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/class-18app-admin.php:47
+#: includes/class-18app-admin.php:48
 msgid "WooCommerce 18app - Impostazioni"
 msgstr ""
 
-#: includes/class-18app-admin.php:47
+#: includes/class-18app-admin.php:48
 msgid "WC 18app"
 msgstr ""
 
-#: includes/class-18app-admin.php:287
+#: includes/class-18app-admin.php:390
 msgid "Impostazioni"
 msgstr ""
 
-#: includes/class-18app-admin.php:292
+#: includes/class-18app-admin.php:411
 msgid "Certificato"
 msgstr ""
 
-#: includes/class-18app-admin.php:293
-msgid "Opzioni"
-msgstr ""
-
-#: includes/class-18app-admin.php:300
-msgid "Carica il tuo certificato"
-msgstr ""
-
-#: includes/class-18app-admin.php:301
-msgid ""
-"Se sei già in posseso di un certificato non devi fare altro che caricarlo "
-"con relativa password, nient'altro."
-msgstr ""
-
-#: includes/class-18app-admin.php:308
-msgid "Carica certificato"
-msgstr ""
-
-#: includes/class-18app-admin.php:317 includes/class-18app-admin.php:325
-msgid "Elimina"
-msgstr ""
-
-#: includes/class-18app-admin.php:318
-msgid "File caricato e attivato correttamente."
-msgstr ""
-
-#: includes/class-18app-admin.php:328
-#, php-format
-msgid "L'attivazione del certificato ha restituito il seguente errore: %s"
-msgstr ""
-
-#: includes/class-18app-admin.php:336
-msgid "Carica il certificato (.pem) necessario alla connessione con 18app"
-msgstr ""
-
-#: includes/class-18app-admin.php:345 includes/class-18app-admin.php:412
-msgid "Password"
-msgstr ""
-
-#: includes/class-18app-admin.php:348
-msgid "La password utilizzata per la generazione del certificato"
-msgstr ""
-
-#: includes/class-18app-admin.php:353
-msgid "Salva certificato"
-msgstr ""
-
-#: includes/class-18app-admin.php:364
-msgid "Richiedi un certificato"
-msgstr ""
-
-#: includes/class-18app-admin.php:365
-msgid ""
-"Con questo strumento puoi generare un file .der necessario per richiedere il "
-"tuo certificato su 18app."
-msgstr ""
-
-#: includes/class-18app-admin.php:370
-msgid "Stato"
-msgstr ""
-
-#: includes/class-18app-admin.php:376
-msgid "Provincia"
-msgstr ""
-
-#: includes/class-18app-admin.php:382
-msgid "Località"
-msgstr ""
-
-#: includes/class-18app-admin.php:388
-msgid "Nome azienda"
-msgstr ""
-
-#: includes/class-18app-admin.php:394
-msgid "Reparto azienda"
-msgstr ""
-
-#: includes/class-18app-admin.php:400
-msgid "Nome"
-msgstr ""
-
-#: includes/class-18app-admin.php:406
-msgid "Email"
-msgstr ""
-
-#: includes/class-18app-admin.php:430
+#: includes/class-18app-admin.php:549
 msgid "Crea il tuo certificato"
 msgstr ""
 
-#: includes/class-18app-admin.php:431
+#: includes/class-18app-admin.php:550
 msgid ""
 "Con questo ultimo passaggio, potrai iniziare a ricevere pagamenti attraverso "
 "buoni 18app."
 msgstr ""
 
-#: includes/class-18app-admin.php:438 includes/class-18app-admin.php:445
+#: includes/class-18app-admin.php:557
 msgid "Genera certificato"
 msgstr ""
 
-#: includes/class-18app-admin.php:442
+#: includes/class-18app-admin.php:561
 msgid "Carica il file .cer ottenuto da 18app per procedere"
 msgstr ""
 
-#: includes/class-18app-admin.php:456
+#: includes/class-18app-admin.php:580
 msgid "Modalità Sandbox"
 msgstr ""
 
-#: includes/class-18app-admin.php:459
+#: includes/class-18app-admin.php:583
 #, php-format
 msgid ""
 "Attiva questa funzionalità per testare buoni 18app in un ambiente di prova."
@@ -145,163 +62,132 @@ msgid ""
 "href=\"%s\">numeroverde@beniculturali.it</a>"
 msgstr ""
 
-#: includes/class-18app-admin.php:467
+#: includes/class-18app-admin.php:591
 msgid "Sandbox"
 msgstr ""
 
-#: includes/class-18app-admin.php:470
+#: includes/class-18app-admin.php:594
 msgid "Attiva modalità Sandbox"
 msgstr ""
 
-#: includes/class-18app-admin.php:490
-msgid "Categorie"
-msgstr ""
-
-#: includes/class-18app-admin.php:510
-msgid "Seleziona le categorie di prodotti corrispondenti ai beni acquistabili."
-msgstr ""
-
-#: includes/class-18app-admin.php:515
-msgid "Conversione in coupon"
-msgstr ""
-
-#: includes/class-18app-admin.php:518
-msgid ""
-"Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a "
-"carrello, viene convertito in <i>Codice promozionale</i> ed applicato "
-"all'ordine."
-msgstr ""
-
-#: includes/class-18app-admin.php:524
-msgid "Utilizzo immagine"
-msgstr ""
-
-#: includes/class-18app-admin.php:527
+#: includes/class-18app-admin.php:642
 msgid "Mostra il logo <i>18app</i> nella pagine di checkout."
 msgstr ""
 
-#: includes/class-18app-admin.php:532
-msgid "Controllo prodotti"
-msgstr ""
-
-#: includes/class-18app-admin.php:535
+#: includes/class-18app-admin.php:650
 msgid ""
 "Mostra il metodo di pagamento solo se il/ i prodotti a carrello sono "
 "acquistabili con buoni <i>18app</i>.<br>Più prodotti dovranno prevedere "
 "l'uso di buoni dello stesso ambito di utilizzo."
 msgstr ""
 
-#: includes/class-18app-admin.php:542
-msgid "Ordini in sospeso"
-msgstr ""
-
-#: includes/class-18app-admin.php:545
+#: includes/class-18app-admin.php:658
 msgid ""
 "I buoni 18app verranno validati con il completamento manuale degli ordini."
 msgstr ""
 
-#: includes/class-18app-admin.php:552
-msgid "Ordine ricevuto"
+#: includes/class-18app-admin.php:665
+msgid "Escludi le spese di spedizione dal pagamento con 18app."
 msgstr ""
 
-#: includes/class-18app-admin.php:554
+#: includes/class-18app-admin.php:673
+msgid ""
+"Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a "
+"carrello, viene convertito in <i>Codice promozionale</i> ed applicato "
+"all'ordine."
+msgstr ""
+
+#: includes/class-18app-admin.php:680 includes/class-18app-gateway.php:364
 msgid ""
 "L'ordine verrà completato manualmente nei prossimi giorni e, "
 "contestualmente, verrà validato il buono 18app inserito. Riceverai una "
 "notifica email di conferma, grazie!"
 msgstr ""
 
-#: includes/class-18app-admin.php:557
+#: includes/class-18app-admin.php:683
 msgid "Messaggio della mail inviata all'utente al ricevimento dell'ordine."
 msgstr ""
 
-#: includes/class-18app-admin.php:564
-msgid "Oggetto email"
-msgstr ""
-
-#: includes/class-18app-admin.php:567
+#: includes/class-18app-admin.php:693
 msgid ""
 "Oggetto della mail inviata all'utente nel caso in cui la validazione del "
 "buono non sia andata a buon fine."
 msgstr ""
 
-#: includes/class-18app-admin.php:572
-msgid "Intestazione email"
-msgstr ""
-
-#: includes/class-18app-admin.php:575
+#: includes/class-18app-admin.php:701
 msgid ""
 "Intestazione della mail inviata all'utente nel caso in cui la validazione "
 "del buono non sia andata a buon fine."
 msgstr ""
 
-#: includes/class-18app-admin.php:580
-msgid "Ordine fallito"
-msgstr ""
-
-#: includes/class-18app-admin.php:582
+#: includes/class-18app-admin.php:708
 msgid ""
 "La validazone del buono 18app ha restituito un errore e non è stato "
 "possibile completare l'ordine, effettua il pagamento a <a href=\"[checkout-"
 "url]\">questo indirizzo</a>."
 msgstr ""
 
-#: includes/class-18app-admin.php:588
+#: includes/class-18app-admin.php:714
 msgid ""
 "Messaggio della mail inviata all'utente nel caso in cui la validazione del "
 "buono non sia andata a buon fine."
 msgstr ""
 
-#: includes/class-18app-admin.php:598
-msgid "Salva impostazioni"
-msgstr ""
-
-#: includes/class-18app-admin.php:623
-msgid "ATTENZIONE! Il file caricato non sembra essere un certificato valido."
-msgstr ""
-
-#: includes/class-18app-gateway.php:26
-msgid ""
-"Consente ai diciottenni di utilizzare il buono a loro riservato per "
-"l'acquisto di materiale didattico."
-msgstr ""
-
-#: includes/class-18app-gateway.php:58
+#: includes/class-18app-gateway.php:179
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/class-18app-gateway.php:60
+#: includes/class-18app-gateway.php:181
 msgid "Abilita pagamento con buono 18app"
 msgstr ""
 
-#: includes/class-18app-gateway.php:64
+#: includes/class-18app-gateway.php:185
 msgid "Title"
 msgstr ""
 
-#: includes/class-18app-gateway.php:66
+#: includes/class-18app-gateway.php:187
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: includes/class-18app-gateway.php:67 includes/class-18app-gateway.php:214
+#: includes/class-18app-gateway.php:188
 msgid "Buono 18app"
 msgstr ""
 
-#: includes/class-18app-gateway.php:71
+#: includes/class-18app-gateway.php:192
 msgid "Messaggio utente"
 msgstr ""
 
-#: includes/class-18app-gateway.php:89
-msgid "Inserisci qui il tuo codice"
+#: includes/class-18app-gateway.php:379
+#, php-format
+msgid ""
+"La validazone del buono 18app ha restituito un errore e non è stato "
+"possibile completare l'ordine, completa il pagamento a <a href=\"%s\">questo "
+"indirizzo</a>."
 msgstr ""
 
-#: includes/class-18app-gateway.php:252
+#: includes/class-18app-gateway.php:498
 msgid ""
 "Uno o più prodotti nel carrello non sono acquistabili con il buono inserito."
 msgstr ""
 
-#: includes/class-18app-gateway.php:345
+#: includes/class-18app-gateway.php:523
+msgid ""
+"Il valore del buono inserito non è sufficiente ed è stato convertito in "
+"buono sconto."
+msgstr ""
+
+#: includes/class-18app-gateway.php:526
+msgid ""
+"Le spese di spedizione devono essere saldate con altro metodo di pagamento."
+msgstr ""
+
+#: includes/class-18app-gateway.php:646 includes/class-18app.php:183
 #, php-format
 msgid "Buono 18app - %s"
+msgstr ""
+
+#: includes/class-18app.php:209 includes/class-18app.php:211
+msgid "Ordine fallito"
 msgstr ""
 
 #: includes/ilghera-notice/class-ilghera-notice.php:66
@@ -328,24 +214,47 @@ msgid ""
 "Non hai impostato una licenza e non sei in grado di ricevere aggiornamenti."
 msgstr ""
 
-#: plugin-update-checker/Puc/v5p0/Plugin/Ui.php:56
+#: plugin-update-checker/Puc/v5p3/Plugin/Ui.php:56
 msgid "View details"
 msgstr ""
 
-#: plugin-update-checker/Puc/v5p0/Plugin/Ui.php:79
+#: plugin-update-checker/Puc/v5p3/Plugin/Ui.php:79
 #, php-format
 msgid "More information about %s"
 msgstr ""
 
-#: plugin-update-checker/Puc/v5p0/Plugin/Ui.php:130
+#: plugin-update-checker/Puc/v5p3/Plugin/Ui.php:130
 msgid "Check for updates"
 msgstr ""
 
-#: plugin-update-checker/Puc/v5p0/Plugin/Ui.php:227
+#: plugin-update-checker/Puc/v5p3/Plugin/Ui.php:227
 #, php-format
 msgid "Unknown update checker status \"%s\""
 msgstr ""
 
-#: plugin-update-checker/Puc/v5p0/Vcs/PluginUpdateChecker.php:98
+#: plugin-update-checker/Puc/v5p3/Vcs/PluginUpdateChecker.php:113
 msgid "There is no changelog available."
+msgstr ""
+
+#: wc-18app.php:169
+#, php-format
+msgid ""
+"Per ricevere aggiornamenti devi inserire la tua <b>Premium Key</b> nelle <a "
+"href=\"%sadmin.php/?page=wc18-settings\">impostazioni del plugin</a>. Clicca "
+"<a href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
+"target=\"_blank\">qui</a> per maggiori informazioni."
+msgstr ""
+
+#: wc-18app.php:179
+msgid ""
+"Sembra che la tua <strong>Premium Key</strong> sia scaduta. Clicca <a "
+"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
+"target=\"_blank\">qui</a> per maggiori informazioni."
+msgstr ""
+
+#: wc-18app.php:181
+msgid ""
+"Sembra che la tua <strong>Premium Key</strong> non sia valida. Clicca <a "
+"href=\"https://www.ilghera.com/product/woocommerce-18app-premium/\" "
+"target=\"_blank\">qui</a> per maggiori informazioni."
 msgstr ""

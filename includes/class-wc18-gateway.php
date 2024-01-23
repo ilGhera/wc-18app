@@ -4,13 +4,16 @@
  *
  * @author ilGhera
  * @package wc-18app/includes
- * @since 1.3.0
+ *
+ * @since 1.4.0
  */
 
 /**
- * WC18_18app_Gateway class
+ * WC18_Gateway class
+ *
+ * @since 1.4.0
  */
-class WC18_18app_Gateway extends WC_Payment_Gateway {
+class WC18_Gateway extends WC_Payment_Gateway {
 
 	/**
 	 * The constructor
@@ -84,7 +87,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public function payment_fields() {
 		?>
 		<p>
-			<?php echo esc_html( $this->description ); ?>
+			<?php echo wp_kses_post( $this->description ); ?>
 			<label for="wc-codice-18app">
 				<?php esc_html_e( 'Inserisci qui il tuo codice', 'wc18' ); ?>
 				<span class="required">*</span>
@@ -211,7 +214,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 
 		if ( '18app' === $data['payment_method'] ) {
 
-			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( get_post_meta( $order->get_id(), 'wc-codice-18app', true ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Buono 18app', 'wc18' ) . ': </strong>' . esc_html( $order->get_meta( 'wc-codice-18app' ) ) . '</p>';
 
 		}
 
@@ -281,7 +284,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 						}
 
 						/*Aggiungo il buono 18app all'ordine*/
-						update_post_meta( $order_id, 'wc-codice-18app', $code_18app );
+						$order->update_meta_data( 'wc-codice-18app', $code_18app );
 
 						/* Ordine completato */
 						$order->payment_complete();
@@ -317,8 +320,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 
 		$order  = wc_get_order( $order_id );
-		$import = floatval( $order->get_total() ); // Il totale dell'ordine.
-
+		$import = floatval( $order->get_total() );
 		$notice = null;
 		$output = array(
 			'result'   => 'failure',
@@ -326,7 +328,7 @@ class WC18_18app_Gateway extends WC_Payment_Gateway {
 		);
 
 		$data       = $this->get_post_data();
-		$code_18app = $data['wc-codice-18app']; // Il buono inserito dall'utente.
+		$code_18app = $data['wc-codice-18app'];
 
 		if ( $code_18app ) {
 

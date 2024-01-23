@@ -5,11 +5,13 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.3.0
+ * @since 1.4.0
  */
 
 /**
  * WC18_Admin class
+ *
+ * @since 1.4.0
  */
 class WC18_Admin {
 
@@ -456,7 +458,7 @@ class WC18_Admin {
 					echo '<h3>' . esc_html( __( 'Modalità Sandbox', 'wc18' ) ) . '</h3>';
 				echo '<p class="description">';
 					/* Translators: the email address */
-					printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@beniculturali.it</a>', 'wc18' ) ), 'mailto:numeroverde@beniculturali.it' );
+					printf( wp_kses_post( __( 'Attiva questa funzionalità per testare buoni 18app in un ambiente di prova.<br>Richiedi i buoni test scrivendo a <a href="%s">numeroverde@cultura.gov.it</a>', 'wc18' ) ), 'mailto:numeroverde@cultura.gov.it' );
 				echo '</p>';
 
 					echo '<form name="wc18-sandbox" class="wc18-sandbox" method="post" enctype="multipart/form-data" action="">';
@@ -511,16 +513,7 @@ class WC18_Admin {
 								echo '</td>';
 							echo '</tr>';
 
-							echo '<tr>';
-								echo '<th scope="row">' . esc_html__( 'Conversione in coupon', 'wc18' ) . '</th>';
-								echo '<td>';
-									echo '<input type="checkbox" name="wc18-coupon" value="1" disabled>';
-									echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
-									echo wp_kses_post( $this->get_go_premium( true ) );
-								echo '</td>';
-							echo '</tr>';
-
-							echo '<tr>';
+                            echo '<tr>';
 								echo '<th scope="row">' . esc_html__( 'Utilizzo immagine', 'wc18' ) . '</th>';
 								echo '<td>';
 									echo '<input type="checkbox" name="wc18-image" value="1"' . ( 1 === intval( $wc18_image ) ? ' checked="checked"' : '' ) . '>';
@@ -544,6 +537,22 @@ class WC18_Admin {
 										echo '<input type="checkbox" name="wc18-orders-on-hold" value="1" disabled>';
 									echo '<p class="description">' . wp_kses_post( __( 'I buoni 18app verranno validati con il completamento manuale degli ordini.', 'wc18' ) ) . '</p>';
 
+									echo wp_kses_post( $this->get_go_premium( true ) );
+								echo '</td>';
+
+							echo '<tr class="wc18-exclude-shipping">';
+								echo '<th scope="row">' . esc_html__( 'Spese di spedizione', 'wc18' ) . '</th>';
+								echo '<td>';
+										echo '<input type="checkbox" name="wc18-exclude-shipping" value="1"' . ( 1 === intval( $wc18_exclude_shipping ) ? ' checked="checked"' : '' ) . '>';
+									echo '<p class="description">' . wp_kses_post( __( 'Escludi le spese di spedizione dal pagamento con 18app.', 'wc18' ) ) . '</p>';
+								echo '</td>';
+							echo '</tr>';
+
+							echo '<tr class="wc18-coupon">';
+								echo '<th scope="row">' . esc_html__( 'Conversione in coupon', 'wc18' ) . '</th>';
+								echo '<td>';
+									echo '<input type="checkbox" name="wc18-coupon" value="1" disabled>';
+									echo '<p class="description">' . wp_kses_post( __( 'Nel caso in cui il buono <i>18app</i> inserito sia inferiore al totale a carrello, viene convertito in <i>Codice promozionale</i> ed applicato all\'ordine.', 'wc18' ) ) . '</p>';
 									echo wp_kses_post( $this->get_go_premium( true ) );
 								echo '</td>';
 							echo '</tr>';
