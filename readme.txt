@@ -2,8 +2,11 @@
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
 Version: 1.4.0
+Stable tag: 1.4.0
 Requires at least: 4.0
 Tested up to: 6.4
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano. 
 

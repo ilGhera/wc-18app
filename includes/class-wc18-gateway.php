@@ -5,8 +5,10 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.4.0
+ * @since 1.4.1
  */
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * WC18_Gateway class
@@ -277,10 +279,13 @@ class WC18_Gateway extends WC_Payment_Gateway {
 				$terms = get_the_terms( $item['product_id'], 'product_cat' );
 				$ids   = array();
 
-				foreach ( $terms as $term ) {
+				if ( is_array( $terms ) ) {
 
-					$ids[] = $term->term_id;
+					foreach ( $terms as $term ) {
 
+						$ids[] = $term->term_id;
+
+					}
 				}
 
 				$results = array_intersect( $ids, $cats );
@@ -355,7 +360,7 @@ class WC18_Gateway extends WC_Payment_Gateway {
 
 		}
 
-		if ( self::$orders_on_hold ) {
+		if ( self::$orders_on_hold && '18app' === $order->get_payment_method() ) {
 
 			if ( in_array( $order->get_status(), array( 'on-hold', 'pending' ), true ) ) {
 

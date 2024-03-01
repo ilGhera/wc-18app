@@ -8,6 +8,8 @@
  * @since 1.4.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * WC18_Soap_Client class
  *
