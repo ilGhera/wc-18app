@@ -5,7 +5,7 @@
  * Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultura previsto dallo stato Italiano.
  * Author: ilGhera
  *
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
  * Tested up to: 6.4
@@ -38,7 +38,7 @@ function wc18_premium_activation() {
 	define( 'WC18_URI', plugin_dir_url( __FILE__ ) );
 	define( 'WC18_INCLUDES', WC18_DIR . 'includes/' );
 	define( 'WC18_INCLUDES_URI', WC18_URI . 'includes/' );
-	define( 'WC18_VERSION', '1.3.0' );
+	define( 'WC18_VERSION', '1.4.1' );
 
 	/*Main directory di upload*/
 	$wp_upload_dir = wp_upload_dir();

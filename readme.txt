@@ -1,8 +1,8 @@
 === WooCommerce 18app - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, e-commerce, shop, orders, payment, payment gateway, payment method, 
-Version: 1.4.0
-Stable tag: 1.4.0
+Version: 1.4.1
+Stable tag: 1.4.1
 Requires at least: 4.0
 Tested up to: 6.4
 License: GPLv3
@@ -68,6 +68,13 @@ This plugin sends data to an external service, like the categories and the price
 
 
 == Changelog ==
+
+= 1.4.1 =
+Data di rilascio: 1 Marzo, 2024
+
+    * Update: Plugin Update Checker
+    * Correzione bug: Messaggio opzione ordini in sospeso mostrato con ogni ordine in attesa di pagamento 
+
 
 = 1.4.0 =
 Data di rilascio: 22 Dicembre, 2023
