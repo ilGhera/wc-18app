@@ -16,6 +16,8 @@
  * @package wc-18app
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Attivazione
  */
