@@ -2,12 +2,12 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.2'
+publiccodeYmlVersion: '0.4.0'
 categories:
   - e-commerce
 description:
   it:
-    documentation: 'https://www.ilghera.com/category/documentation/wc-carta-docente-18app/'
+    documentation: 'https://ilghera.com/documentation/wc-carta-docente-18app/'
     features:
       - Carica il tuo certificato .pem
       - Abbina le categorie WooCommerce agli ambiti d'acquisto di 18app
@@ -18,7 +18,6 @@ description:
       - (Premium) Conversione valore buono 18app in voucher WooCommerce
       - (Premium) Mostra il metodo di pagamento solo se i prodotti a carrello sono acquistabili con 18app
       - (Premium) Opzione ordini in sospeso con validazione buoni 18app solo a completamento manuale dell'ordine 
-    genericName: WordPress plugin
     longDescription: |
       Ogni diciottenne, in Italia, ha a disposizione un _Bonus Cultura_  del
 
