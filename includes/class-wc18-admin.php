@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.4.0
+ * @since 1.4.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * WC18_Admin class
  *
- * @since 1.4.0
+ * @since 1.4.2
  */
 class WC18_Admin {
 
