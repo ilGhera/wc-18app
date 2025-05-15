@@ -41,7 +41,6 @@ class WC18_Admin {
 		add_action( 'wp_ajax_wc18-sandbox', array( $this, 'sandbox_callback' ) );
 	}
 
-
 	/**
 	 * Registra la pagina opzioni del plugin
 	 *
@@ -51,7 +50,6 @@ class WC18_Admin {
 
 		add_submenu_page( 'woocommerce', __( 'WooCommerce 18app - Impostazioni', 'wc18' ), __( 'WC 18app', 'wc18' ), 'manage_options', 'wc18-settings', array( $this, 'wc18_settings' ) );
 	}
-
 
 	/**
 	 * Verifica la presenza di un file per estenzione
@@ -71,7 +69,6 @@ class WC18_Admin {
 		return $output;
 
 	}
-
 
 	/**
 	 * Cancella il certificato
@@ -95,7 +92,6 @@ class WC18_Admin {
 
 	}
 
-
 	/**
 	 * Restituisce il nome esatto del bene 18app partendo dallo slug
 	 *
@@ -116,7 +112,6 @@ class WC18_Admin {
 		}
 
 	}
-
 
 	/**
 	 * Categoria per la verifica in fase di checkout
@@ -186,7 +181,6 @@ class WC18_Admin {
 			echo '</li>';
 	}
 
-
 	/**
 	 * Aggiunge una nuova categoria per la verifica in fase di checkout
 	 *
@@ -209,7 +203,6 @@ class WC18_Admin {
 		exit;
 	}
 
-
 	/**
 	 * Trasforma il contenuto di un certificato .pem in .der
 	 *
@@ -227,7 +220,6 @@ class WC18_Admin {
 
 		return $der;
 	}
-
 
 	/**
 	 * Download della richiesta di certificato da utilizzare sul portale 18app
@@ -320,7 +312,6 @@ class WC18_Admin {
 		}
 	}
 
-
 	/**
 	 * Attivazione certificato
 	 *
@@ -345,7 +336,6 @@ class WC18_Admin {
 		}
 	}
 
-
 	/**
 	 * Funzionalita Sandbox
 	 *
@@ -365,7 +355,6 @@ class WC18_Admin {
 		exit();
 
 	}
-
 
 	/**
 	 * Pagina opzioni plugin
@@ -399,7 +388,7 @@ class WC18_Admin {
 						echo '<th scope="row">' . esc_html__( 'Premium Key', 'wc18' ) . '</th>';
 						echo '<td>';
 							echo '<input type="text" class="regular-text code" name="wc18-premium-key" id="wc18-premium-key" placeholder="' . esc_attr__( 'Inserisci la tua Premium Key', 'wc18' ) . '" value="' . esc_attr( $premium_key ) . '" />';
-							echo '<p class="description">' . esc_html__( 'Aggiungi la tua Premium Key e mantieni aggiornato <strong>Woocommerce 18app - Premium</strong>.', 'wc18' ) . '</p>';
+							echo '<p class="description">' . wp_kses_post( __( 'Aggiungi la tua Premium Key e mantieni aggiornato <strong>Woocommerce 18app - Premium</strong>.', 'wc18' ) ) . '</p>';
 
 							wp_nonce_field( 'wc18-premium-key', 'wc18-premium-key-nonce' );
 
@@ -740,7 +729,6 @@ class WC18_Admin {
 
 	}
 
-
 	/**
 	 * Mostra un mesaggio d'errore nel caso in cui il certificato non isa valido
 	 *
@@ -927,5 +915,6 @@ class WC18_Admin {
 	}
 
 }
+
 new WC18_Admin();
 
