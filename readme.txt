@@ -12,6 +12,9 @@ Description: Abilita in WooCommerce il pagamento con buoni 18app, il Bonus Cultu
 
 == Description ==
 
+18app è stato sostituito con il bonus **Carta della cultura giovani e del merito**, a questo indirizzo il plugin dedicato:
+[https://wordpress.org/plugins/wc-carte-cultura/#description](https://wordpress.org/plugins/wc-carte-cultura/#description)
+
 Il plugin consente di abilitare sul proprio store il pagamento con 18app, il Bonus Cultura previsto dallo stato italiano.
 In fase di checkout, il buono inserito dall'utente verrà verificato per validità, credito disponibile e pertinenza in termini di tipologia di prodotto.
 
