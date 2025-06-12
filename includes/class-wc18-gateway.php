@@ -5,13 +5,15 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.4.0
+ * @since 1.4.1
  */
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * WC18_Gateway class
  *
- * @since 1.4.0
+ * @since 1.4.1
  */
 class WC18_Gateway extends WC_Payment_Gateway {
 
@@ -48,7 +50,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 
 	}
 
-
 	/**
 	 * Campi relativi al sistema di pagamento, modificabili nel back-end
 	 */
@@ -80,7 +81,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 
 	}
 
-
 	/**
 	 * Campo per l'inserimento del buono nella pagina di checkout
 	 */
@@ -96,7 +96,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 		</p>
 		<?php
 	}
-
 
 	/**
 	 * Restituisce la cateogia prodotto corrispondente al bene acquistabile con il buono
@@ -134,7 +133,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 
 	}
 
-
 	/**
 	 * Tutti i prodotti dell'ordine devono essere della tipologia (cat) consentita dal buono 18app.
 	 *
@@ -156,10 +154,13 @@ class WC18_Gateway extends WC_Payment_Gateway {
 				$terms = get_the_terms( $item['product_id'], 'product_cat' );
 				$ids   = array();
 
-				foreach ( $terms as $term ) {
+				if ( is_array( $terms ) ) {
 
-					$ids[] = $term->term_id;
+					foreach ( $terms as $term ) {
 
+						$ids[] = $term->term_id;
+
+					}
 				}
 
 				$results = array_intersect( $ids, $cats );
@@ -176,7 +177,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 		return $output;
 
 	}
-
 
 	/**
 	 * Add the shortcode to get the specific checkout URL.
@@ -199,7 +199,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 
 	}
 
-
 	/**
 	 * Mostra il buono 18app nella thankyou page, nelle mail e nella pagina dell'ordine.
 	 *
@@ -219,7 +218,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 		}
 
 	}
-
 
 	/**
 	 * Processa il buono 18app inserito
@@ -308,7 +306,6 @@ class WC18_Gateway extends WC_Payment_Gateway {
 		return $output;
 
 	}
-
 
 	/**
 	 * Gestisce il processo di pagamento, verificando la validità del buono inserito dall'utente

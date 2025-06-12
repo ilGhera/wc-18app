@@ -1,10 +1,10 @@
 === WooCommerce 18app ===
 Contributors: ghera74
 Tags: WooCommerce, payment gateway, 18app, Carta Docente, Carte Cultura 
-Version: 1.4.0
-Stable tag: 1.4.0
+Version: 1.4.1
+Stable tag: 1.4.1
 Requires at least: 4.0
-Tested up to: 6.5
+Tested up to: 6.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,6 +77,15 @@ https://youtu.be/a94VpGu76Qw
 
 
 == Changelog ==
+
+= 1.4.1 =
+Data di rilascio: 12 Giugno, 2025
+
+    * Update: Supporto WP 6.8
+    * Update: Supporto WC 9.5
+    * Update: (Premium) Plugin Update Checker
+    * Correzione bug : Testo errato in pagina opzioni 
+
 
 = 1.4.0 =
 Data di rilascio: 23 Gennaio, 2024

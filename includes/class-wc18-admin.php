@@ -5,13 +5,15 @@
  * @author ilGhera
  * @package wc-18app/includes
  *
- * @since 1.4.0
+ * @since 1.4.1
  */
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * WC18_Admin class
  *
- * @since 1.4.0
+ * @since 1.4.1
  */
 class WC18_Admin {
 
@@ -38,7 +40,6 @@ class WC18_Admin {
 		add_action( 'wp_ajax_wc18-sandbox', array( $this, 'sandbox_callback' ) );
 	}
 
-
 	/**
 	 * Registra la pagina opzioni del plugin
 	 *
@@ -48,7 +49,6 @@ class WC18_Admin {
 
 		add_submenu_page( 'woocommerce', __( 'WooCommerce 18app - Impostazioni', 'wc18' ), __( 'WC 18app', 'wc18' ), 'manage_options', 'wc18-settings', array( $this, 'wc18_settings' ) );
 	}
-
 
 	/**
 	 * Verifica la presenza di un file per estenzione
@@ -68,7 +68,6 @@ class WC18_Admin {
 		return $output;
 
 	}
-
 
 	/**
 	 * Cancella il certificato
@@ -92,7 +91,6 @@ class WC18_Admin {
 
 	}
 
-
 	/**
 	 * Restituisce il nome esatto del bene 18app partendo dallo slug
 	 *
@@ -113,7 +111,6 @@ class WC18_Admin {
 		}
 
 	}
-
 
 	/**
 	 * Categoria per la verifica in fase di checkout
@@ -183,7 +180,6 @@ class WC18_Admin {
 			echo '</li>';
 	}
 
-
 	/**
 	 * Aggiunge una nuova categoria per la verifica in fase di checkout
 	 *
@@ -206,7 +202,6 @@ class WC18_Admin {
 		exit;
 	}
 
-
 	/**
 	 * Pulsante call to action Premium
 	 *
@@ -223,7 +218,6 @@ class WC18_Admin {
 		return $output;
 
 	}
-
 
 	/**
 	 * Attivazione certificato
@@ -249,7 +243,6 @@ class WC18_Admin {
 		}
 	}
 
-
 	/**
 	 * Funzionalita Sandbox
 	 *
@@ -269,7 +262,6 @@ class WC18_Admin {
 		exit();
 
 	}
-
 
 	/**
 	 * Pagina opzioni plugin
@@ -621,7 +613,6 @@ class WC18_Admin {
 
 	}
 
-
 	/**
 	 * Mostra un mesaggio d'errore nel caso in cui il certificato non isa valido
 	 *
@@ -714,5 +705,6 @@ class WC18_Admin {
 	}
 
 }
+
 new WC18_Admin();
 

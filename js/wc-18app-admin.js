@@ -1,5 +1,6 @@
 /**
  * WC 18app - Admin js
+ *
  * @author ilGhera
  * @package wc-18app/js
  * 
